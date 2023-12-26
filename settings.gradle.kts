@@ -15,4 +15,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "SmartTranslator"
 include(":app")
- 
+include(":core:common")
+include(":core:feature-api")
+include(":core:network")
+include(":core:database")
+include(":feature:card")
+include(":features:card:data")
