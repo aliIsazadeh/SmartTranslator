@@ -57,6 +57,7 @@ dependencies {
 
     //moshi
     implementation(libs.moshi)
+    implementation(libs.moshi.kotlin.convertor)
 
 
 

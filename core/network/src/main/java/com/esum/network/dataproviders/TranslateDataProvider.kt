@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class TranslateDataProvider @Inject constructor(private val apiService: TranslateApiService) {
 
-    suspend fun translate(fromLanguage: Languages, toLanguages: Languages, query: String) =
-        apiService.translate(langpair = "${fromLanguage.key}%7C${toLanguages}", query)
+    suspend fun translate(fromLanguage: String, toLanguages: String, query: String) =
+        apiService.translate(langpair = "$fromLanguage%7C$toLanguages", "query")
 
 }

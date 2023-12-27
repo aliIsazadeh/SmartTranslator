@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt.android)
+    kotlin("kapt")
 }
 
 android {
@@ -11,7 +13,7 @@ android {
     defaultConfig {
         minSdk = 25
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.esum.database.DatabaseTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -41,4 +43,25 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.espresso)
+    //hilt
+    implementation(libs.hilt.compose)
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.instrumented.test)
+    kaptAndroidTest(libs.hilt.test)
+    testImplementation(libs.hilt.instrumented.test)
+    kaptTest(libs.hilt.test)
+
+    //room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
+//    implementation(libs.room.compiler)
+    testImplementation(libs.room.testing)
+
+
+}
+kapt {
+    correctErrorTypes = true
 }

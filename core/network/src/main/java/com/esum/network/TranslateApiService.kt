@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface TranslateApiService {
 
 
-    @GET("")
+    @GET("get")
     suspend fun translate(
         @Query("langpair") langpair: String,
         @Query("q") q: String,

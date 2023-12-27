@@ -1,8 +1,10 @@
-package com.esum.network.dataproviders.di
+package com.esum.network.di
 
 import com.esum.network.NetworkModule
 import com.esum.network.TranslateApiService
 import com.esum.network.interceptor.TranslateInterceptor
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -40,10 +42,14 @@ object NetworkModuleTest {
     @Provides
     @Singleton
     fun providesTranslateApiService(okHttpClient: OkHttpClient): TranslateApiService {
+         val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
         return Retrofit.Builder()
-            .baseUrl("https://translated-mymemory---translation-memory.p.rapidapi.com/get?")
+            .baseUrl("https://translated-mymemory---translation-memory.p.rapidapi.com/")
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create()).build()
+            .addConverterFactory(MoshiConverterFactory.create(moshi)).build()
             .create(TranslateApiService::class.java)
     }
 

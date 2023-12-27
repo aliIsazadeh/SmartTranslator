@@ -1,6 +1,7 @@
 package com.esum.network
 
 import com.esum.network.interceptor.TranslateInterceptor
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +27,7 @@ object NetworkModule {
     fun providesClient(interceptor: TranslateInterceptor): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(interceptor).build()
     }
+
 
 
     @Provides
