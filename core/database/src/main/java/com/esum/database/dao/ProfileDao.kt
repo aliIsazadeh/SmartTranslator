@@ -15,6 +15,9 @@ interface ProfileDao {
     @Query("Select * From profile_table")
     fun getProfile(): Flow<ProfileEntity>
 
+    @Query("Select * From profile_table")
+    fun getAllProfile(): Flow<List<ProfileEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = ProfileEntity::class)
     suspend fun insertProfile(profileEntity: ProfileEntity) : Long
 

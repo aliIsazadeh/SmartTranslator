@@ -23,7 +23,7 @@ interface CardDao {
     suspend fun updateCard(entity: CardEntity)
 
     @Query("SELECT * FROM CARD_TABLE WHERE id = :id")
-    fun getCardById(id : Long) : Flow<CardEntity>
+    fun getCardById(id : Long) : Flow<CardEntity?>
 
     @Query("Delete From card_table Where id = :id")
     suspend fun deleteCardById(id : Long)

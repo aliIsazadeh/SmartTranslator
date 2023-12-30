@@ -10,40 +10,40 @@ data class CardEntity(
 
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id : Long,
+    val id : Long = 0L,
 
     @ColumnInfo("define_language")
-    val defineLanguage : String ?,
+    val defineLanguage : String ? = null,
 
     @ColumnInfo("en")
-    val english : String ?,
+    val english : String ? = null,
 
     @ColumnInfo("fa")
-    val farsi : String ?,
+    val farsi : String ? = null,
 
     @ColumnInfo("tu")
-    val turkish : String ?,
+    val turkish : String ? = null,
 
     @ColumnInfo("fe")
-    val french : String ?,
+    val french : String ? = null,
 
     @ColumnInfo("sp")
-    val spaniel : String ?,
+    val spaniel : String ? = null,
 
     @ColumnInfo("gr")
-    val germany : String ?,
+    val germany : String ? = null,
 
     @ColumnInfo("sentence")
-    val sentence : String ?,
+    val sentence : String ? = null,
 
     @ColumnInfo("image")
-    val image : String ?,
+    val image : String ? = null,
 
     @ColumnInfo("create_date")
-    val createDate : String ?,
+    val createDate : String ? = null,
 
     @ColumnInfo("update_date")
-    val updateDate : String ?,
+    val updateDate : String ? = null,
 
     //correct answer count in a row
     @ColumnInfo("CAC")
@@ -53,7 +53,7 @@ data class CardEntity(
     val active : Boolean = true,
 
     @ColumnInfo("desc")
-    val description : String ?
+    val description : String ? = null
 
 
 

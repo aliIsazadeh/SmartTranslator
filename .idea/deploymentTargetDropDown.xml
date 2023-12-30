@@ -2,10 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ProfileDataProviderTest">
+      <entry key="CardDataProviderTest">
         <State />
       </entry>
-      <entry key="TranslateDataProviderTest">
+      <entry key="ProfileDataProviderTest">
         <State>
           <targetSelectedWithDropDown>
             <Target>
@@ -13,12 +13,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\aisazadeh\.android\avd\Resizable_Experimental_API_34.avd" />
+                  <value value="C:\Users\aisazadeh\.android\avd\Resizable_Experimental_API_33.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2023-12-27T06:25:31.042949Z" />
+          <timeTargetWasSelectedWithDropDown value="2023-12-30T06:55:32.742585700Z" />
         </State>
       </entry>
       <entry key="app">
@@ -37,21 +37,8 @@
           <timeTargetWasSelectedWithDropDown value="2023-12-26T06:06:35.970817100Z" />
         </State>
       </entry>
-      <entry key="translate()">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\aisazadeh\.android\avd\Resizable_Experimental_API_34.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2023-12-27T12:06:14.354242600Z" />
-        </State>
+      <entry key="insertProfile()">
+        <State />
       </entry>
     </value>
   </component>

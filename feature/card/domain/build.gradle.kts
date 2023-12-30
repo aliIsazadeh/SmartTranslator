@@ -7,11 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.esum.feature.card.data"
+    namespace = "com.esum.feature.card.domain"
     compileSdk = 34
+
 
     defaultConfig {
         minSdk = 25
+
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -33,20 +36,23 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
 
 dependencies {
-    implementation(project(":feature:card:domain"))
+
+
+
     implementation(project(":core:database"))
+    implementation(project(":core:common"))
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appCompat)
     implementation(libs.material)
-    implementation(project(":core:common"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.espresso)
-
 
     //hilt
     implementation(libs.hilt.compose)
