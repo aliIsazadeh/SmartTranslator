@@ -10,6 +10,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
+
     }
 }
 
@@ -25,3 +27,4 @@ include(":feature:card:data")
 include(":feature:profile:data")
 include(":feature:image-convertor:data")
 include(":feature:card:domain")
+include(":feature:card:presentation")

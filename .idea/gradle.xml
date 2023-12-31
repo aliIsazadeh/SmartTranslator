@@ -31,6 +31,7 @@
             <option value="$PROJECT_DIR$/feature/card" />
             <option value="$PROJECT_DIR$/feature/card/data" />
             <option value="$PROJECT_DIR$/feature/card/domain" />
+            <option value="$PROJECT_DIR$/feature/card/presentation" />
             <option value="$PROJECT_DIR$/feature/image-convertor" />
             <option value="$PROJECT_DIR$/feature/image-convertor/data" />
             <option value="$PROJECT_DIR$/feature/profile" />
