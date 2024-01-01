@@ -2,11 +2,10 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    kotlin("kapt")
-    id("com.google.dagger.hilt.android")
 }
+
 android {
-    namespace = "com.esum.feature.card.presentation"
+    namespace = "com.esum.core.ui"
     compileSdk = 34
 
     defaultConfig {
@@ -46,9 +45,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:ui"))
-    implementation(project(":feature:card:domain"))
-    implementation(project(":core:common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -58,25 +54,18 @@ dependencies {
     implementation(libs.compose.graphics)
     implementation(libs.compose.preview)
     implementation(libs.compose.material)
+
     implementation(libs.coil)
     implementation(libs.coil.gif)
-    implementation(libs.androidx.compose.materialWindow)
+
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.lifecycle.runtime.compose)
 
 
-
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.appCompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.espresso)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.compose.ui.test)
-    debugImplementation(libs.tooling.ui)
-    debugImplementation(libs.manifest.test)
-
-    //hilt
-    implementation(libs.hilt.compose)
-    implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
-}
-kapt {
-    correctErrorTypes = true
 }

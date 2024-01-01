@@ -52,8 +52,7 @@ data class CardEntity(
     @ColumnInfo("active")
     val active : Boolean = true,
 
-    @ColumnInfo("desc")
-    val description : String ? = null
+
 
 
 

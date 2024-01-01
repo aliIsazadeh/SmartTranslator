@@ -1,81 +1,71 @@
 package com.esum.feature.card.presentation.screen
 
-import android.os.Build.VERSION.SDK_INT
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
-import coil.ImageLoader
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.request.ImageRequest
-import coil.request.repeatCount
-import coil.size.Size
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.esum.feature.card.presentation.R
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.esum.core.ui.CollectInLaunchedEffect
+import com.esum.core.ui.use
+import com.esum.feature.card.presentation.viewmodel.AddingCardViewModel
+import com.esum.feature.card.presentation.viewmodel.CardAddingContract
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+
 
 @Composable
-fun CardAddingScreen() {
+fun CardAddingScreen(
+    windowSize: WindowSizeClass,
+    viewModel: AddingCardViewModel = hiltViewModel(),
+    navController: NavController
+) {
+    val (state, effect, event) = use(viewModel = viewModel)
+    CardAddingScreen(state = state, effect = effect, event = event)
 
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.duck_phone_anime))
-    val progress by animateLottieCompositionAsState(composition)
+}
 
-    val image = rememberAsyncImagePainter(model = R.drawable.duck_phone)
+@OptIn(InternalCoroutinesApi::class)
+@Composable
+fun CardAddingScreen(
+    state: CardAddingContract.State,
+    effect: Flow<CardAddingContract.Effect>,
+    event: (CardAddingContract.Event) -> Unit
+) {
 
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
-            if (SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
+    effect.CollectInLaunchedEffect { effect ->
+        when (effect) {
+            is CardAddingContract.Effect.ShowSnackBar -> {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(effect.message, "Ok")
+                }
             }
         }
-        .build()
-
-    Column(modifier = Modifier.fillMaxSize()  , horizontalAlignment = Alignment.CenterHorizontally  , verticalArrangement = Arrangement.SpaceEvenly){
-        LottieAnimation(
-            modifier = Modifier.weight(1f),
-            composition = composition,
-            progress = { progress },
-        )
-        Image(
-            painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current)
-                    .data(data = R.drawable.duck_phone)
-                    .apply(block = fun ImageRequest.Builder.() {
-                        repeatCount(1)
-                        size(400)
-                    }).build(),
-                imageLoader = imageLoader
-            ),
-            contentDescription = null,
-        )
+    }
+    Scaffold(snackbarHost = {
+    }) { padding ->
+        padding
 
     }
+
 
 }
 
 @Preview
 @Composable
-fun CardAddingScreenPreview(){
+fun CardAddingScreenPreview() {
 
     MaterialTheme {
-        CardAddingScreen()
+
     }
 
 }
