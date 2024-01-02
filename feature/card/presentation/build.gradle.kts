@@ -49,18 +49,20 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:card:domain"))
     implementation(project(":core:common"))
+    implementation(project(":core:feature-api"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
+    implementation(libs.compose.material)
     implementation(libs.compose.graphics)
     implementation(libs.compose.preview)
-    implementation(libs.compose.material)
     implementation(libs.coil)
     implementation(libs.coil.gif)
     implementation(libs.androidx.compose.materialWindow)
+
 
 
 

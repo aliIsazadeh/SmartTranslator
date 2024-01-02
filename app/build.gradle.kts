@@ -53,6 +53,12 @@ android {
 
 dependencies {
 
+    implementation(project(":feature:card:presentation"))
+    implementation(project(":feature:card:domain"))
+    implementation(project(":feature:card:data"))
+    implementation(project(":core:common"))
+    implementation(project(":core:feature-api"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -61,6 +67,9 @@ dependencies {
     implementation(libs.compose.graphics)
     implementation(libs.compose.preview)
     implementation(libs.compose.material)
+    implementation(libs.androidx.compose.materialWindow)
+    implementation(libs.androidx.compose.materialWindow)
+
 
 
     testImplementation(libs.junit)
@@ -75,6 +84,10 @@ dependencies {
     implementation(libs.hilt.compose)
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.instrumented.test)
+    kaptAndroidTest(libs.hilt.test)
+    testImplementation(libs.hilt.instrumented.test)
+    kaptTest(libs.hilt.test)
 }
 kapt {
     correctErrorTypes = true

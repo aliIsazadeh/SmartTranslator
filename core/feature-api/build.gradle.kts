@@ -31,6 +31,17 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
@@ -38,7 +49,16 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.appCompat)
     implementation(libs.material)
+    implementation(libs.compose.navigation)
     testImplementation(libs.junit)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.espresso)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material)
+    implementation(libs.androidx.compose.materialWindow)
+
+
 }

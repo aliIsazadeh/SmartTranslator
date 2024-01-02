@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
+import com.esum.feature.card.domain.UsecaseFactory
 import com.esum.feature.card.domain.usecase.InsertCardUsecase
 import com.esum.feature.card.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddingCardViewModel @Inject constructor(
-    private val insertCardUsecase : Lazy<InsertCardUsecase>
+    private val insertCardUsecase: InsertCardUsecase
 
 ) : ViewModel(), CardAddingContract {
 
@@ -39,13 +40,13 @@ class AddingCardViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 when (event) {
-                    CardAddingContract.Event.CancelEvent -> TODO()
-                    CardAddingContract.Event.GenerateSentenceEvent -> TODO()
-                    CardAddingContract.Event.OnlineTranslateEvent -> TODO()
-                    CardAddingContract.Event.SaveCardEvent -> TODO()
-                    CardAddingContract.Event.SelectOriginalOriginEvent -> TODO()
-                    CardAddingContract.Event.SelectTranslateOriginEvent -> TODO()
-                    CardAddingContract.Event.backEvent -> TODO()
+                    CardAddingContract.Event.CancelEvent -> {}
+                    CardAddingContract.Event.GenerateSentenceEvent -> {}
+                    CardAddingContract.Event.OnlineTranslateEvent -> {}
+                    CardAddingContract.Event.SaveCardEvent -> {}
+                    CardAddingContract.Event.SelectOriginalOriginEvent -> {}
+                    CardAddingContract.Event.SelectTranslateOriginEvent -> {}
+                    CardAddingContract.Event.backEvent -> {}
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "event: ${e.message.toString()}")
@@ -64,18 +65,30 @@ class AddingCardViewModel @Inject constructor(
         }
     }
 
-    fun onOriginalChange(original : Pair<String , Languages>){
+    fun onOriginalChange(original : String ){
         setOriginal(original)
     }
-    private fun setOriginal(original : Pair<String , Languages>) {
+    private fun setOriginal(original :String ) {
         _mutableState.update { it.copy(card = it.card.copy(original = original)) }
     }
+    fun onOriginalChange(original :Languages){
+        setOriginal(original)
+    }
+    private fun setOriginal(original :  Languages) {
+        _mutableState.update { it.copy(card = it.card.copy(originalLanguage = original)) }
+    }
 
-    fun onTranslationChange(translate : Pair<String , Languages>){
+    fun onTranslationChange(translate : String ){
         setTranslation(translate)
     }
-    private fun setTranslation(translate : Pair<String , Languages>) {
+    private fun setTranslation(translate : String ) {
         _mutableState.update { it.copy(card = it.card.copy(translate = translate)) }
+    }
+    fun onTranslationChange(translate :  Languages){
+        setTranslation(translate)
+    }
+    private fun setTranslation(translate :  Languages) {
+        _mutableState.update { it.copy(card = it.card.copy(translateLanguage = translate)) }
     }
 
     fun onSentenceChange(sentence : String) {
