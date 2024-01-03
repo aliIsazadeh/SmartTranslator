@@ -9,6 +9,7 @@ import com.esum.core.ui.R
 
 
 val gandomFont = FontFamily(Font(R.font.gandom))
+val diroozFont = FontFamily(Font(R.font.dirooz))
 //val Typography = Typography(
 //    bodyLarge = TextStyle(
 //        fontFamily = FontFamily.Default,
@@ -39,42 +40,42 @@ val gandomFont = FontFamily(Font(R.font.gandom))
 val typography = androidx.compose.material3.Typography(
     headlineSmall = TextStyle(
         fontWeight = FontWeight.SemiBold,
-        fontFamily = gandomFont,
+        fontFamily = diroozFont,
         fontSize = 24.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
     titleLarge = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontFamily = gandomFont,
+        fontFamily = diroozFont,
         fontSize = 18.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
     bodyLarge = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontFamily = gandomFont,
+        fontFamily = diroozFont,
         fontSize = 16.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.sp
     ),
     bodyMedium = TextStyle(
         fontWeight = FontWeight.Medium,
-        fontFamily = gandomFont,
+        fontFamily = diroozFont,
         fontSize = 14.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.sp
     ),
     bodySmall = TextStyle(
         fontWeight = FontWeight.Medium,
-        fontFamily = gandomFont,
+        fontFamily = diroozFont,
         fontSize = 12.sp,
         lineHeight = 14.sp,
         letterSpacing = 0.sp
     ),
     labelMedium = TextStyle(
         fontWeight = FontWeight.SemiBold,
-        fontFamily = gandomFont,
+        fontFamily = diroozFont,
         fontSize = 12.sp,
         lineHeight = 14.sp,
         letterSpacing = 0.sp

@@ -1,11 +1,11 @@
 package com.esum.feature.card.presentation.component
 
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun InfoTextFiled(
     modifier: Modifier = Modifier,
-    value: String,
+    value: String ?,
     onValueChange: (String) -> Unit,
     maxLine: Int? = null,
     nullable: Boolean,
@@ -28,23 +28,32 @@ fun InfoTextFiled(
     var error by remember {
         mutableStateOf(false)
     }
+    var focus by remember {
+        mutableStateOf(false)
+    }
+
+
+
+    LaunchedEffect(focus){
+        if (!nullable && focus){
+            error = value.isNullOrBlank()
+        }
+    }
 
     TextField(
         modifier = modifier.onFocusChanged {
-            if (it.isFocused) {
-                if (!nullable) {
-                    error = value.isBlank()
-                }
-            }
+           if (it.isFocused){
+               focus = true
+           }
         },
-        value = value,
+        value = value ?:"",
         onValueChange = onValueChange,
         maxLines = maxLine ?: Int.MAX_VALUE,
         textStyle = MaterialTheme.typography.bodyMedium,
         colors = TextFieldDefaults.colors(
-            unfocusedIndicatorColor = if (error) MaterialTheme.colorScheme.error else Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
             unfocusedContainerColor = MaterialTheme.colorScheme.background,
-            focusedIndicatorColor = if (error) MaterialTheme.colorScheme.error else Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
             focusedContainerColor = MaterialTheme.colorScheme.background,
             errorContainerColor = MaterialTheme.colorScheme.background,
             focusedLabelColor = if (error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
@@ -52,9 +61,9 @@ fun InfoTextFiled(
 
             ),
 
-        isError = error,
+        isError = error && value.isNullOrBlank(),
         label = {
-            if (hint.isNotBlank() && value.isBlank()) {
+            if (hint.isNotBlank() && value.isNullOrBlank()) {
                 Text(
                     text = hint, style = MaterialTheme.typography.bodySmall
                 )

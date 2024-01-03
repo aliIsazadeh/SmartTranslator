@@ -95,7 +95,7 @@ class AddingCardViewModel @Inject constructor(
         setSentence(sentence)
     }
     private fun setSentence(sentence : String){
-        _mutableState.update { it.copy(sentence = sentence) }
+        _mutableState.update { it.copy(card = it.card.copy(sentence = sentence)) }
     }
 
     companion object {

@@ -4,4 +4,6 @@
     <string name="ok">ok</string>
     <string name="Add_card_text_here">Add your card text here...</string>
     <string name="add_translate_text_here">Add translate text here...</string>
+    <string name="add_card">Add Card</string>
+    <string name="add_description_here">Add description here (optional)</string>
 </resources>
