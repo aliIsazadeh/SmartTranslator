@@ -14,17 +14,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.twotone.ArrowBack
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,12 +50,14 @@ import coil.request.ImageRequest
 import coil.request.repeatCount
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.CollectInLaunchedEffect
-import com.esum.core.ui.component.Picker
+import com.esum.core.ui.component.DefaultSnackbar
+import com.esum.core.ui.component.GenericDialog
 import com.esum.core.ui.theme.SmartTranslatorTheme
 import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.component.InfoTextFiled
+import com.esum.feature.card.presentation.component.Picker
 import com.esum.feature.card.presentation.viewmodel.AddingCardViewModel
 import com.esum.feature.card.presentation.viewmodel.CardAddingContract
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -72,7 +79,9 @@ fun CardAddingScreen(
         event = event,
         viewModel::onOriginalChange,
         viewModel::onTranslationChange,
-        viewModel::onSentenceChange
+        viewModel::onSentenceChange,
+        onOriginalLanguageSelect = viewModel::onOriginalChange,
+        onTranslateLanguageSelect = viewModel::onTranslationChange
     )
 
 }
@@ -85,8 +94,13 @@ fun CardAddingScreen(
     event: (CardAddingContract.Event) -> Unit,
     onOriginalTextChange: (String) -> Unit,
     onTranslationTextChange: (String) -> Unit,
-    onSentenceTextChange: (String) -> Unit
-) {
+    onSentenceTextChange: (String) -> Unit,
+    onOriginalLanguageSelect: (Languages) -> Unit,
+    onTranslateLanguageSelect: (Languages) -> Unit,
+
+    ) {
+
+    val context = LocalContext.current
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -105,45 +119,72 @@ fun CardAddingScreen(
 
     effect.CollectInLaunchedEffect { effect ->
         when (effect) {
+
             is CardAddingContract.Effect.ShowSnackBar -> {
+
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar(effect.message, "Ok")
+                    snackbarHostState.showSnackbar(
+                        context.getString(effect.message),
+                        actionLabel = context.getString(R.string.ok),
+                        withDismissAction = true
+                    )
                 }
             }
         }
     }
-    Scaffold(topBar = {
-        DefaultTopBar(
-            leftComposable = {
-                IconButton(onClick = { event.invoke(CardAddingContract.Event.backEvent) }) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "backBtn")
-                }
-            },
-            rightComposable = {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current)
-                            .data(data = R.drawable.send_message)
-                            .apply(block = fun ImageRequest.Builder.() {
-                                repeatCount(2)
-                                size(60)
-                            }).build(),
-                        imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
+    Scaffold(
+        topBar = {
+            DefaultTopBar(
+                leftComposable = {
+                    IconButton(onClick = { event.invoke(CardAddingContract.Event.backEvent) }) {
+                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "backBtn")
+                    }
+                },
+                rightComposable = {
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            ImageRequest.Builder(LocalContext.current)
+                                .data(data = R.drawable.send_message)
+                                .apply(block = fun ImageRequest.Builder.() {
+                                    repeatCount(2)
+                                    size(60)
+                                }).build(),
+                            imageLoader = imageLoader
+                        ),
+                        contentDescription = null,
+                    )
+                },
+                title = stringResource(id = R.string.add_card)
+            )
+        }, containerColor = MaterialTheme.colorScheme.background, snackbarHost = {
+            DefaultSnackbar(
+                snackbarHostState = snackbarHostState,
+                onDismiss = { snackbarHostState.currentSnackbarData?.dismiss() },
+            )
+        },
+        bottomBar = {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp), shape = MaterialTheme.shapes.extraSmall,
+                enabled = (state.card.original.isNotBlank() && state.card.translate.isNotBlank()),
+                onClick = { event.invoke(CardAddingContract.Event.SaveCardEvent) }) {
+                Text(
+                    text = stringResource(R.string.save_card),
+                    style = MaterialTheme.typography.titleSmall
                 )
-            },
-            title = stringResource(id = R.string.add_card)
-        )
-    }, containerColor = MaterialTheme.colorScheme.background, snackbarHost = {
-    }) { padding ->
+            }
+        }) { padding ->
 
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
-                .padding(top = padding.calculateTopPadding())
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    bottom = padding.calculateBottomPadding()
+                )
                 .background(color = MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -151,8 +192,7 @@ fun CardAddingScreen(
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    ,
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -168,15 +208,10 @@ fun CardAddingScreen(
                 )
                 Picker(
                     modifier = Modifier.weight(0.2f),
-                    items = listOf(
-                        Pair<String, Int>("fa", R.drawable.iran),
-                        Pair<String, Int>("en", R.drawable.united_kingdom),
-                        Pair<String, Int>("fr", R.drawable.france),
-                        Pair<String, Int>("it", R.drawable.italy),
-                        Pair<String, Int>("sa", R.drawable.saudi_arabia),
-                        Pair<String, Int>("ja", R.drawable.japan),
-                        ),
-                    textStyle = MaterialTheme.typography.labelSmall
+                    items = state.availableLanguage,
+                    textStyle = MaterialTheme.typography.labelSmall,
+                    dividerColor = MaterialTheme.colorScheme.primary,
+                    selectLanguage = onOriginalLanguageSelect
                 )
 
 //                Card(
@@ -192,10 +227,26 @@ fun CardAddingScreen(
 //
 //                }
             }
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { event.invoke(CardAddingContract.Event.OnlineTranslateEvent) }) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.height(IntrinsicSize.Min)
+                ) {
+                    Text(text = "translate online", style = MaterialTheme.typography.bodySmall)
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "online translate",
+                        modifier = Modifier.size(20.dp)
+                    )
+
+                }
+
+            }
             Row(
                 modifier = Modifier
-                    .fillMaxWidth().height(300.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                    .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 InfoTextFiled(
@@ -210,36 +261,31 @@ fun CardAddingScreen(
                     maxLine = 4,
                     nullable = false
                 )
-                Column(
+//                Column(
+//                    modifier = Modifier.weight(0.2f),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.spacedBy(4.dp)
+//                ) {
+////                    Card(
+////                        modifier = Modifier
+////                            .weight(0.5f),
+////                        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
+////                        shape = MaterialTheme.shapes.extraSmall,
+////                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+////                    ) {
+//
+//
+//                }
+                Picker(
                     modifier = Modifier.weight(0.2f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Card(
-                        modifier = Modifier
-                            .weight(0.5f)
-                            .fillMaxSize(),
-                        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-                        shape = MaterialTheme.shapes.extraSmall,
-                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-                    ) {
+                    items = state.availableLanguage,
+                    textStyle = MaterialTheme.typography.labelSmall,
+                    selectLanguage = onTranslateLanguageSelect
 
-                    }
-                    Picker(modifier = Modifier
-                        .weight(0.5f),
-                        items = listOf(
-                            Pair<String, Int>("fa", R.drawable.iran),
-                            Pair<String, Int>("en", R.drawable.united_kingdom),
-                            Pair<String, Int>("fr", R.drawable.france),
-                            Pair<String, Int>("it", R.drawable.italy),
-                            Pair<String, Int>("sa", R.drawable.saudi_arabia),
-                            Pair<String, Int>("ja", R.drawable.japan),
-                        ),
-                        textStyle = MaterialTheme.typography.labelSmall
-                    )
+                )
 
-                }
             }
+
 
             Spacer(
                 modifier = Modifier
@@ -261,16 +307,37 @@ fun CardAddingScreen(
                     id = R.string.add_description_here
                 ),
                 maxLine = 4,
-                nullable = true
+                nullable = true,
+                trailingIcon = {
+                    IconButton(onClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "generate sentence",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             )
+        }
 
+        if (state.errors != null) {
+            state.errors.apply {
+                GenericDialog(
+                    onDismiss = { onDismiss },
+                    title = title,
+                    sticker = sticker,
+                    positiveAction = positiveAction,
+                    negativeAction = negativeAction,
+                    description = description
+                )
+            }
 
         }
 
     }
 
-
 }
+
 
 @Preview
 @Composable
@@ -288,7 +355,9 @@ fun CardAddingScreenPreview() {
             event = {},
             onOriginalTextChange = {},
             onTranslationTextChange = {},
-            onSentenceTextChange = {}
+            onSentenceTextChange = {},
+            onOriginalLanguageSelect = {},
+            onTranslateLanguageSelect = {}
         )
     }
 

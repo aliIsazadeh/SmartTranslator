@@ -1,10 +1,11 @@
-package com.esum.core.ui.component
+package com.esum.feature.card.presentation.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,8 +15,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import com.esum.feature.card.presentation.R
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import com.esum.feature.card.presentation.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,24 +41,26 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.esum.core.ui.R
-
+import com.esum.common.lagnuage.Languages
+import com.esum.core.ui.theme.SmartTranslatorTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Picker(
-    items: List<Pair<String, Int>>,
+    items: List<Pair<Languages, Int>>,
     state: PickerState = rememberPickerState(),
     modifier: Modifier = Modifier,
     startIndex: Int = 0,
     visibleItemsCount: Int = 3,
     textModifier: Modifier = Modifier,
-    textStyle: TextStyle = LocalTextStyle.current,
-    dividerColor: Color = LocalContentColor.current,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    dividerColor: Color = MaterialTheme.colorScheme.primary,
+    selectLanguage : (Languages) -> Unit
 ) {
 
     val visibleItemsMiddle = visibleItemsCount / 2
@@ -84,7 +90,7 @@ fun Picker(
             .map { index -> getItem(index + visibleItemsMiddle) }
             .distinctUntilChanged()
             .collect { item ->
-                state.selectedItem = item.first
+                state.selectedItem = item.first.key
                 state.itemImage = item.second
             }
     }
@@ -103,19 +109,24 @@ fun Picker(
             items(listScrollCount) { index ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    horizontalArrangement = Arrangement.SpaceBetween,
 //                    modifier = Modifier.height(IntrinsicSize.Max)
                 ) {
                     Text(
-                        text = getItem(index).first,
+                        text = getItem(index).first.key,
                         modifier = Modifier
                             .onSizeChanged { size -> itemHeightPixels.value = size.height }
                             .then(textModifier)
+                            .weight(0.2f),
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center
                     )
-                    Icon(
-                        painter = painterResource(id = state.itemImage),
-                        contentDescription = "flag image" ,
-                        modifier.height(20.dp)
+                    Image(
+                        painter = painterResource(id = getItem(index).second),
+                        contentDescription = "flag image",
+                        modifier
+                            .height(20.dp)
+                            .weight(0.5f)
                     )
                 }
             }
@@ -151,4 +162,40 @@ fun rememberPickerState() = remember { PickerState() }
 class PickerState {
     var selectedItem by mutableStateOf("")
     var itemImage by mutableIntStateOf(R.drawable.iran)
+}
+
+
+@Preview
+@Composable
+fun PickerPreview() {
+
+    SmartTranslatorTheme {
+
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.background)
+        ) {
+            Box(modifier = Modifier.weight(0.8f))
+
+
+            Picker(
+                modifier = Modifier.weight(0.2f),
+                items = listOf(
+                    Pair<Languages, Int>(Languages.Farsi, R.drawable.iran),
+                    Pair<Languages, Int>(Languages.English, R.drawable.united_kingdom),
+                    Pair<Languages, Int>(Languages.French, R.drawable.france),
+                    Pair<Languages, Int>(Languages.Italian, R.drawable.italy),
+                    Pair<Languages, Int>(Languages.Arabic, R.drawable.saudi_arabia),
+                    Pair<Languages, Int>(Languages.Japans, R.drawable.japan),
+                ),
+                textStyle = MaterialTheme.typography.labelSmall,
+                selectLanguage = {}
+
+            )
+        }
+
+    }
+
+
 }

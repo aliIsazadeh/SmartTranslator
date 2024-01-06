@@ -1,14 +1,18 @@
 package com.esum.feature.card.presentation.viewmodel
 
 import android.util.Log
+import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.esum.common.constraints.ResultConstraints
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
+import com.esum.core.ui.status.SnackBarStatus
 import com.esum.feature.card.domain.UsecaseFactory
 import com.esum.feature.card.domain.usecase.InsertCardUsecase
 import com.esum.feature.card.presentation.R
+import com.esum.core.ui.R as CoreR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -18,22 +22,32 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class AddingCardViewModel @Inject constructor(
-    private val insertCardUsecase: InsertCardUsecase
+    private val insertCardUsecase: Provider<InsertCardUsecase>
 
 ) : ViewModel(), CardAddingContract {
 
     private val TAG = "CardAddingContract"
 
-    private val _mutableState = MutableStateFlow(CardAddingContract.State())
+    private val _mutableState = MutableStateFlow(
+        CardAddingContract.State(
+            availableLanguage = listOf(
+                Pair<Languages, Int>(Languages.Farsi, R.drawable.iran),
+                Pair<Languages, Int>(Languages.English, R.drawable.united_kingdom),
+                Pair<Languages, Int>(Languages.French, R.drawable.france),
+                Pair<Languages, Int>(Languages.Italian, R.drawable.italy),
+                Pair<Languages, Int>(Languages.Arabic, R.drawable.saudi_arabia),
+                Pair<Languages, Int>(Languages.Japans, R.drawable.japan),
+            )
+        )
+    )
     override val state: StateFlow<CardAddingContract.State> = _mutableState
 
     private val effectChannel = Channel<CardAddingContract.Effect>(Channel.UNLIMITED)
     override val effect: Flow<CardAddingContract.Effect> = effectChannel.receiveAsFlow()
-
-
 
 
     override fun event(event: CardAddingContract.Event) {
@@ -41,60 +55,134 @@ class AddingCardViewModel @Inject constructor(
             try {
                 when (event) {
                     CardAddingContract.Event.CancelEvent -> {}
-                    CardAddingContract.Event.GenerateSentenceEvent -> {}
-                    CardAddingContract.Event.OnlineTranslateEvent -> {}
-                    CardAddingContract.Event.SaveCardEvent -> {}
+                    CardAddingContract.Event.GenerateSentenceEvent -> {
+                        onlineGenerateSentence()
+                    }
+
+                    CardAddingContract.Event.OnlineTranslateEvent -> {
+                        onlineTranslate()
+                    }
+
+                    CardAddingContract.Event.SaveCardEvent -> {
+                        insertCard()
+                    }
+
                     CardAddingContract.Event.SelectOriginalOriginEvent -> {}
                     CardAddingContract.Event.SelectTranslateOriginEvent -> {}
-                    CardAddingContract.Event.backEvent -> {}
+                    CardAddingContract.Event.backEvent -> {
+                        throw Exception()
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "event: ${e.message.toString()}")
-                _mutableState.update {
-                    it.copy(
-                        errors = GenericDialogInfo.Builder().title(R.string.something_went_wrong)
-                            .description(description = R.drawable.mind_blow)
-                            .positive(
-                                PositiveAction(
-                                    positiveBtnTxt = R.string.ok,
-                                    onPositiveAction = { _mutableState.update { it.copy(errors = null) } })
-                            ).build()
-                    )
-                }
+                addError(
+                    title = R.string.an_error_accoured,
+                    description = R.string.something_went_wrong,
+                    sticker = R.drawable.mind_blow
+                )
             }
         }
     }
 
-    fun onOriginalChange(original : String ){
+    private fun insertCard() {
+        viewModelScope.launch {
+            insertCardUsecase.get().invoke(state.value.card).collect() {
+                when (it) {
+                    is ResultConstraints.Error -> {
+                        Log.e(TAG, "insertCard: ${it.message}", )
+                        addError(
+                            title = R.string.an_error_accoured,
+                            description = R.string.something_went_wrong,
+                            sticker = R.drawable.lagging
+                        )
+                    }
+                    is ResultConstraints.Loading -> {}
+                    is ResultConstraints.Success -> {
+                        effectChannel.trySend(
+                            CardAddingContract.Effect.ShowSnackBar(
+                                message = R.string.add_card_success_full,
+                                success = true
+                            )
+                        )
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun onlineTranslate() {
+        addError(
+            title = R.string.unable_toTranslate,
+            description = R.string.something_went_wrong,
+            sticker = R.drawable.lagging
+        )
+    }
+
+    private fun onlineGenerateSentence() {
+        addError(
+            title = R.string.unable_to_find_sentence,
+            description = R.string.something_went_wrong,
+            sticker = R.drawable.dont_know
+        )
+    }
+
+
+    private fun addError(title: Int, description: Int, sticker: Int) {
+        _mutableState.update {
+            it.copy(
+                errors = GenericDialogInfo.Builder().title(title)
+                    .sticker(sticker = sticker)
+                    .description(description = description)
+                    .positive(
+                        PositiveAction(
+                            positiveBtnTxt = R.string.ok,
+                            onPositiveAction = { _mutableState.update { it.copy(errors = null) } })
+                    ).onDismiss {
+                        _mutableState.update { it.copy(errors = null) }
+                    }.build()
+            )
+        }
+    }
+
+
+    fun onOriginalChange(original: String) {
         setOriginal(original)
     }
-    private fun setOriginal(original :String ) {
+
+    private fun setOriginal(original: String) {
         _mutableState.update { it.copy(card = it.card.copy(original = original)) }
     }
-    fun onOriginalChange(original :Languages){
+
+    fun onOriginalChange(original: Languages) {
         setOriginal(original)
     }
-    private fun setOriginal(original :  Languages) {
+
+    private fun setOriginal(original: Languages) {
         _mutableState.update { it.copy(card = it.card.copy(originalLanguage = original)) }
     }
 
-    fun onTranslationChange(translate : String ){
+    fun onTranslationChange(translate: String) {
         setTranslation(translate)
     }
-    private fun setTranslation(translate : String ) {
+
+    private fun setTranslation(translate: String) {
         _mutableState.update { it.copy(card = it.card.copy(translate = translate)) }
     }
-    fun onTranslationChange(translate :  Languages){
+
+    fun onTranslationChange(translate: Languages) {
         setTranslation(translate)
     }
-    private fun setTranslation(translate :  Languages) {
+
+    private fun setTranslation(translate: Languages) {
         _mutableState.update { it.copy(card = it.card.copy(translateLanguage = translate)) }
     }
 
-    fun onSentenceChange(sentence : String) {
+    fun onSentenceChange(sentence: String) {
         setSentence(sentence)
     }
-    private fun setSentence(sentence : String){
+
+    private fun setSentence(sentence: String) {
         _mutableState.update { it.copy(card = it.card.copy(sentence = sentence)) }
     }
 

@@ -59,10 +59,13 @@ fun GenericDialog(
                 contentDescription = null,
             )
         },
-        title = { Text(stringResource(title)) },
+        title = { Text(stringResource(title), style = MaterialTheme.typography.bodyMedium) },
         text = {
             if (description != null) {
-                Text(text = stringResource(description))
+                Text(
+                    text = stringResource(description),
+                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
+                )
             }
         },
         confirmButton = {
@@ -70,6 +73,7 @@ fun GenericDialog(
                 Button(
                     modifier = Modifier.padding(end = 8.dp),
                     onClick = positiveAction.onPositiveAction,
+                    shape = MaterialTheme.shapes.extraSmall
                 ) {
                     Text(text = stringResource(positiveAction.positiveBtnTxt))
                 }
@@ -80,7 +84,8 @@ fun GenericDialog(
                 Button(
                     modifier = Modifier.padding(end = 8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onError),
-                    onClick = negativeAction.onNegativeAction
+                    onClick = negativeAction.onNegativeAction,
+                    shape = MaterialTheme.shapes.extraSmall
                 ) {
                     Text(text = stringResource(negativeAction.negativeBtnTxt))
                 }

@@ -6,4 +6,9 @@
     <string name="add_translate_text_here">Add translate text here...</string>
     <string name="add_card">Add Card</string>
     <string name="add_description_here">Add description here (optional)</string>
+    <string name="save_card">Save Card</string>
+    <string name="unable_toTranslate">Unable to translate!</string>
+    <string name="unable_to_find_sentence">Unable to find sentence!</string>
+    <string name="an_error_accoured">Unfortunately an error has occurred</string>
+    <string name="add_card_success_full">Card added successfully</string>
 </resources>

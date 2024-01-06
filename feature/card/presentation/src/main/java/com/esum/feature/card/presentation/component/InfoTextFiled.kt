@@ -1,5 +1,6 @@
 package com.esum.feature.card.presentation.component
 
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -17,13 +18,13 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun InfoTextFiled(
     modifier: Modifier = Modifier,
-    value: String ?,
+    value: String?,
     onValueChange: (String) -> Unit,
     maxLine: Int? = null,
     nullable: Boolean,
     hint: String,
-
-    ) {
+    trailingIcon: @Composable() () -> Unit = {}
+) {
 
     var error by remember {
         mutableStateOf(false)
@@ -34,19 +35,19 @@ fun InfoTextFiled(
 
 
 
-    LaunchedEffect(focus){
-        if (!nullable && focus){
+    LaunchedEffect(focus) {
+        if (!nullable && focus) {
             error = value.isNullOrBlank()
         }
     }
 
     TextField(
         modifier = modifier.onFocusChanged {
-           if (it.isFocused){
-               focus = true
-           }
+            if (it.isFocused) {
+                focus = true
+            }
         },
-        value = value ?:"",
+        value = value ?: "",
         onValueChange = onValueChange,
         maxLines = maxLine ?: Int.MAX_VALUE,
         textStyle = MaterialTheme.typography.bodyMedium,
@@ -60,6 +61,7 @@ fun InfoTextFiled(
             focusedTextColor = MaterialTheme.colorScheme.onBackground,
 
             ),
+        trailingIcon = { trailingIcon() },
 
         isError = error && value.isNullOrBlank(),
         label = {

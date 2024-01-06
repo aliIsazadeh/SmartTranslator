@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "card_table")
 data class CardEntity(
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id : Long = 0L,
+    val id : Int = 0,
 
     @ColumnInfo("define_language")
     val defineLanguage : String ? = null,

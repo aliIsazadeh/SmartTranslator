@@ -50,6 +50,8 @@ dependencies {
     implementation(project(":feature:card:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:feature-api"))
+//    implementation(project(":feature:card:data"))
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

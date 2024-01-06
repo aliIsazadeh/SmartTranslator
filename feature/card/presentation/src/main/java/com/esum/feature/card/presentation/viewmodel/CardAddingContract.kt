@@ -1,6 +1,7 @@
 package com.esum.feature.card.presentation.viewmodel
 
 import androidx.compose.runtime.Stable
+import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.UnidirectionalViewModel
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.feature.card.domain.model.Card
@@ -20,13 +21,14 @@ interface CardAddingContract :
     }
 
     sealed interface Effect {
-        data class ShowSnackBar(val message: String, val success: Boolean) : Effect
+        data class ShowSnackBar(val message: Int, val success: Boolean) : Effect
 
     }
 
     @Stable
     data class State(
-        val card : Card = Card(),
+        val card: Card = Card(),
+        val availableLanguage : List<Pair<Languages, Int>> = listOf(),
         val sentence: String? = null,
         val errors: GenericDialogInfo? = null,
     )

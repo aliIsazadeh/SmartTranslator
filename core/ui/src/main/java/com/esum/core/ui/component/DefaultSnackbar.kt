@@ -1,6 +1,7 @@
 package com.esum.core.ui.component
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -20,13 +21,13 @@ fun DefaultSnackbar(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit?,
-    snackBarStatus: SnackBarStatus
 ) {
     SnackbarHost(
+        modifier = modifier,
         hostState = snackbarHostState,
         snackbar = { data ->
-            Snackbar(
-                modifier = Modifier.padding(16.dp).border(width = 1.dp , color = snackBarStatus.color),
+            Snackbar(containerColor = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.padding(16.dp),
                 content = {
                     Text(
                         text = data.visuals.message,
@@ -51,6 +52,5 @@ fun DefaultSnackbar(
                 }
             )
         },
-        modifier = modifier
     )
 }

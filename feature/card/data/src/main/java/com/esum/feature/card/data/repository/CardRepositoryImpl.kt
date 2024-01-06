@@ -1,8 +1,11 @@
 package com.esum.feature.card.data.repository
 
 import com.esum.common.constraints.ResultConstraints
+import com.esum.common.date.getCurrentDate
 import com.esum.database.dataProvider.CardDataProvider
 import com.esum.database.entity.CardEntity
+import com.esum.feature.card.data.mapper.mapToCardEntity
+import com.esum.feature.card.domain.model.Card
 import com.esum.feature.card.domain.repository.CardRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -39,9 +42,9 @@ class CardRepositoryImpl @Inject constructor(
             ResultConstraints.Error<ResultConstraints<CardEntity>>(it.message.toString())
         }.distinctUntilChanged().flowOn(dispatcher)
 
-    override suspend fun insertCard(cardEntity: CardEntity): Flow<ResultConstraints<Long>> = flow {
+    override suspend fun insertCard(card: Card): Flow<ResultConstraints<Long>> = flow {
         emit(ResultConstraints.Loading())
-        emit(ResultConstraints.Success(cardDataProvider.insertCard(cardEntity)))
+        emit(ResultConstraints.Success(cardDataProvider.insertCard(card.mapToCardEntity().copy(createDate = getCurrentDate()))))
     }.catch {
         emit(ResultConstraints.Error(message = it.message.toString()))
     }.flowOn(dispatcher)
