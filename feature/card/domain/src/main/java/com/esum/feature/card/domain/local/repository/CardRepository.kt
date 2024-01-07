@@ -1,8 +1,8 @@
-package com.esum.feature.card.domain.repository
+package com.esum.feature.card.domain.local.repository
 
 import com.esum.common.constraints.ResultConstraints
 import com.esum.database.entity.CardEntity
-import com.esum.feature.card.domain.model.Card
+import com.esum.feature.card.domain.local.model.Card
 import kotlinx.coroutines.flow.Flow
 
 interface CardRepository {

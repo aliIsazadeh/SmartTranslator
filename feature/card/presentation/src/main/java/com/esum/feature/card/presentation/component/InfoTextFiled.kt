@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDirection
 
 @Composable
 fun InfoTextFiled(
@@ -50,7 +51,7 @@ fun InfoTextFiled(
         value = value ?: "",
         onValueChange = onValueChange,
         maxLines = maxLine ?: Int.MAX_VALUE,
-        textStyle = MaterialTheme.typography.bodyMedium,
+        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.Content),
         colors = TextFieldDefaults.colors(
             unfocusedIndicatorColor = Color.Transparent,
             unfocusedContainerColor = MaterialTheme.colorScheme.background,

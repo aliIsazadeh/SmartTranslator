@@ -1,12 +1,12 @@
-package com.esum.feature.card.data.repository
+package com.esum.feature.card.data.local.repository
 
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.date.getCurrentDate
 import com.esum.database.dataProvider.CardDataProvider
 import com.esum.database.entity.CardEntity
-import com.esum.feature.card.data.mapper.mapToCardEntity
-import com.esum.feature.card.domain.model.Card
-import com.esum.feature.card.domain.repository.CardRepository
+import com.esum.feature.card.data.local.mapper.mapToCardEntity
+import com.esum.feature.card.domain.local.model.Card
+import com.esum.feature.card.domain.local.repository.CardRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

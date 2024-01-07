@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.compose.graphics)
     implementation(libs.compose.preview)
     implementation(libs.compose.material)
+    implementation(libs.compose.constraintlayout)
 
     implementation(libs.coil)
     implementation(libs.coil.gif)

@@ -1,7 +1,7 @@
-package com.esum.feature.card.domain.usecase
+package com.esum.feature.card.domain.local.usecase
 
 import com.esum.common.constraints.ResultConstraints
-import com.esum.feature.card.domain.repository.CardRepository
+import com.esum.feature.card.domain.local.repository.CardRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

@@ -1,32 +1,36 @@
 package com.esum.feature.card.presentation.viewmodel
 
 import android.util.Log
-import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esum.common.constraints.ResultConstraints
+import com.esum.common.constraints.TranslateErrors
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
-import com.esum.core.ui.status.SnackBarStatus
-import com.esum.feature.card.domain.UsecaseFactory
-import com.esum.feature.card.domain.usecase.InsertCardUsecase
+import com.esum.feature.card.domain.local.model.Card
+import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
+import com.esum.feature.card.domain.remote.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.R
-import com.esum.core.ui.R as CoreR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.math.log
 
 @HiltViewModel
 class AddingCardViewModel @Inject constructor(
-    private val insertCardUsecase: Provider<InsertCardUsecase>
+    private val insertCardUsecase: Provider<InsertCardUsecase>,
+    private val translateCardUseCase: Provider<TranslateCardUseCase>
 
 ) : ViewModel(), CardAddingContract {
 
@@ -89,13 +93,14 @@ class AddingCardViewModel @Inject constructor(
             insertCardUsecase.get().invoke(state.value.card).collect() {
                 when (it) {
                     is ResultConstraints.Error -> {
-                        Log.e(TAG, "insertCard: ${it.message}", )
+                        Log.e(TAG, "insertCard: ${it.message}")
                         addError(
                             title = R.string.an_error_accoured,
                             description = R.string.something_went_wrong,
                             sticker = R.drawable.lagging
                         )
                     }
+
                     is ResultConstraints.Loading -> {}
                     is ResultConstraints.Success -> {
                         effectChannel.trySend(
@@ -112,11 +117,51 @@ class AddingCardViewModel @Inject constructor(
     }
 
     private fun onlineTranslate() {
-        addError(
-            title = R.string.unable_toTranslate,
-            description = R.string.something_went_wrong,
-            sticker = R.drawable.lagging
-        )
+        viewModelScope.launch {
+            _mutableState.value.card.apply {
+                translateCardUseCase.get().invoke(
+                    fromLanguages = originalLanguage,
+                    toLanguages = translateLanguage,
+                    text = original
+                ).onEach  { result ->
+                    when (result) {
+                        is ResultConstraints.Error -> {
+                            _mutableState.update {
+                                it.copy(loading = false)
+                            }
+                            when (TranslateErrors.getTranslateErrorByMessage(
+                                result.message ?: ""
+                            )) {
+                                TranslateErrors.ResponseIsEmpty -> addError(
+                                    title = R.string.unable_toTranslate,
+                                    description = R.string.no_translation_find,
+                                    sticker = R.drawable.dont_know
+                                )
+
+                                TranslateErrors.ErrorInRequest -> {
+                                    Log.e(TAG, "onlineTranslate: ${result.message}", )
+                                    addError(
+                                        title = R.string.unable_toTranslate,
+                                        description = R.string.something_went_wrong,
+                                        sticker = R.drawable.lagging
+                                    )
+                                }
+                            }
+                        }
+                        is ResultConstraints.Loading -> _mutableState.update {
+                            it.copy(loading = true)
+                        }
+                        is ResultConstraints.Success -> _mutableState.update {
+                            it.copy(
+                                loading = false,
+                                card = it.card.copy(translate = result.data!!.translated)
+                            )
+                        }
+                    }
+
+                }.launchIn(viewModelScope)
+            }
+        }
     }
 
     private fun onlineGenerateSentence() {

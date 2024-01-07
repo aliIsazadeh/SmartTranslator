@@ -1,8 +1,8 @@
-package com.esum.feature.card.domain.usecase
+package com.esum.feature.card.domain.local.usecase
 
 import com.esum.common.date.getCurrentDate
 import com.esum.database.entity.CardEntity
-import com.esum.feature.card.domain.repository.CardRepository
+import com.esum.feature.card.domain.local.repository.CardRepository
 import javax.inject.Inject
 
 class UpdateCardUsecase @Inject constructor(private val cardRepository: CardRepository) {

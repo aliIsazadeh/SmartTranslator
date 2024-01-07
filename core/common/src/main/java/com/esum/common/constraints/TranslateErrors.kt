@@ -5,8 +5,11 @@ enum class TranslateErrors(val message: String) {
     ErrorInRequest("ResponseIsEmpty");
 
 
-    fun getTranslateErrorByMessage(message: String): TranslateErrors {
-        return entries.toTypedArray().firstOrNull{it.message == message} ?: ErrorInRequest
+    companion object {
+        fun getTranslateErrorByMessage(message: String): TranslateErrors {
+            return entries.toTypedArray().firstOrNull{it.message == message} ?: ErrorInRequest
+        }
     }
+
 
 }

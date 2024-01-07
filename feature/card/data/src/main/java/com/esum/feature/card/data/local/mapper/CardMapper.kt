@@ -1,8 +1,8 @@
-package com.esum.feature.card.data.mapper
+package com.esum.feature.card.data.local.mapper
 
 import com.esum.common.lagnuage.Languages
 import com.esum.database.entity.CardEntity
-import com.esum.feature.card.domain.model.Card
+import com.esum.feature.card.domain.local.model.Card
 
 fun Card.mapToCardEntity(): CardEntity {
 

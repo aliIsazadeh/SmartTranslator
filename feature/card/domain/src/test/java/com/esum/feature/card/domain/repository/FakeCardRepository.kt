@@ -4,7 +4,8 @@ import com.esum.common.constraints.ResultConstraints
 import com.esum.common.date.getCurrentDate
 import com.esum.common.lagnuage.Languages
 import com.esum.database.entity.CardEntity
-import com.esum.feature.card.domain.model.Card
+import com.esum.feature.card.domain.local.model.Card
+import com.esum.feature.card.domain.local.repository.CardRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -47,7 +48,7 @@ class FakeCardRepository : CardRepository {
         emit(ResultConstraints.Error<CardEntity?>(message = it.message.toString()))
     }
 
-    override suspend fun insertCard(card: Card ): Flow<ResultConstraints<Long>> = flow<ResultConstraints<Long>> {
+    override suspend fun insertCard(card: Card): Flow<ResultConstraints<Long>> = flow<ResultConstraints<Long>> {
         emit(ResultConstraints.Loading())
         cards.add(card)
         emit(ResultConstraints.Success(0))

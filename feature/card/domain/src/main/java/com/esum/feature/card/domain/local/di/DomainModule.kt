@@ -1,17 +1,15 @@
-package com.esum.feature.card.domain.di
+package com.esum.feature.card.domain.local.di
 
-import com.esum.feature.card.domain.UsecaseFactory
-import com.esum.feature.card.domain.repository.CardRepository
-import com.esum.feature.card.domain.usecase.DeleteCardByIdUsecase
-import com.esum.feature.card.domain.usecase.DeleteCardUsecase
-import com.esum.feature.card.domain.usecase.GetAllCardsUsecase
-import com.esum.feature.card.domain.usecase.GetCardByIdUsecase
-import com.esum.feature.card.domain.usecase.InsertCardUsecase
-import com.esum.feature.card.domain.usecase.UpdateCardUsecase
+import com.esum.feature.card.domain.local.repository.CardRepository
+import com.esum.feature.card.domain.local.usecase.DeleteCardByIdUsecase
+import com.esum.feature.card.domain.local.usecase.DeleteCardUsecase
+import com.esum.feature.card.domain.local.usecase.GetAllCardsUsecase
+import com.esum.feature.card.domain.local.usecase.GetCardByIdUsecase
+import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
+import com.esum.feature.card.domain.local.usecase.UpdateCardUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.UnidirectionalViewModel
 import com.esum.core.ui.component.GenericDialogInfo
-import com.esum.feature.card.domain.model.Card
+import com.esum.feature.card.domain.local.model.Card
 
 interface CardAddingContract :
     UnidirectionalViewModel<CardAddingContract.State, CardAddingContract.Effect, CardAddingContract.Event> {
@@ -31,6 +31,8 @@ interface CardAddingContract :
         val availableLanguage : List<Pair<Languages, Int>> = listOf(),
         val sentence: String? = null,
         val errors: GenericDialogInfo? = null,
+        val loading: Boolean = false
+
     )
 
 

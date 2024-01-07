@@ -92,6 +92,7 @@ fun Picker(
             .collect { item ->
                 state.selectedItem = item.first.key
                 state.itemImage = item.second
+                selectLanguage(item.first)
             }
     }
 

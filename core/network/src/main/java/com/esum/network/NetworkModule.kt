@@ -2,6 +2,7 @@ package com.esum.network
 
 import com.esum.network.interceptor.TranslateInterceptor
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,16 +17,23 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
-    @Singleton
-    fun provideInterceptor(): Interceptor {
-        return TranslateInterceptor()
-    }
+//    @Provides
+//    @Singleton
+//    fun provideInterceptor(): Interceptor {
+//        return TranslateInterceptor()
+//    }
 
     @Provides
     @Singleton
-    fun providesClient(interceptor: TranslateInterceptor): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor(interceptor).build()
+    fun providesClient(): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(Interceptor.invoke {
+            val request =  it.request().newBuilder()
+                .addHeader("X-RapidAPI-Key", "a8c484a0b1mshd2eb9728993d4c4p13b074jsne7ae553be513")
+                .addHeader("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
+                .addHeader("content-type", "application/x-www-form-urlencoded")
+                .build()
+            it.proceed(request)
+        }).build()
     }
 
 
@@ -33,10 +41,13 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesTranslateApiService(okHttpClient: OkHttpClient): TranslateApiService {
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
         return Retrofit.Builder()
             .baseUrl("https://text-translator2.p.rapidapi.com")
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create()).build()
+            .addConverterFactory(MoshiConverterFactory.create(moshi)).build()
             .create(TranslateApiService::class.java)
     }
 

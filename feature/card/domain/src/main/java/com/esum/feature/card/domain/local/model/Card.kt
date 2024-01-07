@@ -1,4 +1,4 @@
-package com.esum.feature.card.domain.model
+package com.esum.feature.card.domain.local.model
 
 import com.esum.common.lagnuage.Languages
 

@@ -50,6 +50,7 @@ import coil.request.ImageRequest
 import coil.request.repeatCount
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.CollectInLaunchedEffect
+import com.esum.core.ui.component.CircularIndeterminateProgressBar
 import com.esum.core.ui.component.DefaultSnackbar
 import com.esum.core.ui.component.GenericDialog
 import com.esum.core.ui.theme.SmartTranslatorTheme
@@ -319,6 +320,7 @@ fun CardAddingScreen(
                 }
             )
         }
+        CircularIndeterminateProgressBar(isVisible = state.loading)
 
         if (state.errors != null) {
             state.errors.apply {
