@@ -10,7 +10,7 @@ data class CardEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id : Int = 0,
+    val id : Long = 0L,
 
     @ColumnInfo("define_language")
     val defineLanguage : String ? = null,

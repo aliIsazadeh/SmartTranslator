@@ -2,9 +2,10 @@ package com.esum.feature.card.domain.usecase
 
 
 import com.esum.common.constraints.ResultConstraints
+import com.esum.common.lagnuage.Languages
 import com.esum.database.entity.CardEntity
+import com.esum.feature.card.domain.model.Card
 import com.esum.feature.card.domain.repository.FakeCardRepository
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -19,7 +20,9 @@ class CardUsecasesTest {
     private lateinit var insertUsecase: InsertCardUsecase
     private lateinit var getAllCardsUsecase: GetAllCardsUsecase
 
-    val cards = mutableListOf<CardEntity>()
+    private val cardsEntity = mutableListOf<CardEntity>()
+    private val cards = mutableListOf<Card>()
+
 
     @Before
     fun setUp() {
@@ -27,8 +30,22 @@ class CardUsecasesTest {
         insertUsecase = InsertCardUsecase(repository)
         getAllCardsUsecase = GetAllCardsUsecase(repository)
 
-        cards.add(CardEntity(id = 2, active = true, farsi = "سگ", english = "dog"))
-        cards.add(CardEntity(id = 2, active = true, farsi = "گربه", english = "cat"))
+        cardsEntity.add(CardEntity(id = 2, active = true, farsi = "سگ", english = "dog"))
+        cardsEntity.add(CardEntity(id = 2, active = true, farsi = "گربه", english = "cat"))
+
+        cards.add(
+            Card(
+                createDate = "",
+                updateDate = "",
+                sentence = "",
+                correctAnswerCount = 0,
+                translateLanguage = Languages.English,
+                translate = "hello",
+                originalLanguage = Languages.Farsi,
+                original = "سلام"
+            )
+        )
+
     }
 
     @Test
@@ -72,22 +89,20 @@ class CardUsecasesTest {
     @Test
     fun insertCard() = runBlocking {
 
-        insertUsecase.invoke(cards[1]).collect() { result ->
+        insertUsecase.invoke(cards[0]).collect() { result ->
 
             when (result) {
                 is ResultConstraints.Error -> {
                     assert(false)
                 }
+
                 is ResultConstraints.Loading -> {}
                 is ResultConstraints.Success -> {
-                    assert(true){result.data.toString()}
+                    assert(true) { result.data.toString() }
                 }
             }
         }
     }
-
-
-
 
 
 }
