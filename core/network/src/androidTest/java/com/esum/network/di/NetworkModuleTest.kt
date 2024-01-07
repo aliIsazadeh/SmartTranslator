@@ -46,7 +46,6 @@ object NetworkModuleTest {
          val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
-
         return Retrofit.Builder()
             .baseUrl("https://text-translator2.p.rapidapi.com")
             .client(okHttpClient)
