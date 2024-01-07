@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.constraints.TranslateErrors
+import com.esum.common.constraints.getTranslateErrorByMessage
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
@@ -129,14 +130,16 @@ class AddingCardViewModel @Inject constructor(
                             _mutableState.update {
                                 it.copy(loading = false)
                             }
-                            when (TranslateErrors.getTranslateErrorByMessage(
+                            when (getTranslateErrorByMessage(
                                 result.message ?: ""
                             )) {
-                                TranslateErrors.ResponseIsEmpty -> addError(
-                                    title = R.string.unable_toTranslate,
-                                    description = R.string.no_translation_find,
-                                    sticker = R.drawable.dont_know
-                                )
+                                TranslateErrors.ResponseIsEmpty -> {
+                                    addError(
+                                        title = R.string.unable_toTranslate,
+                                        description = R.string.no_translation_find,
+                                        sticker = R.drawable.dont_know
+                                    )
+                                }
 
                                 TranslateErrors.ErrorInRequest -> {
                                     Log.e(TAG, "onlineTranslate: ${result.message}", )
@@ -146,6 +149,11 @@ class AddingCardViewModel @Inject constructor(
                                         sticker = R.drawable.lagging
                                     )
                                 }
+                                TranslateErrors.VpnProblem -> addError(
+                                    title = R.string.vpn_problem,
+                                    description = R.string.vpn_needed,
+                                    sticker = R.drawable.vpn
+                                )
                             }
                         }
                         is ResultConstraints.Loading -> _mutableState.update {

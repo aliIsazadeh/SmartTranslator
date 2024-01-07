@@ -41,7 +41,7 @@ class RemoteRepositoryImpl @Inject constructor(
             }
         }
     }.catch {
-        Log.e("RemoteRepositoryImpl", "translateOnline: ${it.message} ")
+        Log.e("RemoteRepositoryImpl", "translateOnline: ${it.message}")
         emit(ResultConstraints.Error<TranslateResult>(message = it.message.toString()))
     }.flowOn(dispatcher)
 }

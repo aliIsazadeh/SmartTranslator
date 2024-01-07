@@ -12,4 +12,6 @@
     <string name="an_error_accoured">Unfortunately an error has occurred</string>
     <string name="add_card_success_full">Card added successfully</string>
     <string name="no_translation_find">Can\'t find any translation for this word</string>
+    <string name="vpn_problem">Vpn Needed!</string>
+    <string name="vpn_needed">It seems we need vpn!</string>
 </resources>
