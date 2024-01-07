@@ -118,5 +118,6 @@ androidx-compose-material = { group = "androidx.wear.compose", name = "compose-m
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-android = {id = "com.google.dagger.hilt.android" , version.ref = "hilt"}
+room = {id = "androidx.room",version.ref = "room-version"}
 
 

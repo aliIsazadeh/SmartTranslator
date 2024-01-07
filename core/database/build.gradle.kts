@@ -4,7 +4,13 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt.android)
     kotlin("kapt")
+    alias(libs.plugins.room)
+
 }
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 
 android {
     namespace = "com.esum.database"
@@ -15,7 +21,11 @@ android {
 
         testInstrumentationRunner = "com.esum.database.DatabaseTestRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+
+
     }
+
 
     buildTypes {
         release {
