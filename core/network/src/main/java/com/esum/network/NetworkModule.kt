@@ -34,7 +34,7 @@ object NetworkModule {
     @Singleton
     fun providesTranslateApiService(okHttpClient: OkHttpClient): TranslateApiService {
         return Retrofit.Builder()
-            .baseUrl("https://translated-mymemory---translation-memory.p.rapidapi.com/get?")
+            .baseUrl("https://text-translator2.p.rapidapi.com")
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create()).build()
             .create(TranslateApiService::class.java)

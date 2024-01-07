@@ -21,6 +21,9 @@
       <entry key="ExampleInstrumentedTest">
         <State />
       </entry>
+      <entry key="TranslateDataProviderTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -36,6 +39,9 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-01-07T05:47:15.313998600Z" />
         </State>
+      </entry>
+      <entry key="translate()">
+        <State />
       </entry>
     </value>
   </component>

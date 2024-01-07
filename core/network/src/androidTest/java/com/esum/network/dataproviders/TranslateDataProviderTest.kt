@@ -41,11 +41,12 @@ class TranslateDataProviderTest {
                 toLanguages = Languages.Farsi.key,
                 query = "Hello"
             )
-            Log.d(TAG, response.responseData.translatedText)
+            Log.d(TAG, response.toString())
 
-            assertEquals("سلام", response.responseData.translatedText)
+            assertEquals("سلام", response.data.translatedText)
         }catch (e : Exception){
             Log.e(TAG, "translate: ${e.message}", )
+            assert(false)
         }
 
   
