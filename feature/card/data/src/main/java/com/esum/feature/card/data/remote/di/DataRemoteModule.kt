@@ -2,7 +2,7 @@ package com.esum.feature.card.data.remote.di
 
 import com.esum.feature.card.data.remote.repository.RemoteRepositoryImpl
 import com.esum.feature.card.domain.remote.repository.RemoteRepository
-import com.esum.network.dataproviders.TranslateDataProvider
+import com.esum.network.translate.dataprovider.TranslateDataProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

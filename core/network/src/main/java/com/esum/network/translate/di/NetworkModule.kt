@@ -1,6 +1,6 @@
-package com.esum.network
+package com.esum.network.translate.di
 
-import com.esum.network.interceptor.TranslateInterceptor
+import com.esum.network.translate.api.TranslateApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

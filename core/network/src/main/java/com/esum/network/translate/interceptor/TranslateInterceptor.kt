@@ -1,4 +1,4 @@
-package com.esum.network.interceptor
+package com.esum.network.translate.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response

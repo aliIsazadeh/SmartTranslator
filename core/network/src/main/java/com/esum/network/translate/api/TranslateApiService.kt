@@ -1,13 +1,9 @@
-package com.esum.network
+package com.esum.network.translate.api
 
-import com.esum.common.lagnuage.Languages
-import com.esum.network.model.TranslateResult
-import retrofit2.http.Body
+import com.esum.network.translate.model.TranslateResult
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface TranslateApiService {
 

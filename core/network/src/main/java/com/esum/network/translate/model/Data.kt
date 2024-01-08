@@ -1,4 +1,4 @@
-package com.esum.network.model
+package com.esum.network.translate.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

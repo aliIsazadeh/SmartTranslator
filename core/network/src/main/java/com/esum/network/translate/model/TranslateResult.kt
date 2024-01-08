@@ -1,5 +1,6 @@
-package com.esum.network.model
+package com.esum.network.translate.model
 
+import com.esum.network.translate.model.TranslateData
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

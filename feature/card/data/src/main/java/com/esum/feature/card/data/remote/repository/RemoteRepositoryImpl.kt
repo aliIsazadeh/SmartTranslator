@@ -8,7 +8,7 @@ import com.esum.common.lagnuage.Languages
 import com.esum.feature.card.data.remote.mapper.mapToTranslateModel
 import com.esum.feature.card.domain.local.model.TranslateResult
 import com.esum.feature.card.domain.remote.repository.RemoteRepository
-import com.esum.network.dataproviders.TranslateDataProvider
+import com.esum.network.translate.dataprovider.TranslateDataProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -27,7 +27,7 @@ class RemoteRepositoryImpl @Inject constructor(
         toLanguages: Languages,
         text: String
     ): Flow<ResultConstraints<TranslateResult>> = flow {
-        emit(ResultConstraints.Loading())
+        emit(ResultConstraints.Loading<TranslateResult>())
         val translated = translateDataProvider.translate(
             fromLanguage = fromLanguages.key,
             toLanguages = toLanguages.key,

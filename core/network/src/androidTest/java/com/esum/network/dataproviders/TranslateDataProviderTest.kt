@@ -1,9 +1,8 @@
 package com.esum.network.dataproviders
 
 import android.util.Log
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.runner.AndroidJUnitRunner
 import com.esum.common.lagnuage.Languages
+import com.esum.network.translate.dataprovider.TranslateDataProvider
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
@@ -12,7 +11,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import javax.inject.Inject
 
 @HiltAndroidTest

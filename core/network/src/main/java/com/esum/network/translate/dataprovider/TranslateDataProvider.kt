@@ -1,7 +1,6 @@
-package com.esum.network.dataproviders
+package com.esum.network.translate.dataprovider
 
-import com.esum.common.lagnuage.Languages
-import com.esum.network.TranslateApiService
+import com.esum.network.translate.api.TranslateApiService
 import javax.inject.Inject
 
 class TranslateDataProvider @Inject constructor(private val apiService: TranslateApiService) {
