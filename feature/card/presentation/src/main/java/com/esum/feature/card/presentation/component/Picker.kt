@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -52,9 +53,9 @@ import kotlinx.coroutines.flow.map
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Picker(
+    modifier: Modifier = Modifier,
     items: List<Pair<Languages, Int>>,
     state: PickerState = rememberPickerState(),
-    modifier: Modifier = Modifier,
     startIndex: Int = 0,
     visibleItemsCount: Int = 3,
     textModifier: Modifier = Modifier,
@@ -102,7 +103,7 @@ fun Picker(
             state = listState,
             flingBehavior = flingBehavior,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
+            modifier = Modifier.testTag("lazy_column")
                 .fillMaxWidth()
                 .height(itemHeightDp * visibleItemsCount)
                 .fadingEdge(fadingEdgeGradient)
@@ -125,7 +126,7 @@ fun Picker(
                     Image(
                         painter = painterResource(id = getItem(index).second),
                         contentDescription = "flag image",
-                        modifier
+                        Modifier
                             .height(20.dp)
                             .weight(0.5f)
                     )
@@ -191,7 +192,7 @@ fun PickerPreview() {
                     Pair<Languages, Int>(Languages.Japans, R.drawable.japan),
                 ),
                 textStyle = MaterialTheme.typography.labelSmall,
-                selectLanguage = {}
+                selectLanguage = {},
 
             )
         }

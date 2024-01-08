@@ -55,7 +55,6 @@ dependencies {
     kapt(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.instrumented.test)
     kaptAndroidTest(libs.hilt.test)
-    testImplementation(libs.hilt.instrumented.test)
     kaptTest(libs.hilt.test)
 }
 kapt {

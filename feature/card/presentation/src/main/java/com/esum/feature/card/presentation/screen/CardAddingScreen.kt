@@ -36,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -159,13 +160,14 @@ fun CardAddingScreen(
             )
         }, containerColor = MaterialTheme.colorScheme.background, snackbarHost = {
             DefaultSnackbar(
+                modifier = Modifier.testTag("snack_bar"),
                 snackbarHostState = snackbarHostState,
                 onDismiss = { snackbarHostState.currentSnackbarData?.dismiss() },
             )
         },
         bottomBar = {
             Button(
-                modifier = Modifier
+                modifier = Modifier.testTag("save_card_btn")
                     .fillMaxWidth()
                     .padding(16.dp), shape = MaterialTheme.shapes.extraSmall,
                 enabled = (state.card.original.isNotBlank() && state.card.translate.isNotBlank()),
@@ -198,7 +200,7 @@ fun CardAddingScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 InfoTextFiled(
-                    modifier = Modifier.weight(0.8f),
+                    modifier = Modifier.weight(0.8f).testTag("original_text_field"),
                     value = state.card.original,
                     onValueChange = onOriginalTextChange,
                     hint = stringResource(
@@ -208,28 +210,16 @@ fun CardAddingScreen(
                     nullable = false
                 )
                 Picker(
-                    modifier = Modifier.weight(0.2f),
+                    modifier = Modifier.weight(0.2f).testTag("original_picker"),
                     items = state.availableLanguage,
                     textStyle = MaterialTheme.typography.labelSmall,
                     dividerColor = MaterialTheme.colorScheme.primary,
-                    selectLanguage = onOriginalLanguageSelect
+                    selectLanguage = onOriginalLanguageSelect,
                 )
 
-//                Card(
-//                    modifier = Modifier
-//                        .weight(0.2f)
-//                        .fillMaxSize()
-//                        .padding(vertical = 8.dp),
-//                    shape = MaterialTheme.shapes.extraSmall,
-//                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-//                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-//
-//                ) {
-//
-//                }
             }
             TextButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("online_translate_tag"),
                 onClick = { event.invoke(CardAddingContract.Event.OnlineTranslateEvent) }) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -253,7 +243,7 @@ fun CardAddingScreen(
                 InfoTextFiled(
                     modifier = Modifier
                         .weight(0.8f)
-                        .padding(top = 16.dp, bottom = 16.dp),
+                        .padding(top = 16.dp, bottom = 16.dp).testTag("translate_text_field"),
                     value = state.card.translate,
                     onValueChange = onTranslationTextChange,
                     hint = stringResource(
@@ -262,29 +252,13 @@ fun CardAddingScreen(
                     maxLine = 4,
                     nullable = false
                 )
-//                Column(
-//                    modifier = Modifier.weight(0.2f),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    verticalArrangement = Arrangement.spacedBy(4.dp)
-//                ) {
-////                    Card(
-////                        modifier = Modifier
-////                            .weight(0.5f),
-////                        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-////                        shape = MaterialTheme.shapes.extraSmall,
-////                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-////                    ) {
-//
-//
-//                }
+
                 Picker(
-                    modifier = Modifier.weight(0.2f),
+                    modifier = Modifier.weight(0.2f).testTag("translate_picker"),
                     items = state.availableLanguage,
                     textStyle = MaterialTheme.typography.labelSmall,
-                    selectLanguage = onTranslateLanguageSelect
-
+                    selectLanguage = onTranslateLanguageSelect,
                 )
-
             }
 
 

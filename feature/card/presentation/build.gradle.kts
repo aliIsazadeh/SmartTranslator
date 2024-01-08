@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.resolve.sam.SamConstructorDescriptorKindExclude.excludes
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -12,8 +14,14 @@ android {
     defaultConfig {
         minSdk = 25
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.esum.feature.card.presentation.PresentTestRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+    packagingOptions {
+        exclude("META-INF/gradle/incremental.annotation.processors")
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/LICENSE-notice.md")
+
     }
 
     buildTypes {
@@ -26,11 +34,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -50,6 +58,8 @@ dependencies {
     implementation(project(":feature:card:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:feature-api"))
+    implementation(libs.androidx.runner)
+    androidTestImplementation(project(":core:database"))
 //    implementation(project(":feature:card:data"))
 
 
@@ -63,23 +73,30 @@ dependencies {
     implementation(libs.compose.preview)
     implementation(libs.coil)
     implementation(libs.coil.gif)
+
     implementation(libs.androidx.compose.materialWindow)
 
-
-
-
+    androidTestImplementation(libs.hilt.test)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.espresso)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test)
+
     debugImplementation(libs.tooling.ui)
     debugImplementation(libs.manifest.test)
+
+
+    //mockk
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk)
+
 
     //hilt
     implementation(libs.hilt.compose)
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.instrumented.test)
+    kaptAndroidTest(libs.hilt.test)
 }
 kapt {
     correctErrorTypes = true
