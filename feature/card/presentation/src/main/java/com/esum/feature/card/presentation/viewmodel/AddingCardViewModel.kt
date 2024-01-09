@@ -11,7 +11,8 @@ import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
 import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
-import com.esum.feature.card.domain.remote.usecase.TranslateCardUseCase
+import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
+import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -31,7 +32,8 @@ import kotlin.math.log
 @HiltViewModel
 class AddingCardViewModel @Inject constructor(
     private val insertCardUsecase: Provider<InsertCardUsecase>,
-    private val translateCardUseCase: Provider<TranslateCardUseCase>
+    private val translateCardUseCase: Provider<TranslateCardUseCase>,
+    private val getDescriptionUsecase: Provider<GetDescriptionUsecase>
 
 ) : ViewModel(), CardAddingContract {
 

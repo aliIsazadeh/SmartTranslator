@@ -1,4 +1,4 @@
-package com.esum.feature.card.data.remote.mapper
+package com.esum.feature.card.data.remote.translate.mapper
 
 import com.esum.network.translate.model.TranslateResult
 

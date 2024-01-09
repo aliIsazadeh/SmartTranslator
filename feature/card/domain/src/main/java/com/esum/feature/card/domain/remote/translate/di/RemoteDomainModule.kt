@@ -1,7 +1,7 @@
-package com.esum.feature.card.domain.remote.di
+package com.esum.feature.card.domain.remote.translate.di
 
-import com.esum.feature.card.domain.remote.repository.RemoteRepository
-import com.esum.feature.card.domain.remote.usecase.TranslateCardUseCase
+import com.esum.feature.card.domain.remote.translate.repository.RemoteRepository
+import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ object RemoteDomainModule {
 
     @Provides
     @Singleton
-    fun provideTranslateUsecase(repository: RemoteRepository) : TranslateCardUseCase{
+    fun provideTranslateUsecase(repository: RemoteRepository) : TranslateCardUseCase {
         return TranslateCardUseCase(repository)
     }
 

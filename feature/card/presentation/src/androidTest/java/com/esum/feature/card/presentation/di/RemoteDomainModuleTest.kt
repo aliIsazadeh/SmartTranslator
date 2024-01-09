@@ -1,8 +1,8 @@
 package com.esum.feature.card.presentation.di
 
-import com.esum.feature.card.domain.remote.di.RemoteDomainModule
-import com.esum.feature.card.domain.remote.repository.RemoteRepository
-import com.esum.feature.card.domain.remote.usecase.TranslateCardUseCase
+import com.esum.feature.card.domain.remote.translate.di.RemoteDomainModule
+import com.esum.feature.card.domain.remote.translate.repository.RemoteRepository
+import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.repository.RemoteRepositoryFakeImpl
 import dagger.Module
 import dagger.Provides

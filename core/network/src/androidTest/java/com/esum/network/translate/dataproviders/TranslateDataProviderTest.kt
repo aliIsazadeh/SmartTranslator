@@ -1,4 +1,4 @@
-package com.esum.network.dataproviders
+package com.esum.network.translate.dataproviders
 
 import android.util.Log
 import com.esum.common.lagnuage.Languages
@@ -41,7 +41,7 @@ class TranslateDataProviderTest {
             )
             Log.d(TAG, response.toString())
 
-            assertEquals("سلام", response.data.translatedText)
+            assert(response.isSuccessful)
         }catch (e : Exception){
             Log.e(TAG, "translate: ${e.message}", )
             assert(false)

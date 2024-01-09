@@ -1,4 +1,4 @@
-package com.esum.network.di
+package com.esum.network.translate.di
 
 import com.esum.network.translate.di.NetworkModule
 import com.esum.network.translate.api.TranslateApiService

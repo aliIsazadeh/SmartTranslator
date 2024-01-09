@@ -52,8 +52,9 @@ dependencies {
 
     //retrofit
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
     implementation(libs.okhttp)
+    implementation(libs.converter.gson)
+
 
     //moshi
     implementation(libs.moshi)

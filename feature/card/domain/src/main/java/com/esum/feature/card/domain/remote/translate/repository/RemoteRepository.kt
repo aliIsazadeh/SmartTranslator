@@ -1,4 +1,4 @@
-package com.esum.feature.card.domain.remote.repository
+package com.esum.feature.card.domain.remote.translate.repository
 
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.lagnuage.Languages

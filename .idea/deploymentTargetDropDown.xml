@@ -18,6 +18,9 @@
           <timeTargetWasSelectedWithDropDown value="2024-01-08T11:55:36.664394900Z" />
         </State>
       </entry>
+      <entry key="DescriptionDataProviderTest">
+        <State />
+      </entry>
       <entry key="ExampleInstrumentedTest">
         <State />
       </entry>
@@ -39,9 +42,6 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-01-08T06:01:53.629104Z" />
         </State>
-      </entry>
-      <entry key="translate()">
-        <State />
       </entry>
     </value>
   </component>

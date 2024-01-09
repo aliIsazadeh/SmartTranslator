@@ -48,6 +48,10 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.espresso)
 
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.okhttp)
+
 
     //hilt
     implementation(libs.hilt.compose)

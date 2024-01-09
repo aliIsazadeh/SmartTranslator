@@ -1,13 +1,13 @@
-package com.esum.feature.card.data.remote.repository
+package com.esum.feature.card.data.remote.translate.repository
 
 import android.util.Log
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.constraints.TranslateErrors
 import com.esum.common.constraints.TranslatedStatus
 import com.esum.common.lagnuage.Languages
-import com.esum.feature.card.data.remote.mapper.mapToTranslateModel
+import com.esum.feature.card.data.remote.translate.mapper.mapToTranslateModel
 import com.esum.feature.card.domain.local.model.TranslateResult
-import com.esum.feature.card.domain.remote.repository.RemoteRepository
+import com.esum.feature.card.domain.remote.translate.repository.RemoteRepository
 import com.esum.network.translate.dataprovider.TranslateDataProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -26,16 +26,16 @@ class RemoteRepositoryImpl @Inject constructor(
         fromLanguages: Languages,
         toLanguages: Languages,
         text: String
-    ): Flow<ResultConstraints<TranslateResult>> = flow {
+    ): Flow<ResultConstraints<TranslateResult>> = flow<ResultConstraints<TranslateResult>> {
         emit(ResultConstraints.Loading<TranslateResult>())
         val translated = translateDataProvider.translate(
             fromLanguage = fromLanguages.key,
             toLanguages = toLanguages.key,
             text
         )
-        if (translated.status == TranslatedStatus.Success.status) {
-            if (translated.data.translatedText.isNotBlank()) {
-                emit(ResultConstraints.Success(translated.mapToTranslateModel()))
+        if (translated.isSuccessful) {
+            if (translated.body() != null) {
+                emit(ResultConstraints.Success(translated.body()!!.mapToTranslateModel()))
             } else {
                 emit(ResultConstraints.Error<TranslateResult>(TranslateErrors.ResponseIsEmpty.message))
             }

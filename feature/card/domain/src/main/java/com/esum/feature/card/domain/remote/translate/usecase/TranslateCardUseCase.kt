@@ -1,9 +1,9 @@
-package com.esum.feature.card.domain.remote.usecase
+package com.esum.feature.card.domain.remote.translate.usecase
 
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.lagnuage.Languages
 import com.esum.feature.card.domain.local.model.TranslateResult
-import com.esum.feature.card.domain.remote.repository.RemoteRepository
+import com.esum.feature.card.domain.remote.translate.repository.RemoteRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
