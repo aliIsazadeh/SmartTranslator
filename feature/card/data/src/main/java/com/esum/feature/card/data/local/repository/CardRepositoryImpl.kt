@@ -3,7 +3,12 @@ package com.esum.feature.card.data.local.repository
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.date.getCurrentDate
 import com.esum.database.dataProvider.CardDataProvider
+import com.esum.database.dataProvider.DescriptionDefinitionProvider
+import com.esum.database.dataProvider.DescriptionMeaningsProvider
+import com.esum.database.dataProvider.DescriptionProvider
+import com.esum.database.dataProvider.LanguageProvider
 import com.esum.database.entity.CardEntity
+import com.esum.database.entity.DescriptionMeanings
 import com.esum.feature.card.data.local.mapper.mapToCardEntity
 import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.repository.CardRepository
@@ -20,7 +25,11 @@ import javax.inject.Inject
 
 class CardRepositoryImpl @Inject constructor(
     private val cardDataProvider: CardDataProvider,
-    private val dispatcher: CoroutineDispatcher
+    private val descriptionDefinitionProvider: DescriptionDefinitionProvider,
+    private val descriptionMeaningsProvider: DescriptionMeaningsProvider,
+    private val descriptionProvider: DescriptionProvider,
+    private val languageProvider: LanguageProvider,
+    private val dispatcher: CoroutineDispatcher,
 ) : CardRepository {
     override fun getAllCards(): Flow<ResultConstraints<List<CardEntity>>> =
         cardDataProvider.getAllCards()
@@ -44,7 +53,25 @@ class CardRepositoryImpl @Inject constructor(
 
     override suspend fun insertCard(card: Card): Flow<ResultConstraints<Long>> = flow {
         emit(ResultConstraints.Loading())
-        emit(ResultConstraints.Success(cardDataProvider.insertCard(card.mapToCardEntity().copy(createDate = getCurrentDate()))))
+        val dataObject = card.mapToCardEntity()
+        val cardId = cardDataProvider.insertCard(cardEntity = dataObject.cardEntity.copy(createDate = getCurrentDate()))
+        dataObject.language?.forEach { languageWithDescription ->
+            languageProvider.insertLanguage(languageWithDescription.language)
+            if (languageWithDescription.description != null) {
+                descriptionProvider.insertDescription(description = languageWithDescription.description!!.description)
+                languageWithDescription.description!!.meanings?.forEach { meaningsWithDefinitions ->
+                    descriptionMeaningsProvider.insertDescriptionMeaning(meaningsWithDefinitions.meanings)
+                    meaningsWithDefinitions.definitions.forEach { definitions ->
+                        descriptionDefinitionProvider.insertDescriptionDefinition(definitions)
+                    }
+                }
+            }
+        }
+        emit(
+            ResultConstraints.Success(
+                cardId
+            )
+        )
     }.catch {
         emit(ResultConstraints.Error(message = it.message.toString()))
     }.flowOn(dispatcher)

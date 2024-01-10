@@ -33,7 +33,7 @@ class CardDataProviderTest {
     @Before
     fun setUp() {
         hilt.inject()
-        cardEntity = CardEntity(active = true, correctAnswerCount = 0 , farsi = "سلام", english = "hello")
+//        cardEntity = CardEntity(active = true, correctAnswerCount = 0 , farsi = "سلام", english = "hello")
     }
 
 

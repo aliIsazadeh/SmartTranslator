@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.compose.preview)
     implementation(libs.coil)
     implementation(libs.coil.gif)
+    implementation(libs.material.icons)
 
     implementation(libs.androidx.compose.materialWindow)
 

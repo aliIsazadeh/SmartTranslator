@@ -3,13 +3,14 @@ package com.esum.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 @Entity(tableName = "profile_table")
 data class ProfileEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo("id" )
-    val id: Long = 0L ,
+    @PrimaryKey()
+    @ColumnInfo(name = "id")
+    val id: UUID,
 
     @ColumnInfo("name")
     val name : String,
@@ -29,6 +30,4 @@ data class ProfileEntity(
     @ColumnInfo("avatar")
     val avatar : String?= null,
 
-
-
-)
+    )

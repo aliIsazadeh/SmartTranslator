@@ -23,7 +23,8 @@ import com.esum.common.lagnuage.Languages
 import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.model.TranslateResult
 import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
-import com.esum.feature.card.domain.remote.usecase.TranslateCardUseCase
+import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
+import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.viewmodel.AddingCardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -62,6 +63,9 @@ class CardAddingScreenTest {
     @MockK
     lateinit var translateCardUseCase: TranslateCardUseCase
 
+    @MockK
+    lateinit var getDescriptionUsecase: GetDescriptionUsecase
+
     private lateinit var viewModel: AddingCardViewModel
 
     @get:Rule
@@ -87,7 +91,7 @@ class CardAddingScreenTest {
         }
 
         viewModel = AddingCardViewModel(insertCardUsecase = { insertCardUsecase },
-            translateCardUseCase = { translateCardUseCase })
+            translateCardUseCase = { translateCardUseCase } , {getDescriptionUsecase})
 
         composeTestRule.setContent {
             val navController = rememberNavController()

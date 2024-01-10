@@ -62,6 +62,8 @@ dependencies {
     testImplementation(libs.hilt.instrumented.test)
     kaptTest(libs.hilt.test)
 
+    implementation(libs.converter.gson)
+
     //room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

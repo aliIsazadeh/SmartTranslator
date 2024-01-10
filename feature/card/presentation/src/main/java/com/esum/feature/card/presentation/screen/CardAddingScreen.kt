@@ -170,7 +170,7 @@ fun CardAddingScreen(
                 modifier = Modifier.testTag("save_card_btn")
                     .fillMaxWidth()
                     .padding(16.dp), shape = MaterialTheme.shapes.extraSmall,
-                enabled = (state.card.original.isNotBlank() && state.card.translate.isNotBlank()),
+                enabled = (state.card.original.isNotBlank() && state.card.original.isNotBlank()),
                 onClick = { event.invoke(CardAddingContract.Event.SaveCardEvent) }) {
                 Text(
                     text = stringResource(R.string.save_card),
@@ -244,7 +244,7 @@ fun CardAddingScreen(
                     modifier = Modifier
                         .weight(0.8f)
                         .padding(top = 16.dp, bottom = 16.dp).testTag("translate_text_field"),
-                    value = state.card.translate,
+                    value = state.card.,
                     onValueChange = onTranslationTextChange,
                     hint = stringResource(
                         id = R.string.add_translate_text_here

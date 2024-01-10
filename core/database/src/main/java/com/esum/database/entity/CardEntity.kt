@@ -4,60 +4,45 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Fts4
 import androidx.room.PrimaryKey
+import androidx.room.Relation
+import java.util.UUID
 
 @Entity(tableName = "card_table")
 data class CardEntity(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @ColumnInfo(name = "id")
-    val id : Long = 0L,
+    val id: UUID ,
 
     @ColumnInfo("define_language")
-    val defineLanguage : String ? = null,
+    val defineLanguage: String,
 
-    @ColumnInfo("en")
-    val english : String ? = null,
 
-    @ColumnInfo("fa")
-    val farsi : String ? = null,
-
-    @ColumnInfo("tu")
-    val turkish : String ? = null,
-
-    @ColumnInfo("fe")
-    val french : String ? = null,
-
-    @ColumnInfo("sp")
-    val spaniel : String ? = null,
-
-    @ColumnInfo("gr")
-    val germany : String ? = null,
-
-    @ColumnInfo("sentence")
-    val sentence : String ? = null,
+    @ColumnInfo("define_text")
+    val defineText: String,
 
     @ColumnInfo("image")
-    val image : String ? = null,
+    val image: String? = null,
 
     @ColumnInfo("create_date")
-    val createDate : String ? = null,
+    val createDate: String ,
 
     @ColumnInfo("update_date")
-    val updateDate : String ? = null,
+    val updateDate: String? = null,
 
-    //correct answer count in a row
-    @ColumnInfo("CAC")
-    val correctAnswerCount : Int = 0,
 
     @ColumnInfo("active")
-    val active : Boolean = true,
+    val active: Boolean = true,
 
+//    @Relation(
+//        parentColumn = "id",
+//        entityColumn = "card_id"
+//    )
+//    val languages: List<Language>,
+//    @Relation(
+//        parentColumn = "id",
+//        entityColumn = "card_id"
+//    )
+//    val descriptions: List<Description>
 
-
-
-
-
-
-
-
-    )
+)

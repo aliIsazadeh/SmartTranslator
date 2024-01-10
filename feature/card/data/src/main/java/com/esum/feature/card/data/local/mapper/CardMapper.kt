@@ -1,120 +1,90 @@
 package com.esum.feature.card.data.local.mapper
 
-import com.esum.common.lagnuage.Languages
 import com.esum.database.entity.CardEntity
+import com.esum.database.entity.Description
+import com.esum.database.entity.DescriptionDefinition
+import com.esum.database.entity.DescriptionMeanings
+import com.esum.database.entity.Language
+import com.esum.database.entity.model.Antonym
+import com.esum.database.entity.model.Synonym
+import com.esum.database.entity.relations.CardWithLanguages
+import com.esum.database.entity.relations.DescriptionMeaningsWithDefinitions
+import com.esum.database.entity.relations.DescriptionWithMeanings
+import com.esum.database.entity.relations.LanguageWithDescriptions
 import com.esum.feature.card.domain.local.model.Card
+import java.util.UUID
 
-fun Card.mapToCardEntity(): CardEntity {
+fun Card.mapToCardEntity(): CardWithLanguages {
 
-    var english: String? = null
-    var farsi: String? = null
-    var french: String? = null
-    var germany: String? = null
-    var sentence: String? = null
-    var spaniel: String? = null
-    var turkish: String? = null
+    val cardId: UUID = this.id ?: UUID.randomUUID()
 
-    var defineLanguage: String
+    return CardWithLanguages(
+        cardEntity = CardEntity(
+            id = cardId,
+            createDate = this.createDate,
+            updateDate = this.updateDate,
+            image = this.image,
+            defineLanguage = this.originalLanguage.key,
+            active = this.active,
+            defineText = this.original
+        ),
+        language = this.descriptionModel?.map { (details, language) ->
+            val languageId: UUID = details.id ?: UUID.randomUUID()
+            val descriptionId: UUID = details.description?.id ?: UUID.randomUUID()
+            LanguageWithDescriptions(
+                language = Language(
+                    id = languageId,
+                    cardId = cardId,
+                    region = language.key,
+                    value = details.translated,
+                    correctAnswerCount = details.correctAnswerCount,
+                    sentence = details.sentence,
+                ),
+                description = if (details.description != null) {
+                    DescriptionWithMeanings(
+                        description = Description(
+                            languageId = languageId,
+                            id = descriptionId,
+                            licence = details.description!!.licence,
+                            audio = details.description!!.audio,
+                            phonetic = details.description!!.phonetic
+                        ),
+                        meanings = if (details.description!!.meanings != null) {
+                            details.description!!.meanings?.map { descriptionMeanings ->
 
+                                val descriptionMeaningsId: UUID =
+                                    descriptionMeanings.id ?: UUID.randomUUID()
 
-    when (this.originalLanguage) {
-        Languages.English -> {
-            english = this.original
-            defineLanguage = this.originalLanguage.key
+                                DescriptionMeaningsWithDefinitions(
+                                    meanings = DescriptionMeanings(
+                                        id = descriptionMeaningsId,
+                                        descriptionId = descriptionId,
+                                        partOfSpeech = descriptionMeanings.partOfSpeech
+                                    ),
+                                    definitions = descriptionMeanings.definitions.map { definition ->
+
+                                        val definitionId: UUID =
+                                            definition.id ?: UUID.randomUUID()
+
+                                        DescriptionDefinition(
+                                            id = definitionId,
+                                            definition = definition.definition,
+                                            example = definition.example,
+                                            descriptionMeaningId = descriptionMeaningsId,
+                                            synonyms = Synonym(definition.synonyms.map { synonym -> synonym }),
+                                            antonym = Antonym(definition.antonyms.map { antonym -> antonym }),
+                                        )
+                                    }
+                                )
+                            }
+                        } else {
+                            null
+                        }
+                    )
+                } else {
+                    null
+                }
+            )
         }
-
-        Languages.Farsi -> {
-            farsi = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-
-        Languages.Italian -> {
-            english = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-
-        Languages.French -> {
-            french = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-
-        Languages.Arabic -> {
-            english = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-
-        Languages.Japans -> {
-            english = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-
-        Languages.Germany -> {
-            germany = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-
-        Languages.Turkish -> {
-            turkish = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-
-        Languages.Spanish -> {
-            spaniel = this.original
-            defineLanguage = this.originalLanguage.key
-        }
-    }
-
-    when (this.translateLanguage) {
-        Languages.English -> {
-            english = this.translate
-        }
-
-        Languages.Farsi -> {
-            farsi = this.translate
-        }
-
-        Languages.Italian -> {
-            english = this.translate
-        }
-
-        Languages.French -> {
-            french = this.translate
-        }
-
-        Languages.Arabic -> {
-            english = this.translate
-        }
-
-        Languages.Japans -> {
-            english = this.translate
-        }
-
-        Languages.Germany -> {
-            germany = this.translate
-        }
-
-        Languages.Turkish -> {
-            turkish = this.translate
-        }
-
-        Languages.Spanish -> {
-            spaniel = this.translate
-        }
-    }
-
-    return CardEntity(
-        active = true,
-        correctAnswerCount = this.correctAnswerCount,
-        defineLanguage = defineLanguage,
-        english = english,
-        farsi = farsi,
-        french = french,
-        germany = germany,
-        image = null,
-        sentence = this.sentence,
-        spaniel = spaniel,
-        turkish = turkish,
-        createDate = this.createDate, updateDate = this.updateDate
     )
-
 }

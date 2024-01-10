@@ -14,4 +14,9 @@
     <string name="no_translation_find">Can\'t find any translation for this word</string>
     <string name="vpn_problem">Vpn Needed!</string>
     <string name="vpn_needed">It seems we need vpn!</string>
+    <string name="phonetic">phonetic</string>
+    <string name="description">description</string>
+    <string name="synonyms">synonyms</string>
+    <string name="antonyms">antonyms</string>
+    <string name="example">example</string>
 </resources>
