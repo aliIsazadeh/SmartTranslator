@@ -12,8 +12,8 @@ data class DescriptionDefinition(
     @PrimaryKey()
     @ColumnInfo(name = "id")
     val id: UUID,
-    @ColumnInfo(name = "definition") val definition: String,
-    @ColumnInfo(name = "example") val example: String,
+    @ColumnInfo(name = "definition") val definition: String?,
+    @ColumnInfo(name = "example") val example: String?,
     @ColumnInfo(name = "synonyms")
     val synonyms: Synonym,
     @ColumnInfo(name = "antonyms")

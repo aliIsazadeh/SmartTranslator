@@ -54,8 +54,9 @@ class CardRepositoryImpl @Inject constructor(
     override suspend fun insertCard(card: Card): Flow<ResultConstraints<Long>> = flow {
         emit(ResultConstraints.Loading())
         val dataObject = card.mapToCardEntity()
-        val cardId = cardDataProvider.insertCard(cardEntity = dataObject.cardEntity.copy(createDate = getCurrentDate()))
-        dataObject.language?.forEach { languageWithDescription ->
+        val cardId =
+            cardDataProvider.insertCard(cardEntity = dataObject.card.copy(createDate = getCurrentDate()))
+        dataObject.language?.let { languageWithDescription ->
             languageProvider.insertLanguage(languageWithDescription.language)
             if (languageWithDescription.description != null) {
                 descriptionProvider.insertDescription(description = languageWithDescription.description!!.description)

@@ -8,6 +8,7 @@ import com.esum.database.entity.Language
 data class CardWithLanguages(
     @Embedded val cardEntity: CardEntity,
     @Relation(
+        entity = Language::class,
         parentColumn = "id",
         entityColumn = "card_id"
     )

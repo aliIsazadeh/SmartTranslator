@@ -1,5 +1,6 @@
 package com.esum.feature.card.presentation.component
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,17 +28,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.esum.feature.card.domain.remote.description.model.DescriptionModel
 import com.esum.feature.card.presentation.R
+import com.esum.feature.card.presentation.viewmodel.CardAddingContract
 
 @Composable
-fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> Unit) {
+fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> Unit , onSearchClick : () -> Unit) {
+
+
+
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
-            .padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween , verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.weight(0.8f), horizontalArrangement = Arrangement.Start) {
                 Text(
                     modifier = Modifier,
                     text = stringResource(id = R.string.phonetic),
@@ -48,11 +55,23 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
                     style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onBackground)
                 )
             }
-            IconButton(onClick = { onPlaySoundClick(value.audio) }) {
-                Icon(imageVector = Icons.Filled.VolumeUp, contentDescription = "play_voice")
+            IconButton(onClick = { onPlaySoundClick(value.audio) } ,modifier = Modifier.weight(0.1f)) {
+                Icon(
+                    imageVector = Icons.Filled.VolumeUp,
+                    contentDescription = "play_voice",
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+            IconButton(onClick = { onSearchClick() },modifier = Modifier.weight(0.1f)) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "generate sentence",
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         }
-        value.meanings.forEach { meaning ->
+        value.meanings?.forEachIndexed { index, meaning ->
 
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -60,7 +79,7 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
                 style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
             )
 
-            meaning.definitions.forEach { definition ->
+            meaning.definitions.forEachIndexed { index, definition ->
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
                     Text(
                         modifier = Modifier,
@@ -69,7 +88,7 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
                     )
                     Text(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        text = definition.definition,
+                        text = definition.definition ?: "",
                         style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onBackground)
                     )
                 }
@@ -113,31 +132,47 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
 
                     }
                 }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                    Text(
-                        modifier = Modifier,
-                        text = stringResource(id = R.string.example),
-                        style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
-                    )
-                    Text(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        text = definition.example,
-                        style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onBackground)
+                if (definition.example.isNullOrBlank().not()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            text = stringResource(id = R.string.example),
+                            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
+                        )
+                        Text(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = definition.example ?: "",
+                            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onBackground)
+                        )
+                    }
+                }
+                if (index != meaning.definitions.size - 1) {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = MaterialTheme.shapes.small
+                            )
                     )
                 }
+
+
+            }
+
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(2.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.surface,
+                            color = MaterialTheme.colorScheme.secondary,
                             shape = MaterialTheme.shapes.small
                         )
                 )
-
-
-            }
-
 
         }
         Text(

@@ -5,11 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
 
-@Entity(tableName = "languages")
+@Entity(tableName = "languages" )
 data class Language(
-    @PrimaryKey()
     @ColumnInfo(name = "id")
     val id: UUID,
+    @PrimaryKey()
     @ColumnInfo(name = "region")
     val region: String,
     @ColumnInfo(name = "value") val value: String,

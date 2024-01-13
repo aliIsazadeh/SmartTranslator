@@ -19,4 +19,7 @@
     <string name="synonyms">synonyms</string>
     <string name="antonyms">antonyms</string>
     <string name="example">example</string>
+    <string name="insert_translate_text">First enter translation!</string>
+    <string name="insert_original_text">Enter velue for tranlsating!</string>
+    <string name="original_and_target_same_error">Original language and target language can not be the same!</string>
 </resources>

@@ -14,11 +14,12 @@ import com.esum.database.entity.CardEntity
 import com.esum.database.entity.Description
 import com.esum.database.entity.DescriptionDefinition
 import com.esum.database.entity.DescriptionMeanings
+import com.esum.database.entity.Language
 import com.esum.database.entity.ProfileEntity
 
 @TypeConverters(value = [RoomTypeConverters::class])
 @Database(
-    entities = [CardEntity::class , ProfileEntity::class , Description::class , DescriptionDefinition::class , DescriptionMeanings::class],
+    entities = [CardEntity::class , ProfileEntity::class , Description::class , DescriptionDefinition::class , DescriptionMeanings::class , Language::class],
     version = 1,
     exportSchema = true
 )

@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltAndroidTest
 class DescriptionDataProviderTest {
@@ -31,11 +32,10 @@ class DescriptionDataProviderTest {
 
         try{
             val response = provider.getDescription(Languages.English, word = "you")
-
+            Log.d("DescriptionDataProviderTest", "testDescription: ${response.body()?.toString()} ", )
             assert(response.isSuccessful)
         }catch(e : Exception) {
             Log.e("DescriptionDataProviderTest", "testDescription: ${e.message}", )
-
         }
 
     }

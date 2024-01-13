@@ -3,16 +3,18 @@ package com.esum.feature.card.data.remote.description.mapper
 import com.esum.feature.card.domain.remote.description.model.DescriptionDefinition
 import com.esum.feature.card.domain.remote.description.model.DescriptionMeanings
 import com.esum.feature.card.domain.remote.description.model.DescriptionModel
-import com.esum.network.description.model.DescriptionResult
+import com.esum.network.description.model.DescriptionResultItem
 import com.esum.network.description.model.Meaning
 
-fun DescriptionResult.mapToDescriptionModel(): DescriptionModel {
+fun DescriptionResultItem.mapToDescriptionModel(): DescriptionModel {
 
-    return this.map { result ->
+    return this.let { result ->
         DescriptionModel(
-            phonetic = result.phonetic,
-            audio = result.phonetics.firstOrNull { it.audio.isNotBlank() }?.audio ?: "",
-            meanings = result.meanings.map { meaning: Meaning ->
+            phonetic = result.phonetic
+                ?: this.phonetics.firstOrNull { phonetic -> phonetic.text != null && phonetic.audio != null }?.text
+                ?: this.phonetics.firstOrNull { phonetic -> phonetic.text != null }?.text ?: "",
+            audio = result.phonetics.firstOrNull { it.audio?.isNotBlank() == true }?.audio ?: "",
+            meanings = result.meanings?.map { meaning: Meaning ->
                 DescriptionMeanings(
                     partOfSpeech = meaning.partOfSpeech,
                     definitions = meaning.definitions.map {
@@ -24,9 +26,9 @@ fun DescriptionResult.mapToDescriptionModel(): DescriptionModel {
                         )
                     })
             },
-            licence = result.license.name
+            licence = result.license?.name ?: ""
         )
-    }.first()
+    }
 
 
 }

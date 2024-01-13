@@ -23,8 +23,6 @@ object NetworkDescriptionModuleTest {
     @Provides
     fun provideDescriptionApi(): DescriptionApiService {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-
-
         return Retrofit.Builder().baseUrl("https://api.dictionaryapi.dev/api/v2/")
             .addConverterFactory(MoshiConverterFactory.create(moshi)).build()
             .create(DescriptionApiService::class.java)

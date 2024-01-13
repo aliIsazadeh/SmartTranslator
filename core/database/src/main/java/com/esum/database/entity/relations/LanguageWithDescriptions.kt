@@ -8,7 +8,8 @@ import com.esum.database.entity.Language
 data class LanguageWithDescriptions(
     @Embedded val language : Language ,
     @Relation(
-        parentColumn = "id",
+        entity = Description::class,
+        parentColumn = "region",
         entityColumn = "language_id"
     )
     val description: DescriptionWithMeanings?

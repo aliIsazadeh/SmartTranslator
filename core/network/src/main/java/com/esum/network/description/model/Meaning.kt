@@ -5,12 +5,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Meaning(
-    @field:Json(name = "antonyms")
+    @Json(name = "antonyms")
     val antonyms: List<Any>,
-    @field:Json(name = "definitions")
+    @Json(name = "definitions")
     val definitions: List<Definition>,
-    @field:Json(name = "partOfSpeech")
+    @Json(name = "partOfSpeech")
     val partOfSpeech: String,
-    @field:Json(name = "synonyms")
+    @Json(name = "synonyms")
     val synonyms: List<String>
 )

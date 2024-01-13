@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class License(
-    @field:Json(name = "name")
+    @Json(name = "name")
     val name: String,
-    @field:Json(name = "url")
+    @Json(name = "url")
     val url: String
 )

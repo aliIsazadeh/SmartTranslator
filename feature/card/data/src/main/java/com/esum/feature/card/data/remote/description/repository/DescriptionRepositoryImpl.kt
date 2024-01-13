@@ -1,5 +1,6 @@
 package com.esum.feature.card.data.remote.description.repository
 
+import android.util.Log
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.lagnuage.Languages
 import com.esum.feature.card.data.remote.description.mapper.mapToDescriptionModel
@@ -13,7 +14,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class DescriptionRepositoryImpl @Inject constructor(private val dataProvider: DescriptionDataProvider , private val dispatcher: CoroutineDispatcher) :
+class DescriptionRepositoryImpl @Inject constructor(
+    private val dataProvider: DescriptionDataProvider,
+    private val dispatcher: CoroutineDispatcher
+) :
     DescriptionRepository {
     override suspend fun getDescription(
         word: String,
@@ -24,14 +28,21 @@ class DescriptionRepositoryImpl @Inject constructor(private val dataProvider: De
         val response = dataProvider.getDescription(languages, word)
         if (response.isSuccessful) {
             if (response.body() != null) {
-                emit(ResultConstraints.Success(data = response.body()!!.mapToDescriptionModel()))
-            }else {
+                if (response.body()?.first() != null) {
+                    emit(
+                        ResultConstraints.Success(
+                            data = response.body()!!.first().mapToDescriptionModel()
+                        )
+                    )
+                }
+            } else {
                 emit(ResultConstraints.Error(response.message()))
             }
-        }else {
+        } else {
             emit(ResultConstraints.Error(response.message()))
         }
     }.catch {
+        Log.e("DescriptionRepositoryImpl", "getDescription: ${it.message}")
         emit(ResultConstraints.Error(it.message.toString()))
 
     }.flowOn(dispatcher)

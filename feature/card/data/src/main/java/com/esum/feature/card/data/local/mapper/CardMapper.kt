@@ -6,6 +6,7 @@ import com.esum.database.entity.DescriptionDefinition
 import com.esum.database.entity.DescriptionMeanings
 import com.esum.database.entity.Language
 import com.esum.database.entity.model.Antonym
+import com.esum.database.entity.model.CardWithLanguage
 import com.esum.database.entity.model.Synonym
 import com.esum.database.entity.relations.CardWithLanguages
 import com.esum.database.entity.relations.DescriptionMeaningsWithDefinitions
@@ -14,12 +15,12 @@ import com.esum.database.entity.relations.LanguageWithDescriptions
 import com.esum.feature.card.domain.local.model.Card
 import java.util.UUID
 
-fun Card.mapToCardEntity(): CardWithLanguages {
+fun Card.mapToCardEntity(): CardWithLanguage {
 
     val cardId: UUID = this.id ?: UUID.randomUUID()
 
-    return CardWithLanguages(
-        cardEntity = CardEntity(
+    return CardWithLanguage(
+       card  = CardEntity(
             id = cardId,
             createDate = this.createDate,
             updateDate = this.updateDate,
@@ -28,7 +29,7 @@ fun Card.mapToCardEntity(): CardWithLanguages {
             active = this.active,
             defineText = this.original
         ),
-        language = this.descriptionModel?.map { (details, language) ->
+        language = this.descriptionModel?.let { (details, language) ->
             val languageId: UUID = details.id ?: UUID.randomUUID()
             val descriptionId: UUID = details.description?.id ?: UUID.randomUUID()
             LanguageWithDescriptions(

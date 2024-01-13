@@ -1,7 +1,10 @@
 package com.esum.feature.card.presentation.screen
 
 
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,9 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,13 +31,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +64,7 @@ import com.esum.core.ui.use
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.component.InfoTextFiled
 import com.esum.feature.card.presentation.component.Picker
+import com.esum.feature.card.presentation.component.WordDescriptionItem
 import com.esum.feature.card.presentation.viewmodel.AddingCardViewModel
 import com.esum.feature.card.presentation.viewmodel.CardAddingContract
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -83,7 +88,8 @@ fun CardAddingScreen(
         viewModel::onTranslationChange,
         viewModel::onSentenceChange,
         onOriginalLanguageSelect = viewModel::onOriginalChange,
-        onTranslateLanguageSelect = viewModel::onTranslationChange
+        onTranslateLanguageSelect = viewModel::onTranslationChange,
+        onAudioChange = viewModel::onAudioPlays
     )
 
 }
@@ -99,13 +105,16 @@ fun CardAddingScreen(
     onSentenceTextChange: (String) -> Unit,
     onOriginalLanguageSelect: (Languages) -> Unit,
     onTranslateLanguageSelect: (Languages) -> Unit,
+    onAudioChange: (String) -> Unit
 
-    ) {
+) {
 
     val context = LocalContext.current
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val translateFocusRequester = remember { FocusRequester() }
+    val originalFocusRequester = remember { FocusRequester() }
 
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
@@ -118,12 +127,18 @@ fun CardAddingScreen(
         }
         .build()
 
+    val translateTextFiledFocus by remember {
+        mutableStateOf(false)
+    }
+
+
+//    var mediaPlayer by remember { mutableStateOf(MediaPlayer()) }
+
 
     effect.CollectInLaunchedEffect { effect ->
         when (effect) {
 
             is CardAddingContract.Effect.ShowSnackBar -> {
-
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(
                         context.getString(effect.message),
@@ -131,6 +146,14 @@ fun CardAddingScreen(
                         withDismissAction = true
                     )
                 }
+            }
+
+            is CardAddingContract.Effect.SetFocusOnTranslateTextFiled -> {
+                translateFocusRequester.requestFocus()
+            }
+
+            is CardAddingContract.Effect.SetFocusOnOriginalTextFiled -> {
+                originalFocusRequester.requestFocus()
             }
         }
     }
@@ -167,10 +190,11 @@ fun CardAddingScreen(
         },
         bottomBar = {
             Button(
-                modifier = Modifier.testTag("save_card_btn")
+                modifier = Modifier
+                    .testTag("save_card_btn")
                     .fillMaxWidth()
                     .padding(16.dp), shape = MaterialTheme.shapes.extraSmall,
-                enabled = (state.card.original.isNotBlank() && state.card.original.isNotBlank()),
+                enabled = (state.card.originalText.isNotBlank() && state.card.originalLanguages.key.isNotBlank()),
                 onClick = { event.invoke(CardAddingContract.Event.SaveCardEvent) }) {
                 Text(
                     text = stringResource(R.string.save_card),
@@ -200,8 +224,11 @@ fun CardAddingScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 InfoTextFiled(
-                    modifier = Modifier.weight(0.8f).testTag("original_text_field"),
-                    value = state.card.original,
+                    modifier = Modifier
+                        .weight(0.8f)
+                        .testTag("original_text_field")
+                        .focusRequester(originalFocusRequester),
+                    value = state.card.originalText,
                     onValueChange = onOriginalTextChange,
                     hint = stringResource(
                         id = R.string.Add_card_text_here
@@ -210,7 +237,9 @@ fun CardAddingScreen(
                     nullable = false
                 )
                 Picker(
-                    modifier = Modifier.weight(0.2f).testTag("original_picker"),
+                    modifier = Modifier
+                        .weight(0.2f)
+                        .testTag("original_picker"),
                     items = state.availableLanguage,
                     textStyle = MaterialTheme.typography.labelSmall,
                     dividerColor = MaterialTheme.colorScheme.primary,
@@ -219,7 +248,9 @@ fun CardAddingScreen(
 
             }
             TextButton(
-                modifier = Modifier.fillMaxWidth().testTag("online_translate_tag"),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("online_translate_tag"),
                 onClick = { event.invoke(CardAddingContract.Event.OnlineTranslateEvent) }) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -243,8 +274,10 @@ fun CardAddingScreen(
                 InfoTextFiled(
                     modifier = Modifier
                         .weight(0.8f)
-                        .padding(top = 16.dp, bottom = 16.dp).testTag("translate_text_field"),
-                    value = state.card.,
+                        .padding(top = 16.dp, bottom = 16.dp)
+                        .testTag("translate_text_field")
+                        .focusRequester(translateFocusRequester),
+                    value = state.card.translateText,
                     onValueChange = onTranslationTextChange,
                     hint = stringResource(
                         id = R.string.add_translate_text_here
@@ -254,7 +287,9 @@ fun CardAddingScreen(
                 )
 
                 Picker(
-                    modifier = Modifier.weight(0.2f).testTag("translate_picker"),
+                    modifier = Modifier
+                        .weight(0.2f)
+                        .testTag("translate_picker"),
                     items = state.availableLanguage,
                     textStyle = MaterialTheme.typography.labelSmall,
                     selectLanguage = onTranslateLanguageSelect,
@@ -271,28 +306,52 @@ fun CardAddingScreen(
                         shape = MaterialTheme.shapes.small
                     )
             )
-
-            InfoTextFiled(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp, bottom = 16.dp),
-                value = state.card.sentence,
-                onValueChange = onSentenceTextChange,
-                hint = stringResource(
-                    id = R.string.add_description_here
-                ),
-                maxLine = 4,
-                nullable = true,
-                trailingIcon = {
-                    IconButton(onClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent) }) {
-                        Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "generate sentence",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+            if (state.card.description == null) {
+                InfoTextFiled(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 16.dp),
+                    value = state.card.sentence,
+                    onValueChange = onSentenceTextChange,
+                    hint = stringResource(
+                        id = R.string.add_description_here
+                    ),
+                    maxLine = 4,
+                    nullable = true,
+                    trailingIcon = {
+                        IconButton(onClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent) }) {
+                            Icon(
+                                imageVector = Icons.Filled.Search,
+                                contentDescription = "generate sentence",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                var isPlaying by remember { mutableStateOf(false) }
+                WordDescriptionItem(
+                    value = state.card.description,
+                    onPlaySoundClick = {
+                        try {
+                            val mediaPlayer = MediaPlayer().apply {
+                                setAudioAttributes(
+                                    AudioAttributes.Builder()
+                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                                        .build()
+                                )
+                                setDataSource(it)
+                                prepare() // might take long! (for buffering, etc)
+                                start()
+                            }
+                        } catch (e: Exception) {
+
+                            Log.e("mediaPlayer", "CardAddingScreen: ${e.message}")
+                        }
+                    } ,
+                    onSearchClick = {event.invoke(CardAddingContract.Event.GenerateSentenceEvent)})
+            }
         }
         CircularIndeterminateProgressBar(isVisible = state.loading)
 
@@ -333,7 +392,8 @@ fun CardAddingScreenPreview() {
             onTranslationTextChange = {},
             onSentenceTextChange = {},
             onOriginalLanguageSelect = {},
-            onTranslateLanguageSelect = {}
+            onTranslateLanguageSelect = {},
+            onAudioChange = {}
         )
     }
 

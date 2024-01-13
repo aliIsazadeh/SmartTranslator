@@ -12,14 +12,13 @@ data class Card(
     val image: String? = null,
     val updateDate: String = "",
     val createDate: String = "",
-    val descriptionModel: List<Pair<CardDetails, Languages>>? = listOf()
-)
+    val descriptionModel: Pair<CardDetails, Languages>? = null)
 
 data class CardDetails(
     val id: UUID? = null,
     val correctAnswerCount: Int,
     val translated: String,
     val description: DescriptionModel?,
-    val sentence : String
+    val sentence : String?
 
 )
