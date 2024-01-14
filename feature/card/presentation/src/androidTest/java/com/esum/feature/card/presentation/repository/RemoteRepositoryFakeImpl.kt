@@ -13,6 +13,6 @@ class RemoteRepositoryFakeImpl() : RemoteRepository {
         toLanguages: Languages,
         text: String
     ): Flow<ResultConstraints<TranslateResult>> = flow {
-
+        emit(ResultConstraints.Success(TranslateResult("سلام")))
     }
 }

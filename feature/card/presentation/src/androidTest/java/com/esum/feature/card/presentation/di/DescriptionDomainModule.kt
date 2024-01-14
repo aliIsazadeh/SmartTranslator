@@ -3,10 +3,7 @@ package com.esum.feature.card.presentation.di
 import com.esum.feature.card.domain.remote.description.di.DescriptionDomainModule
 import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
 import com.esum.feature.card.domain.remote.translate.di.RemoteDomainModule
-import com.esum.feature.card.domain.remote.translate.repository.RemoteRepository
-import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.repository.DescriptionRepositoryFakeImpl
-import com.esum.feature.card.presentation.repository.RemoteRepositoryFakeImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -14,18 +11,15 @@ import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
 
 @Module
-@TestInstallIn(replaces = [RemoteDomainModule::class ] , components = [SingletonComponent::class])
-object RemoteDomainModuleTest {
+@TestInstallIn(replaces = [DescriptionDomainModule::class] , components = [SingletonComponent::class])
+object DescriptionDomainModule {
 
-    private val repository = RemoteRepositoryFakeImpl()
-
+    private val descriptionRepository = DescriptionRepositoryFakeImpl()
 
     @Provides
     @Singleton
-    fun provideTranslateUsecase() : TranslateCardUseCase {
-        return TranslateCardUseCase(repository)
+    fun provideGetDescriptionUsecase() : GetDescriptionUsecase {
+        return GetDescriptionUsecase(descriptionRepository)
     }
-
-
 
 }

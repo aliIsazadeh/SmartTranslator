@@ -47,7 +47,7 @@ fun Card.mapToCardEntity(): CardWithLanguage {
                             languageId = languageId,
                             id = descriptionId,
                             licence = details.description!!.licence,
-                            audio = details.description!!.audio,
+                            audio = details.description!!.audio ?:"",
                             phonetic = details.description!!.phonetic
                         ),
                         meanings = if (details.description!!.meanings != null) {

@@ -1,4 +1,4 @@
-package com.esum.feature.card.presentation.viewmodel
+package com.esum.feature.card.presentation.addingCard.viewmodel
 
 import android.provider.MediaStore.Audio
 import android.util.Log
@@ -119,7 +119,7 @@ class AddingCardViewModel @Inject constructor(
                 )
             }
 
-            insertCardUsecase.get().invoke(card).collect() {
+            insertCardUsecase.get().invoke(card).onEach {
                 when (it) {
                     is ResultConstraints.Error -> {
                         Log.e(TAG, "insertCard: ${it.message}")
@@ -140,7 +140,7 @@ class AddingCardViewModel @Inject constructor(
                         )
                     }
                 }
-            }
+            }.launchIn(viewModelScope)
         }
     }
 

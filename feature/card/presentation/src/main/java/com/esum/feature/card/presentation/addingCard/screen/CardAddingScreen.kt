@@ -1,4 +1,4 @@
-package com.esum.feature.card.presentation.screen
+package com.esum.feature.card.presentation.addingCard.screen
 
 
 import android.media.AudioAttributes
@@ -65,8 +65,8 @@ import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.component.InfoTextFiled
 import com.esum.feature.card.presentation.component.Picker
 import com.esum.feature.card.presentation.component.WordDescriptionItem
-import com.esum.feature.card.presentation.viewmodel.AddingCardViewModel
-import com.esum.feature.card.presentation.viewmodel.CardAddingContract
+import com.esum.feature.card.presentation.addingCard.viewmodel.AddingCardViewModel
+import com.esum.feature.card.presentation.addingCard.viewmodel.CardAddingContract
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

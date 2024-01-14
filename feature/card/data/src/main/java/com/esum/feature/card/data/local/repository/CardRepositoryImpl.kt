@@ -10,7 +10,9 @@ import com.esum.database.dataProvider.LanguageProvider
 import com.esum.database.entity.CardEntity
 import com.esum.database.entity.DescriptionMeanings
 import com.esum.feature.card.data.local.mapper.mapToCardEntity
+import com.esum.feature.card.data.local.mapper.mapToCardWithLanguage
 import com.esum.feature.card.domain.local.model.Card
+import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.domain.local.repository.CardRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -31,12 +33,12 @@ class CardRepositoryImpl @Inject constructor(
     private val languageProvider: LanguageProvider,
     private val dispatcher: CoroutineDispatcher,
 ) : CardRepository {
-    override fun getAllCards(): Flow<ResultConstraints<List<CardEntity>>> =
+    override fun getAllCards(): Flow<ResultConstraints<List<CardWithLanguage>>> =
         cardDataProvider.getAllCards()
             .onStart {
-                ResultConstraints.Loading<ResultConstraints<List<CardEntity>>>()
+                ResultConstraints.Loading<ResultConstraints<List<CardWithLanguage>>>()
             }.map {
-                ResultConstraints.Success(it)
+                ResultConstraints.Success(it.map { card -> card.mapToCardWithLanguage() })
             }.catch {
                 ResultConstraints.Error<ResultConstraints<List<CardEntity>>>(it.message.toString())
             }.distinctUntilChanged()

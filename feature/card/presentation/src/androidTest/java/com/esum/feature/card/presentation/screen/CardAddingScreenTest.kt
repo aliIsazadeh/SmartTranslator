@@ -19,23 +19,28 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.esum.common.constraints.ResultConstraints
+import com.esum.common.date.getCurrentDate
 import com.esum.common.lagnuage.Languages
 import com.esum.feature.card.domain.local.model.Card
+import com.esum.feature.card.domain.local.model.CardDetails
 import com.esum.feature.card.domain.local.model.TranslateResult
 import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
 import com.esum.feature.card.domain.remote.description.model.DescriptionModel
 import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
 import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.R
-import com.esum.feature.card.presentation.state.AddCardScreenState
-import com.esum.feature.card.presentation.viewmodel.AddingCardViewModel
-import com.esum.feature.card.presentation.viewmodel.CardAddingContract
+import com.esum.feature.card.presentation.addingCard.screen.CardAddingScreen
+import com.esum.feature.card.presentation.addingCard.state.AddCardScreenState
+import com.esum.feature.card.presentation.addingCard.viewmodel.AddingCardViewModel
+import com.esum.feature.card.presentation.addingCard.viewmodel.CardAddingContract
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -47,33 +52,36 @@ class CardAddingScreenTest {
 
     val ADD_CARD_SCREEN_ROUTE = "add_card_screen"
 
-    val card: Card = Card(
-        id = null,
-        originalLanguage = Languages.Farsi,
-        original = "سلام",
-        updateDate = "",
-        active = true,
-        createDate = "",
-        image = "",
-        descriptionModel = null
-    )
+
 
     val stateCard: AddCardScreenState = AddCardScreenState(
         id = null,
         audio = "",
         correctAnswer = 0,
-        originalLanguages = Languages.Farsi,
-        translateLanguages = Languages.English,
-        translateText = "hello",
-        description = DescriptionModel(
-            audio = "",
-            id = null,
-            phonetic = "",
-            licence = "",
-            meanings = listOf()
-        ),
-        sentence ="",
-        originalText ="سلام"
+        originalLanguages = Languages.English,
+        translateLanguages = Languages.Farsi,
+        translateText = "سلام",
+        description = null,
+        sentence = "",
+        originalText = "hello"
+    )
+
+    val card: Card = Card(
+        id = stateCard.id,
+        createDate = getCurrentDate(),
+        active = true,
+        updateDate = getCurrentDate(),
+        original = stateCard.originalText,
+        originalLanguage = stateCard.originalLanguages,
+        descriptionModel = Pair(
+            CardDetails(
+                id = stateCard.description?.id,
+                description = stateCard.description,
+                sentence = stateCard.sentence,
+                correctAnswerCount = stateCard.correctAnswer,
+                translated = stateCard.translateText
+            ), stateCard.translateLanguages
+        )
     )
 
 
@@ -127,14 +135,36 @@ class CardAddingScreenTest {
         hiltRule.inject()
         MockKAnnotations.init(this)
 
-        coEvery { insertCardUsecase.invoke(card) } coAnswers {
+        coEvery {
+            insertCardUsecase.invoke(card)
+        } coAnswers {
             flowOf(ResultConstraints.Success(1L))
         }
+
+        coEvery {
+            getDescriptionUsecase.invoke(
+                languages = stateCard.translateLanguages,
+                word = stateCard.translateText
+            )
+        } coAnswers {
+            flowOf(
+                ResultConstraints.Success(
+                    DescriptionModel(
+                        id = null,
+                        audio = "",
+                        meanings = listOf(),
+                        licence = "",
+                        phonetic = ""
+                    )
+                )
+            )
+        }
+
         coEvery {
             translateCardUseCase.invoke(
-                fromLanguages = card.originalLanguage,
-                toLanguages = stateCard.translateLanguages,
-                text = card.original
+                fromLanguages = Languages.English,
+                toLanguages = Languages.Farsi,
+                text = "hello",
             )
         } coAnswers {
             flowOf(ResultConstraints.Success(data = TranslateResult(translated = stateCard.translateText)))
@@ -148,7 +178,7 @@ class CardAddingScreenTest {
             NavHost(navController = navController, startDestination = ADD_CARD_SCREEN_ROUTE) {
                 composable(route = ADD_CARD_SCREEN_ROUTE) {
                     CardAddingScreen(
-                        windowSize = WindowSizeClass.Companion.calculateFromSize(
+                        windowSize = WindowSizeClass.calculateFromSize(
                             size = DpSize(
                                 400.dp,
                                 600.dp
@@ -166,21 +196,23 @@ class CardAddingScreenTest {
     @Test
     fun translateTest() {
 
-        composeTestRule.onNodeWithTag("original_text_field").performTextInput(card.original)
+        composeTestRule.onNodeWithTag("original_text_field").performTextInput("hello")
 
         val picker = composeTestRule.onAllNodes(hasTestTag("lazy_column")).onFirst()
         picker.performScrollToIndex(0)
 
         composeTestRule.onNodeWithTag("online_translate_tag").performClick()
 
-        composeTestRule.onNodeWithTag("translate_text_field").assertTextEquals(stateCard.translateText)
+        composeTestRule.onNodeWithTag("translate_text_field")
+            .assertTextEquals(stateCard.translateText)
 
     }
 
     @Test
     fun addCardTest() {
 
-        composeTestRule.onNodeWithTag("original_text_field").performTextInput(card.original)
+        composeTestRule.onNodeWithTag("original_text_field")
+            .performTextInput(stateCard.originalText)
 
 
         val picker = composeTestRule.onAllNodes(hasTestTag("lazy_column")).onFirst()

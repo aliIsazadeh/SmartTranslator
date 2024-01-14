@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.esum.feature.card.domain.remote.description.model.DescriptionModel
 import com.esum.feature.card.presentation.R
-import com.esum.feature.card.presentation.viewmodel.CardAddingContract
+import com.esum.feature.card.presentation.addingCard.viewmodel.CardAddingContract
 
 @Composable
 fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> Unit , onSearchClick : () -> Unit) {
@@ -55,7 +55,7 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
                     style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onBackground)
                 )
             }
-            IconButton(onClick = { onPlaySoundClick(value.audio) } ,modifier = Modifier.weight(0.1f)) {
+            IconButton(onClick = { onPlaySoundClick(value.audio?:"") } ,modifier = Modifier.weight(0.1f)) {
                 Icon(
                     imageVector = Icons.Filled.VolumeUp,
                     contentDescription = "play_voice",

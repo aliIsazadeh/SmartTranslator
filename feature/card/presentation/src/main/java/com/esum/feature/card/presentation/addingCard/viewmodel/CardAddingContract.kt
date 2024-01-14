@@ -1,11 +1,11 @@
-package com.esum.feature.card.presentation.viewmodel
+package com.esum.feature.card.presentation.addingCard.viewmodel
 
 import androidx.compose.runtime.Stable
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.UnidirectionalViewModel
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.feature.card.domain.local.model.Card
-import com.esum.feature.card.presentation.state.AddCardScreenState
+import com.esum.feature.card.presentation.addingCard.state.AddCardScreenState
 
 interface CardAddingContract :
     UnidirectionalViewModel<CardAddingContract.State, CardAddingContract.Effect, CardAddingContract.Event> {

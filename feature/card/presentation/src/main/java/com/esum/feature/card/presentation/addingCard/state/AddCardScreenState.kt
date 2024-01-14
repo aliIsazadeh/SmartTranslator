@@ -1,4 +1,4 @@
-package com.esum.feature.card.presentation.state
+package com.esum.feature.card.presentation.addingCard.state
 
 import com.esum.common.lagnuage.Languages
 import com.esum.feature.card.domain.remote.description.model.DescriptionModel

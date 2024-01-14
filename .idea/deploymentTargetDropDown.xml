@@ -21,11 +21,24 @@
       <entry key="DescriptionDataProviderTest">
         <State />
       </entry>
-      <entry key="ExampleInstrumentedTest">
-        <State />
-      </entry>
       <entry key="TranslateDataProviderTest">
         <State />
+      </entry>
+      <entry key="addCardTest()">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\aisazadeh\.android\avd\Resizable_Experimental_API_33.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-14T11:22:28.167443900Z" />
+        </State>
       </entry>
       <entry key="app">
         <State>
@@ -40,7 +53,23 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-08T06:01:53.629104Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-01-14T06:26:55.134098400Z" />
+        </State>
+      </entry>
+      <entry key="translateTest()">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\aisazadeh\.android\avd\Resizable_Experimental_API_34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-14T11:56:19.939650300Z" />
         </State>
       </entry>
     </value>

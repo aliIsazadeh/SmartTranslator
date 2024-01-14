@@ -14,8 +14,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CardDao {
 
+    @Transaction
     @Query("SELECT * FROM CARD_TABLE")
-    fun getAllCards(): Flow<List<CardEntity>>
+    fun getAllCards(): Flow<List<CardWithLanguages>>
 
 
     @Transaction

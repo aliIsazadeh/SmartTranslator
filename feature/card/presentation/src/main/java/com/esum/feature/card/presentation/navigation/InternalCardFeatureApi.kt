@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.esum.common.constraints.CardFeature
-import com.esum.feature.card.presentation.screen.CardAddingScreen
+import com.esum.feature.card.presentation.addingCard.screen.CardAddingScreen
 import com.esum.feature_api.FeatureApi
 
 internal object InternalCardFeatureApi : FeatureApi {
