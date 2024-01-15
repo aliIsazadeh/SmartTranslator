@@ -1,4 +1,4 @@
-package com.esum.feature.card.presentation.di
+package com.esum.feature.card.presentation.addingCard.di
 
 import com.esum.feature.card.presentation.navigation.CardApi
 import com.esum.feature.card.presentation.navigation.CardApiImpl

@@ -12,6 +12,7 @@ import com.esum.feature.card.domain.repository.FakeCardRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import java.util.UUID
 
 
 class CardUsecasesTest {
@@ -23,7 +24,6 @@ class CardUsecasesTest {
     private lateinit var insertUsecase: InsertCardUsecase
     private lateinit var getAllCardsUsecase: GetAllCardsUsecase
 
-    private val cardsEntity = mutableListOf<CardEntity>()
     private val cards = mutableListOf<Card>()
 
 
@@ -33,19 +33,13 @@ class CardUsecasesTest {
         insertUsecase = InsertCardUsecase(repository)
         getAllCardsUsecase = GetAllCardsUsecase(repository)
 
-        cardsEntity.add(CardEntity(id = 2, active = true, farsi = "سگ", english = "dog"))
-        cardsEntity.add(CardEntity(id = 2, active = true, farsi = "گربه", english = "cat"))
 
         cards.add(
             Card(
                 createDate = "",
                 updateDate = "",
-                sentence = "",
-                correctAnswerCount = 0,
-                translateLanguage = Languages.English,
-                translate = "hello",
                 originalLanguage = Languages.Farsi,
-                original = "سلام"
+                original = "سلام",
             )
         )
 
@@ -53,7 +47,7 @@ class CardUsecasesTest {
 
     @Test
     fun deleteById() = runBlocking {
-        val id = 1L
+        val id = UUID.randomUUID()
         deleteByIdUsecase.invoke(id).collect {
             when (it) {
                 is ResultConstraints.Error -> {
