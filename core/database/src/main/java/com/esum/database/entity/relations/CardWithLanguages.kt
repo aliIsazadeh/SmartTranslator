@@ -12,6 +12,6 @@ data class CardWithLanguages(
         parentColumn = "id",
         entityColumn = "card_id"
     )
-    val language: List<LanguageWithDescriptions>?
+    val language: List<LanguageWithDescriptions?>
 
 )

@@ -10,9 +10,9 @@ import java.util.UUID
 @Entity(tableName = "card_table")
 data class CardEntity(
 
-    @PrimaryKey()
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    val id: UUID ,
+    val id: UUID,
 
     @ColumnInfo("define_language")
     val defineLanguage: String,

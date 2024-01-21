@@ -19,13 +19,12 @@ interface CardHomeContract :
 
     sealed interface Effect {
         data class ShowSnackBar(val message : Int, val success : Boolean ? = null) : Effect
-
     }
 
 
 //    @Stable
 //    data class State(
-//        val
+//
 //    )
 
 

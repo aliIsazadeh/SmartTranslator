@@ -17,6 +17,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -41,7 +42,8 @@ class ProfileDataProviderTest {
             name = "ali",
             username = "ali",
             email = "isazadhali@gmail.com",
-            phoneNumber = "09355452735"
+            phoneNumber = "09355452735",
+            id = UUID.randomUUID()
         )
     }
 

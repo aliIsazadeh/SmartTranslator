@@ -9,8 +9,10 @@ import com.esum.database.dataProvider.DescriptionProvider
 import com.esum.database.dataProvider.LanguageProvider
 import com.esum.database.entity.CardEntity
 import com.esum.database.entity.DescriptionMeanings
+import com.esum.database.entity.relations.CardWithLanguages
 import com.esum.feature.card.data.local.mapper.mapToCardEntity
 import com.esum.feature.card.data.local.mapper.mapToCardWithLanguage
+import com.esum.feature.card.data.local.mapper.mapToCardWithLanguages
 import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.domain.local.repository.CardRepository
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -44,20 +47,26 @@ class CardRepositoryImpl @Inject constructor(
             }.distinctUntilChanged()
             .flowOn(dispatcher)
 
-    override fun getCardById(id: Long): Flow<ResultConstraints<CardEntity?>> =
+    override fun getCardById(id: UUID): Flow<ResultConstraints<CardWithLanguage?>> =
         cardDataProvider.getCardById(id).onStart {
-            ResultConstraints.Loading<ResultConstraints<CardEntity>>()
+            ResultConstraints.Loading<CardWithLanguage?>()
         }.map {
-            ResultConstraints.Success(it)
+            ResultConstraints.Success(it?.mapToCardWithLanguage())
         }.catch {
-            ResultConstraints.Error<ResultConstraints<CardEntity>>(it.message.toString())
+            ResultConstraints.Error<CardWithLanguage?>(message = it.message.toString())
         }.distinctUntilChanged().flowOn(dispatcher)
 
     override suspend fun insertCard(card: Card): Flow<ResultConstraints<Long>> = flow {
         emit(ResultConstraints.Loading())
         val dataObject = card.mapToCardEntity()
         val cardId =
-            cardDataProvider.insertCard(cardEntity = dataObject.card.copy(createDate = getCurrentDate()))
+            cardDataProvider.insertCard(
+                cardEntity = dataObject.copy(
+                    card = dataObject.card.copy(
+                        createDate = getCurrentDate()
+                    )
+                ).mapToCardWithLanguages().cardEntity
+            )
         dataObject.language?.let { languageWithDescription ->
             languageProvider.insertLanguage(languageWithDescription.language)
             if (languageWithDescription.description != null) {
@@ -79,16 +88,16 @@ class CardRepositoryImpl @Inject constructor(
         emit(ResultConstraints.Error(message = it.message.toString()))
     }.flowOn(dispatcher)
 
-    override suspend fun updateCard(cardEntity: CardEntity): Flow<ResultConstraints<String>> =
+    override suspend fun updateCard(cardEntity: CardWithLanguage): Flow<ResultConstraints<String>> =
         flow {
             emit(ResultConstraints.Loading())
-            cardDataProvider.updateCard(cardEntity)
+            cardDataProvider.updateCard(cardEntity.mapToCardWithLanguages().cardEntity)
             emit(ResultConstraints.Success("card updated successfully"))
         }.catch {
             emit(ResultConstraints.Error<String>(message = it.message.toString()))
         }.flowOn(dispatcher)
 
-    override suspend fun deleteCardById(id: Long): Flow<ResultConstraints<String>> = flow {
+    override suspend fun deleteCardById(id: UUID): Flow<ResultConstraints<String>> = flow {
         emit(ResultConstraints.Loading())
         cardDataProvider.deleteCardById(id)
         emit(ResultConstraints.Success("card deleted successfully"))
@@ -96,9 +105,9 @@ class CardRepositoryImpl @Inject constructor(
         emit(ResultConstraints.Error<String>(message = it.message.toString()))
     }.flowOn(dispatcher)
 
-    override suspend fun deleteCard(cardEntity: CardEntity) = flow {
+    override suspend fun deleteCard(cardEntity: CardWithLanguage) = flow {
         emit(ResultConstraints.Loading())
-        cardDataProvider.deleteCard(cardEntity)
+        cardDataProvider.deleteCard(cardEntity.mapToCardWithLanguages().cardEntity)
         emit(ResultConstraints.Success("card deleted successfully"))
     }.catch {
         emit(ResultConstraints.Error<String>(message = it.message.toString()))
