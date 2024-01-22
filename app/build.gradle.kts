@@ -70,6 +70,8 @@ dependencies {
     implementation(libs.androidx.compose.materialWindow)
     implementation(libs.androidx.compose.materialWindow)
 
+    debugImplementation(libs.leakcanary)
+
 
 
     testImplementation(libs.junit)

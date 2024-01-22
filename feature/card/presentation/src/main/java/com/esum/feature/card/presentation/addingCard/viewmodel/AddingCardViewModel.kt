@@ -38,7 +38,6 @@ class AddingCardViewModel @Inject constructor(
     private val insertCardUsecase: Provider<InsertCardUsecase>,
     private val translateCardUseCase: Provider<TranslateCardUseCase>,
     private val getDescriptionUsecase: Provider<GetDescriptionUsecase>
-
 ) : ViewModel(), CardAddingContract {
 
     private val TAG = "CardAddingContract"

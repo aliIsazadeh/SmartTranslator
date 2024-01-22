@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.esum.common.constraints.CardFeature
 import com.esum.feature.card.presentation.addingCard.screen.CardAddingScreen
+import com.esum.feature.card.presentation.home.screen.CardHomeScreen
 import com.esum.feature_api.FeatureApi
 
 internal object InternalCardFeatureApi : FeatureApi {
@@ -17,9 +18,13 @@ internal object InternalCardFeatureApi : FeatureApi {
         windowSizeClass: WindowSizeClass
     ) {
         navGraphBuilder.navigation(
-            startDestination = CardFeature.addCardScreenRoute,
+            startDestination = CardFeature.homeScreenRoute,
             route = CardFeature.nestedRoute
         ) {
+
+            composable(CardFeature.homeScreenRoute) {
+                CardHomeScreen(windowSizeClass = windowSizeClass, navController = navController)
+            }
             composable(CardFeature.addCardScreenRoute) {
                 CardAddingScreen(windowSize = windowSizeClass, navController = navController)
             }

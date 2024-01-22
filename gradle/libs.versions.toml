@@ -33,6 +33,8 @@ material3WindowSizeClass = "1.1.2"
 composeMaterial = "1.2.1"
 composeConstraintlayout = "1.1.0-alpha13"
 mockk = "1.13.8"
+uiTooling = "1.5.4"
+leakcanary = "3.0-alpha-1"
 
 
 [libraries]
@@ -113,6 +115,9 @@ hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref =
 hilt-instrumented-test = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-test = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 
+#[LeakCanary]
+leakcanary = {module = "com.squareup.leakcanary:leakcanary-android" , version.ref = "leakcanary" }
+
 
 
 
@@ -121,6 +126,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

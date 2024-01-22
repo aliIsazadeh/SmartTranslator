@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,11 +27,14 @@ fun LineBar(
     percentage: Double,
     count: String
 ) {
-    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = title, style = MaterialTheme.typography.bodySmall.copy(color = mainColor))
-            Text(text = count, style = MaterialTheme.typography.bodySmall.copy(color = mainColor))
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = title, style = MaterialTheme.typography.labelSmall.copy(color = mainColor))
+            Text(text = count, style = MaterialTheme.typography.labelSmall.copy(color = mainColor))
         }
         Box(
             modifier = Modifier
@@ -38,6 +43,7 @@ fun LineBar(
         ) {
             Box(
                 modifier = Modifier
+                    .height(4.dp)
                     .fillMaxWidth(percentage.toFloat())
                     .background(color = mainColor, shape = MaterialTheme.shapes.small)
             )
@@ -51,13 +57,15 @@ fun LineBar(
 fun LineBarPreview() {
 
     SmartTranslatorTheme {
-        LineBar(
-            title = "main card",
-            mainColor = MaterialTheme.colorScheme.primary,
-            subColor = MaterialTheme.colorScheme.primaryContainer,
-            percentage = 0.6,
-            count = "212"
-        )
+        Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
+            LineBar(
+                title = "main card",
+                mainColor = MaterialTheme.colorScheme.primary,
+                subColor = MaterialTheme.colorScheme.primaryContainer,
+                percentage = 0.6,
+                count = "212"
+            )
+        }
     }
 
 }

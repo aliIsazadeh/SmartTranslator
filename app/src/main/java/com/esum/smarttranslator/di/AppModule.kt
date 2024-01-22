@@ -2,6 +2,7 @@ package com.esum.smarttranslator.di
 
 import com.esum.feature.card.presentation.navigation.CardApi
 import com.esum.smarttranslator.navigation.NavigationProvider
+import com.esum.smarttranslator.navigationTesting.TestApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,8 +15,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNavigationProvider(cardApi: CardApi ) : NavigationProvider {
-        return NavigationProvider(cardApi)
+    fun provideNavigationProvider(cardApi: CardApi , testApi: TestApi ) : NavigationProvider {
+        return NavigationProvider(cardApi , testApi)
     }
 
 }

@@ -20,6 +20,13 @@
     <string name="antonyms">antonyms</string>
     <string name="example">example</string>
     <string name="insert_translate_text">First enter translation!</string>
-    <string name="insert_original_text">Enter velue for tranlsating!</string>
+    <string name="insert_original_text">Enter value for translating!</string>
     <string name="original_and_target_same_error">Original language and target language can not be the same!</string>
+    <string name="completedCards">Completed Cards</string>
+    <string name="allCards">All cards</string>
+    <string name="needToLearn">Need to Learn</string>
+    <string name="activeCards">Active Cards</string>
+    <string name="reviewCards">Review Cards</string>
+    <string name="translate_image">Translate Image</string>
+    <string name="duckLearn">Duck Learn</string>
 </resources>

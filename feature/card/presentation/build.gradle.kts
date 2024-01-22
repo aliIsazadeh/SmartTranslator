@@ -85,6 +85,7 @@ dependencies {
 
     debugImplementation(libs.tooling.ui)
     debugImplementation(libs.manifest.test)
+    debugImplementation(libs.leakcanary)
 
 
     //mockk

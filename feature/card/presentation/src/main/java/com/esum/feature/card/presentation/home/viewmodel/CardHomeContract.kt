@@ -3,9 +3,10 @@ package com.esum.feature.card.presentation.home.viewmodel
 import androidx.compose.runtime.Stable
 import com.esum.core.ui.UnidirectionalViewModel
 import com.esum.feature.card.presentation.addingCard.viewmodel.CardAddingContract
+import com.esum.feature.card.presentation.component.LineBarState
 
 interface CardHomeContract :
-    UnidirectionalViewModel<CardAddingContract.State, CardAddingContract.Effect, CardAddingContract.Event> {
+    UnidirectionalViewModel<CardHomeContract.State, CardHomeContract.Effect, CardHomeContract.Event> {
 
 
     sealed interface Event {
@@ -22,10 +23,14 @@ interface CardHomeContract :
     }
 
 
-//    @Stable
-//    data class State(
-//
-//    )
+    @Stable
+    data class State(
+        val completedCards : LineBarState = LineBarState(),
+        val activeCards : LineBarState = LineBarState(),
+        val needToLearnCards : LineBarState = LineBarState(),
+        val allCards : LineBarState = LineBarState(),
+        //profile
+    )
 
 
 }
