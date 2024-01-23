@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
@@ -89,7 +90,8 @@ fun CardAddingScreen(
         viewModel::onSentenceChange,
         onOriginalLanguageSelect = viewModel::onOriginalChange,
         onTranslateLanguageSelect = viewModel::onTranslationChange,
-        onAudioChange = viewModel::onAudioPlays
+        onAudioChange = viewModel::onAudioPlays,
+        navController
     )
 
 }
@@ -105,7 +107,8 @@ fun CardAddingScreen(
     onSentenceTextChange: (String) -> Unit,
     onOriginalLanguageSelect: (Languages) -> Unit,
     onTranslateLanguageSelect: (Languages) -> Unit,
-    onAudioChange: (String) -> Unit
+    onAudioChange: (String) -> Unit,
+    navController: NavController
 
 ) {
 
@@ -161,7 +164,7 @@ fun CardAddingScreen(
         topBar = {
             DefaultTopBar(
                 leftComposable = {
-                    IconButton(onClick = { event.invoke(CardAddingContract.Event.backEvent) }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "backBtn")
                     }
                 },
@@ -194,7 +197,7 @@ fun CardAddingScreen(
                     .testTag("save_card_btn")
                     .fillMaxWidth()
                     .padding(16.dp), shape = MaterialTheme.shapes.extraSmall,
-                enabled = (state.card.originalText.isNotBlank() && state.card.originalLanguages.key.isNotBlank()),
+                enabled = (state.card.originalText.isNotBlank() &&state.card.translateText.isNotBlank() &&  state.card.originalLanguages.key.isNotBlank()),
                 onClick = { event.invoke(CardAddingContract.Event.SaveCardEvent) }) {
                 Text(
                     text = stringResource(R.string.save_card),
@@ -393,7 +396,8 @@ fun CardAddingScreenPreview() {
             onSentenceTextChange = {},
             onOriginalLanguageSelect = {},
             onTranslateLanguageSelect = {},
-            onAudioChange = {}
+            onAudioChange = {},
+            navController = rememberNavController()
         )
     }
 

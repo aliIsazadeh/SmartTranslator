@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.esum.database.entity.CardEntity
+import com.esum.database.entity.model.ActiveCardsCount
 import com.esum.database.entity.relations.CardWithLanguages
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -22,6 +23,11 @@ interface CardDao {
     @Transaction
     @Query("SELECT * FROM CARD_TABLE WHERE id = :id")
     fun getCardWithDescriptionById(id: UUID): Flow<List<CardWithLanguages>>
+
+
+    @Query("Select active , Count(*) as count from card_table group by active")
+    fun getActivesCount() : Flow<List<ActiveCardsCount>>
+
 
     @Insert( entity = CardEntity::class)
     suspend fun insertCard(cardEntity: CardEntity): Long

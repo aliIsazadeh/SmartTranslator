@@ -23,8 +23,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -47,20 +49,22 @@ import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.component.LineBarState
+import com.esum.feature.card.presentation.home.viewmodel.CardHomeContract
 import com.esum.feature.card.presentation.home.viewmodel.HomeScreenViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun CardHomeScreen(
     navController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass,
 ) {
-    val (state, event, effect) = use(viewModel = viewModel)
+
+    viewModel.activeCardsState.collectAsState()
+    val (state, effect, event) = use(viewModel = viewModel)
     CardHomeScreen(
-        completedCards = state.completedCards,
-        activeCards = state.activeCards,
-        allCards = state.allCards,
-        needToLearnCards = state.needToLearnCards,
+        state = state, event = event, effect = effect,
         navController = navController
     )
 }
@@ -68,11 +72,11 @@ fun CardHomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardHomeScreen(
+    state: CardHomeContract.State,
+    event: (CardHomeContract.Event) -> Unit,
+    effect: Flow<CardHomeContract.Effect>,
     navController: NavController,
-    completedCards: LineBarState = LineBarState(),
-    activeCards: LineBarState = LineBarState(),
-    needToLearnCards: LineBarState = LineBarState(),
-    allCards: LineBarState = LineBarState(),
+
 ) {
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
@@ -125,8 +129,8 @@ fun CardHomeScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-                elevation = CardDefaults.cardElevation(8.dp)
+                elevation = CardDefaults.cardElevation(8.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
             ) {
                 Column(
                     modifier = Modifier
@@ -161,22 +165,22 @@ fun CardHomeScreen(
                                 title = stringResource(id = R.string.completedCards),
                                 mainColor = Color(0xFF478848),
                                 subColor = Color(0xFFA6B4A6),
-                                percentage = completedCards.percentage,
-                                count = completedCards.count
+                                percentage = state.completedCards.percentage,
+                                count = state.completedCards.count
                             )
                             LineBar(
                                 title = stringResource(id = R.string.activeCards),
                                 mainColor = MaterialTheme.colorScheme.secondary,
                                 subColor = MaterialTheme.colorScheme.secondaryContainer,
-                                percentage = activeCards.percentage,
-                                count = activeCards.count
+                                percentage = state.activeCards.percentage,
+                                count = state.activeCards.count
                             )
                             LineBar(
                                 title = stringResource(id = R.string.needToLearn),
                                 mainColor = Color(0xFF923923),
                                 subColor = Color(0xFFACA3A3),
-                                percentage = needToLearnCards.percentage,
-                                count = needToLearnCards.count
+                                percentage = state.needToLearnCards.percentage,
+                                count = state.needToLearnCards.count
                             )
                         }
                     }
@@ -186,8 +190,8 @@ fun CardHomeScreen(
                         title = stringResource(id = R.string.allCards),
                         mainColor = MaterialTheme.colorScheme.primary,
                         subColor = MaterialTheme.colorScheme.primaryContainer,
-                        percentage = allCards.percentage,
-                        count = allCards.count
+                        percentage = state.allCards.percentage,
+                        count = state.allCards.count
                     )
                 }
 
@@ -296,14 +300,9 @@ fun CardHomeScreen(
                     }
 
                 }
-
             }
         }
-
-
     }
-
-
 }
 
 @Preview
@@ -312,10 +311,7 @@ fun CardHomeScreenPreview() {
 
     SmartTranslatorTheme {
         CardHomeScreen(
-            allCards = LineBarState(percentage = 1.0, count = "200"),
-            completedCards = LineBarState(percentage = 0.2, count = "40"),
-            activeCards = LineBarState(percentage = 0.3, count = "60"),
-            needToLearnCards = LineBarState(percentage = 0.5, count = "100"),
+            effect = flowOf(), event = {}, state = CardHomeContract.State(),
             navController = rememberNavController()
         )
     }

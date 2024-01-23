@@ -32,6 +32,8 @@ class CardDataProviderTest {
 
 
     lateinit var cardEntity: CardWithLanguages
+    lateinit var cardEntityDisActive: CardWithLanguages
+
 
     @Before
     fun setUp() {
@@ -39,12 +41,23 @@ class CardDataProviderTest {
         cardEntity = CardWithLanguages(
             cardEntity = CardEntity(
                 image = null,
-                createDate ="",
-                updateDate ="",
-                active =true,
+                createDate = "",
+                updateDate = "",
+                active = true,
                 id = UUID.randomUUID(),
                 defineLanguage = "",
-                defineText =""
+                defineText = ""
+            ), language = listOf()
+        )
+        cardEntityDisActive = CardWithLanguages(
+            cardEntity = CardEntity(
+                image = null,
+                createDate = "",
+                updateDate = "",
+                active = false,
+                id = UUID.randomUUID(),
+                defineLanguage = "",
+                defineText = ""
             ), language = listOf()
         )
     }
@@ -69,7 +82,8 @@ class CardDataProviderTest {
 
             var updateEntity: CardWithLanguages? = null
 
-            updateEntity = provider.getAllCards().first().first().copy(cardEntity = cardEntity.cardEntity.copy(updateDate = "today"))
+            updateEntity = provider.getAllCards().first().first()
+                .copy(cardEntity = cardEntity.cardEntity.copy(updateDate = "today"))
 
             provider.updateCard(updateEntity.cardEntity)
 
@@ -90,7 +104,8 @@ class CardDataProviderTest {
             val id = provider.insertCard(cardEntity.cardEntity)
             val deleteEntity = provider.getAllCards().first().first()
             provider.deleteCard(deleteEntity.cardEntity)
-            val deleted: CardWithLanguages? = provider.getCardById(deleteEntity.cardEntity.id).firstOrNull()
+            val deleted: CardWithLanguages? =
+                provider.getCardById(deleteEntity.cardEntity.id).firstOrNull()
 
             Assert.assertEquals(null, deleted)
 
@@ -102,5 +117,24 @@ class CardDataProviderTest {
 
 
     }
+
+    @Test
+    fun getActiveCounts(): Unit = runBlocking {
+        try {
+            provider.insertCard(cardEntity.cardEntity)
+            provider.insertCard(cardEntityDisActive.cardEntity)
+
+            val cardsCount = provider.getActiveCardsCount().first()
+
+            Assert.assertEquals("actives" , cardsCount.firstOrNull{ it.active }?.count ,1)
+            Assert.assertEquals("deActives" , cardsCount.firstOrNull{ !it.active }?.count ,1)
+
+
+        } catch (e: Exception) {
+            Assert.assertFalse(e.message, false)
+            Log.e(TAG, "getActiveCounts: ${e.message} ")
+        }
+    }
+
 
 }

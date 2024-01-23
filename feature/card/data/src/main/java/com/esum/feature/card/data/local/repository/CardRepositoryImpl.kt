@@ -1,5 +1,6 @@
 package com.esum.feature.card.data.local.repository
 
+import android.database.MergeCursor
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.date.getCurrentDate
 import com.esum.database.dataProvider.CardDataProvider
@@ -8,18 +9,22 @@ import com.esum.database.dataProvider.DescriptionMeaningsProvider
 import com.esum.database.dataProvider.DescriptionProvider
 import com.esum.database.dataProvider.LanguageProvider
 import com.esum.database.entity.CardEntity
-import com.esum.database.entity.DescriptionMeanings
-import com.esum.database.entity.relations.CardWithLanguages
 import com.esum.feature.card.data.local.mapper.mapToCardEntity
 import com.esum.feature.card.data.local.mapper.mapToCardWithLanguage
 import com.esum.feature.card.data.local.mapper.mapToCardWithLanguages
+import com.esum.feature.card.domain.local.model.ActiveCardsCount
 import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.domain.local.repository.CardRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.DEFAULT_CONCURRENCY
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -113,5 +118,20 @@ class CardRepositoryImpl @Inject constructor(
         emit(ResultConstraints.Error<String>(message = it.message.toString()))
     }.flowOn(dispatcher)
 
+    override fun getActiveCardsCount(): Flow<ResultConstraints<Pair<List<ActiveCardsCount>, Int>>> {
+        val cardsStatusFlow = combine(
+            cardDataProvider.getActiveCardsCount(),
+            languageProvider.getNeedToLearnCount()
+        ) { a, b ->
+            a to b
+        }
+        return cardsStatusFlow.onStart {
+            ResultConstraints.Loading<List<ActiveCardsCount>>()
+        }.map { pair ->
+            ResultConstraints.Success(Pair(pair.first.map { ActiveCardsCount(active = it.active, count = it.count) } , pair.second))
+        }.catch {
+            ResultConstraints.Error<List<ActiveCardsCount>>(message = "error while getActiveCardsCount ")
+        }.distinctUntilChanged().flowOn(dispatcher)
 
+    }
 }

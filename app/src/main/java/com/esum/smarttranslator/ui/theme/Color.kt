@@ -44,7 +44,7 @@ val Dark_OutlineVariant = Color(0xFF2E2C2C)
 val Dark_Scrim = Color(0xFF000000)
 
 
-/* Dark Theme */
+/* Light theme */
 val Primary = Color(0xFF1A2C42)
 val OnPrimary = Color(0xFFFFFFFF)
 val PrimaryContainer = Color(0xFFB1C0DD)

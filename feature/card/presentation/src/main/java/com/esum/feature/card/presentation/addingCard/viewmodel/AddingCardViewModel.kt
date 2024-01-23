@@ -80,7 +80,6 @@ class AddingCardViewModel @Inject constructor(
                     CardAddingContract.Event.SelectOriginalOriginEvent -> {}
                     CardAddingContract.Event.SelectTranslateOriginEvent -> {}
                     CardAddingContract.Event.backEvent -> {
-                        throw Exception()
                     }
                 }
             } catch (e: Exception) {

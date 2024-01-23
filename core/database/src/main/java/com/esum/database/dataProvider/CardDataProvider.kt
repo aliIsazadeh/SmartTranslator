@@ -15,5 +15,6 @@ class CardDataProvider @Inject constructor(private val cardDao: CardDao) {
     suspend fun updateCard(cardEntity: CardEntity)  = cardDao.updateCard(cardEntity)
     suspend fun deleteCardById(id : UUID) = cardDao.deleteCardById(id)
     suspend fun deleteCard(cardEntity: CardEntity) = cardDao.deleteCard(cardEntity)
+    fun getActiveCardsCount() = cardDao.getActivesCount()
 
 }

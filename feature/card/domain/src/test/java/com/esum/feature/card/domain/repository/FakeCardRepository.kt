@@ -4,6 +4,7 @@ import com.esum.common.constraints.ResultConstraints
 import com.esum.common.date.getCurrentDate
 import com.esum.common.lagnuage.Languages
 import com.esum.database.entity.CardEntity
+import com.esum.feature.card.domain.local.model.ActiveCardsCount
 import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.domain.local.repository.CardRepository
@@ -95,5 +96,9 @@ class FakeCardRepository : CardRepository {
         }.catch {
             emit(ResultConstraints.Error<String>(message = it.message.toString()))
         }
+
+    override fun getActiveCardsCount(): Flow<ResultConstraints<Pair<List<ActiveCardsCount>, Int>>> {
+        TODO("Not yet implemented")
+    }
 
 }

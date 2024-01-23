@@ -1,8 +1,10 @@
 package com.esum.feature.card.domain.local.di
 
+import com.esum.database.entity.model.ActiveCardsCount
 import com.esum.feature.card.domain.local.repository.CardRepository
 import com.esum.feature.card.domain.local.usecase.DeleteCardByIdUsecase
 import com.esum.feature.card.domain.local.usecase.DeleteCardUsecase
+import com.esum.feature.card.domain.local.usecase.GetActiveCardsUseCase
 import com.esum.feature.card.domain.local.usecase.GetAllCardsUsecase
 import com.esum.feature.card.domain.local.usecase.GetCardByIdUsecase
 import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
@@ -51,6 +53,12 @@ object DomainModule {
     @Singleton
     fun provideUpdateCardUsecase(repository: CardRepository): UpdateCardUsecase {
         return UpdateCardUsecase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideActiveCardsUsecase(repository: CardRepository): GetActiveCardsUseCase {
+        return GetActiveCardsUseCase(repository)
     }
 
 }

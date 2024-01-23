@@ -2,6 +2,7 @@ package com.esum.feature.card.presentation.home.viewmodel
 
 import androidx.compose.runtime.Stable
 import com.esum.core.ui.UnidirectionalViewModel
+import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.feature.card.presentation.addingCard.viewmodel.CardAddingContract
 import com.esum.feature.card.presentation.component.LineBarState
 
@@ -29,6 +30,8 @@ interface CardHomeContract :
         val activeCards : LineBarState = LineBarState(),
         val needToLearnCards : LineBarState = LineBarState(),
         val allCards : LineBarState = LineBarState(),
+        val errors: GenericDialogInfo? = null,
+        val loading: Boolean = false
         //profile
     )
 

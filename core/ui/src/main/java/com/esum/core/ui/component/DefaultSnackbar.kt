@@ -26,13 +26,13 @@ fun DefaultSnackbar(
         modifier = modifier,
         hostState = snackbarHostState,
         snackbar = { data ->
-            Snackbar(containerColor = MaterialTheme.colorScheme.surface,
+            Snackbar(containerColor = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.padding(16.dp),
                 content = {
                     Text(
                         text = data.visuals.message,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 },
                 action = {
@@ -45,7 +45,7 @@ fun DefaultSnackbar(
                             Text(
                                 text = actionLabel,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         }
                     }
