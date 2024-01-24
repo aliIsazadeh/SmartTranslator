@@ -24,7 +24,7 @@ class FakeCardRepository : CardRepository {
             active = true,
             createDate = getCurrentDate(),
             image =null,
-            descriptionModel = listOf()
+            descriptionModel = null
         )
     )
     val cards = mutableListOf<Card>(
