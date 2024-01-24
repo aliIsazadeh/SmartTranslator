@@ -30,7 +30,7 @@ fun CardWithLanguage.mapToCardWithLanguages(): CardWithLanguages {
             active = this.active,
             updateDate = this.updateDate
         ),
-        language = this.descriptionModel.map { details ->
+        language = this.descriptionModel.let { details ->
             details?.let {
                 val languageId: UUID = details.first.id ?: UUID.randomUUID()
                 val descriptionId: UUID = details.first.description?.id ?: UUID.randomUUID()

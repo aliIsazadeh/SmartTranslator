@@ -28,6 +28,11 @@ interface CardDao {
     @Query("Select active , Count(*) as count from card_table group by active")
     fun getActivesCount() : Flow<List<ActiveCardsCount>>
 
+    @Transaction
+    @Query("select * from card_table as ct join languages as lg on ct.id = lg.card_id" +
+            " where  ct.active and (ct.update_date <= strftime( '%Y%m%d' ,DATE('now'))" +
+            " or ct.update_date is null or ct.update_date ='' )")
+    fun getReviewCards() : Flow<List<CardWithLanguages>>
 
     @Insert( entity = CardEntity::class)
     suspend fun insertCard(cardEntity: CardEntity): Long

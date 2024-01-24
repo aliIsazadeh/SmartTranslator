@@ -1,9 +1,9 @@
 package com.esum.database.di
 
 import com.esum.database.dao.CardDao
-import com.esum.database.dao.ProfileDao
-import com.esum.database.dataProvider.CardDataProvider
-import com.esum.database.dataProvider.ProfileDataProvider
+import com.esum.database.dataProvider.card.CardDataProvider
+import com.esum.database.dataProvider.card.CardGetReviewsDataProvider
+import com.esum.database.dataProvider.card.CardInsertDataProvider
 import com.esum.database.database.TranslateDB
 import dagger.Module
 import dagger.Provides
@@ -25,6 +25,19 @@ object CardDatabaseModule {
     @Provides
     fun provideCardDataProvider(dao: CardDao) : CardDataProvider {
         return CardDataProvider(dao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCardInsertProvider(dao: CardDao) : CardInsertDataProvider {
+        return CardInsertDataProvider(dao)
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideCardGetReviewsDataProvider(dao: CardDao) : CardGetReviewsDataProvider {
+        return CardGetReviewsDataProvider(dao)
     }
 
 

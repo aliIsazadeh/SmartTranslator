@@ -8,6 +8,7 @@ import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.usecase.DeleteCardByIdUsecase
 import com.esum.feature.card.domain.local.usecase.GetAllCardsUsecase
 import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
+import com.esum.feature.card.domain.repository.CardInsertFakeRepository
 import com.esum.feature.card.domain.repository.FakeCardRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -19,6 +20,7 @@ class CardUsecasesTest {
     val TAG = "DeleteCardByIdUsecaseTest"
 
     val repository = FakeCardRepository()
+    val fakeRepository = CardInsertFakeRepository()
 
     private lateinit var deleteByIdUsecase: DeleteCardByIdUsecase
     private lateinit var insertUsecase: InsertCardUsecase
@@ -30,7 +32,7 @@ class CardUsecasesTest {
     @Before
     fun setUp() {
         deleteByIdUsecase = DeleteCardByIdUsecase(repository)
-        insertUsecase = InsertCardUsecase(repository)
+        insertUsecase = InsertCardUsecase(fakeRepository)
         getAllCardsUsecase = GetAllCardsUsecase(repository)
 
 

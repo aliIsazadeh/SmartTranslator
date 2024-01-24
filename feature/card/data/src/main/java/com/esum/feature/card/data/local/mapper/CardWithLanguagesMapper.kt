@@ -20,39 +20,39 @@ fun CardWithLanguages.mapToCardWithLanguage(): CardWithLanguage {
         updateDate = this.cardEntity.updateDate ?: "",
         original = this.cardEntity.defineText,
         originalLanguage = Languages.valueOf(this.cardEntity.defineLanguage),
-        descriptionModel = this.language.map { langudesc ->
-            langudesc?.let {
-                Pair(
-                    CardDetails(
-                        id = null,
-                        sentence = it.language.sentence,
-                        description = DescriptionModel(
-                            id = it.description?.description?.id,
-                            audio = it.description?.description?.audio,
-                            phonetic = it.description?.description?.phonetic ?: "",
-                            licence = it.description?.description?.licence ?: "",
-                            meanings = it.description?.meanings?.map { meanings ->
-                                DescriptionMeanings(
-                                    id = meanings.meanings.id,
-                                    partOfSpeech = meanings.meanings.partOfSpeech,
-                                    definitions = meanings.definitions.map { descDif ->
-                                        DescriptionDefinition(
-                                            id = descDif.id,
-                                            example = descDif.example,
-                                            definition = descDif.example,
-                                            synonyms = descDif.synonyms.synonym.map { it },
-                                            antonyms = descDif.antonym.value.map { it }
-                                        )
-                                    },
-                                )
-                            }
-                        ),
-                        translated = it.language.value,
-                        correctAnswerCount = it.language.correctAnswerCount
-                    ), Languages.valueOf(it.language.region)
-                )
-            }
-        } ?: listOf()
+        descriptionModel = this.language?.let {
+
+            Pair(
+                CardDetails(
+                    id = null,
+                    sentence = it.language.sentence,
+                    description = DescriptionModel(
+                        id = it.description?.description?.id,
+                        audio = it.description?.description?.audio,
+                        phonetic = it.description?.description?.phonetic ?: "",
+                        licence = it.description?.description?.licence ?: "",
+                        meanings = it.description?.meanings?.map { meanings ->
+                            DescriptionMeanings(
+                                id = meanings.meanings.id,
+                                partOfSpeech = meanings.meanings.partOfSpeech,
+                                definitions = meanings.definitions.map { descDif ->
+                                    DescriptionDefinition(
+                                        id = descDif.id,
+                                        example = descDif.example,
+                                        definition = descDif.example,
+                                        synonyms = descDif.synonyms.synonym.map { it },
+                                        antonyms = descDif.antonym.value.map { it }
+                                    )
+                                },
+                            )
+                        }
+                    ),
+                    translated = it.language.value,
+                    correctAnswerCount = it.language.correctAnswerCount
+                ), Languages.valueOf(it.language.region)
+            )
+        }
+
     )
 
 }

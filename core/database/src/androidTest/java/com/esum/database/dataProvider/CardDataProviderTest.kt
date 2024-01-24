@@ -1,10 +1,15 @@
 package com.esum.database.dataProvider
 
 import android.util.Log
+import com.esum.database.dataProvider.card.CardDataProvider
+import com.esum.database.dataProvider.card.CardGetReviewsDataProvider
+import com.esum.database.dataProvider.card.CardInsertDataProvider
+import com.esum.database.dataProvider.languag.LanguageInsertDataProvider
+import com.esum.database.dataProvider.languag.LanguageProvider
 import com.esum.database.entity.CardEntity
 import com.esum.database.entity.Language
-import com.esum.database.entity.ProfileEntity
 import com.esum.database.entity.relations.CardWithLanguages
+import com.esum.database.entity.relations.LanguageWithDescriptions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -29,6 +34,15 @@ class CardDataProviderTest {
 
     @Inject
     lateinit var provider: CardDataProvider
+    @Inject
+    lateinit var languageProvider : LanguageProvider
+    @Inject
+    lateinit var cardInsertProvider : CardInsertDataProvider
+    @Inject
+    lateinit var languageInsertDataProvider: LanguageInsertDataProvider
+
+    @Inject
+    lateinit var cardReview : CardGetReviewsDataProvider
 
 
     lateinit var cardEntity: CardWithLanguages
@@ -37,28 +51,32 @@ class CardDataProviderTest {
 
     @Before
     fun setUp() {
+        val cardId = UUID.randomUUID()
+        val deActiveCardId = UUID.randomUUID()
+
         hilt.inject()
         cardEntity = CardWithLanguages(
             cardEntity = CardEntity(
                 image = null,
-                createDate = "",
-                updateDate = "",
+                createDate = "20240120",
+                updateDate = "20240120",
                 active = true,
-                id = UUID.randomUUID(),
-                defineLanguage = "",
+                id = cardId,
+                defineLanguage = "fa",
                 defineText = ""
-            ), language = listOf()
+            ),
+            language = null
         )
         cardEntityDisActive = CardWithLanguages(
             cardEntity = CardEntity(
                 image = null,
-                createDate = "",
-                updateDate = "",
+                createDate = "20240120",
+                updateDate = "20240120",
                 active = false,
-                id = UUID.randomUUID(),
+                id = deActiveCardId,
                 defineLanguage = "",
-                defineText = ""
-            ), language = listOf()
+                defineText = "fa"
+            ), language = null
         )
     }
 
@@ -67,7 +85,7 @@ class CardDataProviderTest {
     fun insertProfile(): Unit = runBlocking {
 
         try {
-            val id = provider.insertCard(cardEntity.cardEntity)
+            val id = cardInsertProvider.insertCard(cardEntity.cardEntity)
             assert(id.toString().isNotBlank())
         } catch (e: Exception) {
             Assert.assertEquals(e.message.toString(), 1, 0)
@@ -78,7 +96,7 @@ class CardDataProviderTest {
     @Test
     fun updateProfile(): Unit = runBlocking {
         try {
-            val id = provider.insertCard(cardEntity.cardEntity)
+            val id = cardInsertProvider.insertCard(cardEntity.cardEntity)
 
             var updateEntity: CardWithLanguages? = null
 
@@ -101,7 +119,7 @@ class CardDataProviderTest {
     fun deleteProfile(): Unit = runBlocking {
         try {
 
-            val id = provider.insertCard(cardEntity.cardEntity)
+            val id = cardInsertProvider.insertCard(cardEntity.cardEntity)
             val deleteEntity = provider.getAllCards().first().first()
             provider.deleteCard(deleteEntity.cardEntity)
             val deleted: CardWithLanguages? =
@@ -121,18 +139,47 @@ class CardDataProviderTest {
     @Test
     fun getActiveCounts(): Unit = runBlocking {
         try {
-            provider.insertCard(cardEntity.cardEntity)
-            provider.insertCard(cardEntityDisActive.cardEntity)
+            cardInsertProvider.insertCard(cardEntity.cardEntity)
+            cardInsertProvider.insertCard(cardEntityDisActive.cardEntity)
 
             val cardsCount = provider.getActiveCardsCount().first()
 
-            Assert.assertEquals("actives" , cardsCount.firstOrNull{ it.active }?.count ,1)
-            Assert.assertEquals("deActives" , cardsCount.firstOrNull{ !it.active }?.count ,1)
+            Assert.assertEquals("actives", cardsCount.firstOrNull { it.active }?.count, 1)
+            Assert.assertEquals("deActives", cardsCount.firstOrNull { !it.active }?.count, 1)
 
 
         } catch (e: Exception) {
             Assert.assertFalse(e.message, false)
             Log.e(TAG, "getActiveCounts: ${e.message} ")
+        }
+    }
+
+    @Test
+    fun reviewCardsTest(): Unit = runBlocking {
+        try {
+            cardInsertProvider.insertCard(cardEntity.cardEntity)
+            cardInsertProvider.insertCard(cardEntityDisActive.cardEntity)
+
+            cardEntity.language.let{
+                languageInsertDataProvider.insertLanguage(it!!.language)
+            }
+            cardEntityDisActive.language.let{
+                languageInsertDataProvider.insertLanguage(it!!.language)
+            }
+
+            val getCards = provider.getAllCards().first()
+            Log.d(TAG, "getCards: ${getCards.size}")
+
+            val reviewCards = cardReview.getReviewCards().first()
+
+
+            Log.d(TAG, "reviewCardsTest: ${reviewCards.size}")
+            assert(reviewCards.size == 1)
+
+
+        } catch (e: Exception) {
+            assert(false)
+
         }
     }
 

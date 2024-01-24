@@ -1,7 +1,8 @@
 package com.esum.database.di
 
 import com.esum.database.dao.DescriptionDefinitionDao
-import com.esum.database.dataProvider.DescriptionDefinitionProvider
+import com.esum.database.dataProvider.definition.DescriptionDefinitionInsertProvider
+import com.esum.database.dataProvider.definition.DescriptionDefinitionProvider
 import com.esum.database.database.TranslateDB
 import dagger.Module
 import dagger.Provides
@@ -22,6 +23,12 @@ object DescriptionDefinitionModule {
     @Provides
     fun provideDescriptionDefinitionProvide(dao: DescriptionDefinitionDao): DescriptionDefinitionProvider {
         return DescriptionDefinitionProvider(dao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDescriptionDefinitionInsertProvider(dao: DescriptionDefinitionDao): DescriptionDefinitionInsertProvider {
+        return DescriptionDefinitionInsertProvider(dao)
     }
 
 }

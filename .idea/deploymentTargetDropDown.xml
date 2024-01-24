@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CardAddingScreenTest">
+        <State />
+      </entry>
       <entry key="CardDataProviderTest">
         <State>
           <targetSelectedWithDropDown>
@@ -18,25 +21,8 @@
           <timeTargetWasSelectedWithDropDown value="2024-01-21T10:28:24.771237600Z" />
         </State>
       </entry>
-      <entry key="CardHomeScreenPreview">
-        <State />
-      </entry>
-      <entry key="TranslateDataProviderTest">
-        <State />
-      </entry>
       <entry key="app">
         <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\aisazadeh\.android\avd\Resizable_Experimental_API_34.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
           <targetSelectedWithDropDown>
             <Target>
               <type value="QUICK_BOOT_TARGET" />
@@ -50,6 +36,12 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-01-21T08:12:32.249427800Z" />
         </State>
+      </entry>
+      <entry key="getActiveCounts()">
+        <State />
+      </entry>
+      <entry key="reviewCardsTest()">
+        <State />
       </entry>
     </value>
   </component>

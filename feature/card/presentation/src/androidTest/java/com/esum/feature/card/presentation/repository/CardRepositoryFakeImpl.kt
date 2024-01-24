@@ -2,6 +2,7 @@ package com.esum.feature.card.presentation.repository
 
 import com.esum.common.constraints.ResultConstraints
 import com.esum.database.entity.CardEntity
+import com.esum.feature.card.domain.local.model.ActiveCardsCount
 import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.domain.local.repository.CardRepository
@@ -19,9 +20,7 @@ class CardRepositoryFakeImpl : CardRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertCard(card: Card): Flow<ResultConstraints<Long>> = flow {
-        TODO("Not yet implemented")
-    }
+
 
     override suspend fun updateCard(cardEntity: CardWithLanguage): Flow<ResultConstraints<String>> {
         TODO("Not yet implemented")
@@ -35,6 +34,10 @@ class CardRepositoryFakeImpl : CardRepository {
         flow {
             TODO("Not yet implemented")
         }
+
+    override fun getActiveCardsCount(): Flow<ResultConstraints<Pair<List<ActiveCardsCount>, Int>>> {
+        TODO("Not yet implemented")
+    }
 
 
 }

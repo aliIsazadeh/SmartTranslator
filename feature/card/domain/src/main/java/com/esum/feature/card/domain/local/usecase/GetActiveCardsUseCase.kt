@@ -25,14 +25,16 @@ class GetActiveCardsUseCase @Inject constructor(private val repository: CardRepo
                     ResultConstraints.Success(
                         CardStatusStates(
                             needToLearnCardsPercentage = (result.data?.second ?: 0).div(
-                                result.data?.first?.size ?: 1
+                                if (result.data?.first.isNullOrEmpty().not()) result.data?.first?.size
+                                    ?: 1 else 1
                             ).toDouble(),
                             needToLearnCardsCount = (result.data?.second ?: 0).toString(),
                             activeCardsCount = result.data?.first?.firstOrNull() { it.active }?.count?.toString()
                                 ?: "0",
                             activeCardsPercentage = (result.data?.first?.filter { it.active }?.size?.toDouble()
                                 ?: 0.0).div(
-                                result.data?.first?.size ?: 1
+                                if (result.data?.first.isNullOrEmpty().not()) result.data?.first?.size
+                                    ?: 1 else 1
                             ),
                             allCardsCount = ((result.data?.first?.firstOrNull() { activeCardsCount -> activeCardsCount.active }?.count
                                 ?: 0) + (result.data?.first?.firstOrNull() { activeCardsCount -> !activeCardsCount.active }?.count
@@ -41,7 +43,8 @@ class GetActiveCardsUseCase @Inject constructor(private val repository: CardRepo
                             completeCardsCount = result.data?.first?.filter { !it.active }?.size.toString(),
                             completeCardsPercentage = (result.data?.first?.filter { !it.active }?.size?.toDouble()
                                 ?: 0.0).div(
-                                result.data?.first?.size ?: 1
+                                if (result.data?.first.isNullOrEmpty().not()) result.data?.first?.size!!
+                                     else 1
                             )
                         )
                     )

@@ -1,4 +1,4 @@
-package com.esum.database.dataProvider
+package com.esum.database.dataProvider.definition
 
 import com.esum.database.dao.DescriptionDefinitionDao
 import com.esum.database.entity.DescriptionDefinition

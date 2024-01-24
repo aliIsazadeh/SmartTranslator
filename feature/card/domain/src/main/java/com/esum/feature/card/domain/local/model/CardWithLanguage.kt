@@ -11,5 +11,5 @@ data class CardWithLanguage(
     val image: String? = null,
     val updateDate: String = "",
     val createDate: String = "",
-    val descriptionModel: List<Pair<CardDetails, Languages>?> )
+    val descriptionModel: Pair<CardDetails, Languages>? )
 

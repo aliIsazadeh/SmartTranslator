@@ -1,4 +1,4 @@
-package com.esum.database.dataProvider
+package com.esum.database.dataProvider.languag
 
 import com.esum.database.dao.LanguageDao
 import com.esum.database.entity.Language
@@ -8,7 +8,6 @@ class LanguageProvider @Inject constructor(private val dao: LanguageDao) {
 
     fun getAllLanguage() = dao.getAllLanguages()
     fun getLanguageById(id : Long) = dao.getLanguageById(id)
-    suspend fun insertLanguage(language: Language) : Long = dao.insertLanguage(language)
 
     fun getNeedToLearnCount() = dao.getNeedToLearn()
     suspend fun updateLanguage(language: Language)  = dao.updateLanguage(language)

@@ -50,14 +50,7 @@ class FakeCardRepository : CardRepository {
         emit(ResultConstraints.Error<CardWithLanguage?>(message = it.message.toString()))
     }
 
-    override suspend fun insertCard(card: Card): Flow<ResultConstraints<Long>> =
-        flow<ResultConstraints<Long>> {
-            emit(ResultConstraints.Loading())
-            cards.add(card)
-            emit(ResultConstraints.Success(0))
-        }.catch {
-            emit(ResultConstraints.Error<Long>(message = it.message.toString()))
-        }
+
 
     override suspend fun updateCard(cardEntity: CardWithLanguage): Flow<ResultConstraints<String>> =
         flow {

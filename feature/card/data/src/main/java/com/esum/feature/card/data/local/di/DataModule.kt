@@ -1,11 +1,21 @@
 package com.esum.feature.card.data.local.di
 
-import com.esum.database.dataProvider.CardDataProvider
-import com.esum.database.dataProvider.DescriptionDefinitionProvider
-import com.esum.database.dataProvider.DescriptionMeaningsProvider
-import com.esum.database.dataProvider.DescriptionProvider
-import com.esum.database.dataProvider.LanguageProvider
+import com.esum.database.dataProvider.card.CardDataProvider
+import com.esum.database.dataProvider.card.CardGetReviewsDataProvider
+import com.esum.database.dataProvider.card.CardInsertDataProvider
+import com.esum.database.dataProvider.definition.DescriptionDefinitionInsertProvider
+import com.esum.database.dataProvider.definition.DescriptionDefinitionProvider
+import com.esum.database.dataProvider.description.DescriptionInsertProvider
+import com.esum.database.dataProvider.meaning.DescriptionMeaningsProvider
+import com.esum.database.dataProvider.description.DescriptionProvider
+import com.esum.database.dataProvider.languag.LanguageInsertDataProvider
+import com.esum.database.dataProvider.languag.LanguageProvider
+import com.esum.database.dataProvider.meaning.DescriptionMeaningsInsertProvider
 import com.esum.feature.card.data.local.repository.CardRepositoryImpl
+import com.esum.feature.card.data.local.repository.CardInsertRepositoryImpl
+import com.esum.feature.card.data.local.repository.CardReviewsRepositoryImpl
+import com.esum.feature.card.domain.local.repository.CardGetReviewsRepository
+import com.esum.feature.card.domain.local.repository.CardInsertRepository
 import com.esum.feature.card.domain.local.repository.CardRepository
 import dagger.Module
 import dagger.Provides
@@ -28,12 +38,34 @@ object DataModule {
     ): CardRepository {
         return CardRepositoryImpl(
             cardDataProvider = cardDataProvider,
-            descriptionDefinitionProvider = descriptionDefinitionProvider,
-            descriptionProvider = descriptionProvider,
-            descriptionMeaningsProvider = descriptionMeaningsProvider,
             languageProvider = languageProvider,
             dispatcher = Dispatchers.IO
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideInsertCardRepository(
+        cardInsertDataProvider: CardInsertDataProvider,
+        languageInsertDataProvider: LanguageInsertDataProvider,
+        descriptionInsertProvider: DescriptionInsertProvider,
+        descriptionDefinitionInsertProvider: DescriptionDefinitionInsertProvider,
+        descriptionMeaningsInsertProvider: DescriptionMeaningsInsertProvider
+    ): CardInsertRepository {
+        return CardInsertRepositoryImpl(
+            dispatcher = Dispatchers.IO,
+            descriptionInsertProvider = descriptionInsertProvider,
+            languageProvider = languageInsertDataProvider,
+            descriptionDefinitionInsertProvider = descriptionDefinitionInsertProvider,
+            descriptionMeaningsInsertProvider = descriptionMeaningsInsertProvider,
+            cardDataProvider = cardInsertDataProvider
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideCardReviewsRepository(getReviewsDataProvider: CardGetReviewsDataProvider): CardGetReviewsRepository {
+        return CardReviewsRepositoryImpl(getReviewsDataProvider, Dispatchers.IO)
     }
 
 }

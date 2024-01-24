@@ -1,6 +1,7 @@
 package com.esum.feature.card.presentation.di
 
 import com.esum.feature.card.domain.local.di.DomainModule
+import com.esum.feature.card.domain.local.repository.CardInsertRepository
 import com.esum.feature.card.domain.local.repository.CardRepository
 import com.esum.feature.card.domain.local.usecase.DeleteCardByIdUsecase
 import com.esum.feature.card.domain.local.usecase.DeleteCardUsecase
@@ -8,6 +9,7 @@ import com.esum.feature.card.domain.local.usecase.GetAllCardsUsecase
 import com.esum.feature.card.domain.local.usecase.GetCardByIdUsecase
 import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
 import com.esum.feature.card.domain.local.usecase.UpdateCardUsecase
+import com.esum.feature.card.presentation.repository.CardInsertFakeRepository
 import com.esum.feature.card.presentation.repository.CardRepositoryFakeImpl
 import dagger.Module
 import dagger.Provides
@@ -20,6 +22,20 @@ import javax.inject.Singleton
 object DomainModuleTest {
 
     private val repository = CardRepositoryFakeImpl()
+    private val cardInsertRepository = CardInsertFakeRepository()
+
+    @Provides
+    @Singleton
+    fun provideCardDataRepository() :  CardRepository {
+        return repository
+    }
+
+    @Provides
+    @Singleton
+    fun provideCardInsertRepository() :  CardInsertRepository {
+        return cardInsertRepository
+    }
+
 
     @Provides
     @Singleton
@@ -48,7 +64,7 @@ object DomainModuleTest {
     @Provides
     @Singleton
     fun provideInsertCardUsecase(): InsertCardUsecase {
-        return InsertCardUsecase(repository)
+        return InsertCardUsecase(cardInsertRepository)
     }
 
     @Provides

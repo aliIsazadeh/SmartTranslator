@@ -8,7 +8,7 @@ fun CardWithLanguageModel.mapToCardWithLanguages(): CardWithLanguages {
 
 
     return CardWithLanguages(
-        cardEntity = this.card, language = listOf(this.language)
+        cardEntity = this.card, language = this.language
     )
 
 

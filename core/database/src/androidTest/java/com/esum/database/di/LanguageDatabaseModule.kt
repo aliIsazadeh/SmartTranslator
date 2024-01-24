@@ -6,14 +6,13 @@ import com.esum.database.dataProvider.languag.LanguageProvider
 import com.esum.database.database.TranslateDB
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
+@TestInstallIn(components = [SingletonComponent::class] , replaces = [LanguageModule::class])
 @Module
-object LanguageModule {
-
+object LanguageDatabaseModule {
     @Singleton
     @Provides
     fun provideLanguageDao(db: TranslateDB): LanguageDao {
@@ -27,9 +26,7 @@ object LanguageModule {
 
     @Singleton
     @Provides
-    fun provideLanguageInsertDataProvider(dao: LanguageDao): LanguageInsertDataProvider {
+    fun provideLanguageInsertProvider(dao: LanguageDao): LanguageInsertDataProvider {
         return LanguageInsertDataProvider(dao)
     }
-
-
 }
