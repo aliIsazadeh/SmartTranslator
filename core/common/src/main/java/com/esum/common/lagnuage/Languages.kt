@@ -1,5 +1,7 @@
 package com.esum.common.lagnuage
 
+import com.esum.common.constraints.TranslateErrors
+
 enum class Languages(val key : String) {
 
     English("en"),
@@ -12,4 +14,8 @@ enum class Languages(val key : String) {
     Turkish("tu"),
     Spanish("sp")
 
+}
+
+fun getLanguagesByKey(key: String): Languages {
+    return Languages.entries.find { it.key == key } ?: Languages.Farsi
 }

@@ -3,6 +3,7 @@ package com.esum.feature.card.presentation.reviewCards.viewmodel
 import androidx.compose.runtime.Stable
 import com.esum.core.ui.UnidirectionalViewModel
 import com.esum.core.ui.component.GenericDialogInfo
+import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.presentation.reviewCards.state.ReviewCardState
 import java.util.Queue
 
@@ -12,7 +13,9 @@ interface ReviewCardsContract :
 
     @Stable
     data class State(
-        val reviewCardState: ArrayDeque<ReviewCardState> = ArrayDeque(listOf()),
+        val reviewCards : ArrayDeque<ReviewCardState> = ArrayDeque(emptyList()),
+        val cardState: ReviewCardState ? = null,
+        val listSize : Int = 0,
         val numberOfReviews: String = "",
         val errors: GenericDialogInfo? = null,
         val loading: Boolean = false

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.esum.common.constraints.ResultConstraints
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
-import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.domain.local.usecase.GetCardReviewsUsecase
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.reviewCards.state.CardFrontState
@@ -30,7 +29,7 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
     private val _mutableState: MutableStateFlow<ReviewCardsContract.State> =
         MutableStateFlow(ReviewCardsContract.State())
 
-    val cardReviews: StateFlow<List<CardWithLanguage>> =
+    val cardReviews: StateFlow<ArrayDeque<ReviewCardState>> =
         getReviewUsecase.get().invoke().map { result ->
             when (result) {
                 is ResultConstraints.Error -> {
@@ -42,47 +41,58 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
                         description = R.string.something_went_wrong,
                         sticker = R.drawable.lagging
                     )
-                    emptyList<CardWithLanguage>()
+                    ArrayDeque(emptyList<ReviewCardState>())
                 }
 
                 is ResultConstraints.Loading -> {
                     _mutableState.update {
                         it.copy(loading = true)
                     }
-                    emptyList<CardWithLanguage>()
+                    ArrayDeque(emptyList<ReviewCardState>())
                 }
 
                 is ResultConstraints.Success -> {
+
                     result.data?.let { list ->
-                        _mutableState.update { state ->
-                            state.copy(
-                                reviewCardState = ArrayDeque(list.map { cardWithLanguage ->
-                                    ReviewCardState(
-                                        CardFrontState(
-                                            pronunciation = cardWithLanguage.descriptionModel?.first?.description?.phonetic,
-                                            audio = cardWithLanguage.descriptionModel?.first?.description?.audio,
-                                            example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.map
-                                            { meanings -> meanings.definitions.firstOrNull { it.example?.isNotBlank() == true }?.example }
-                                                ?.firstOrNull() ?: "",
-                                            original = cardWithLanguage.original,
-                                            originalLanguages = cardWithLanguage.originalLanguage,
-                                            click = {}
-                                        ),
-                                        cardWithLanguage
-                                    )
-                                })
+                        list.map { cardWithLanguage ->
+                            ReviewCardState(
+                                CardFrontState(
+                                    pronunciation = cardWithLanguage.descriptionModel?.first?.description?.phonetic,
+                                    audio = cardWithLanguage.descriptionModel?.first?.description?.audio,
+                                    example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.map
+                                    { meanings -> meanings.definitions.firstOrNull { it.example?.isNotBlank() == true }?.example }
+                                        ?.firstOrNull() ?: "",
+                                    original = cardWithLanguage.original,
+                                    originalLanguages = cardWithLanguage.originalLanguage,
+                                    click = {}
+                                ), cardWithLanguage
                             )
                         }
-                    }
-                    emptyList()
+                    }?.toList()?.let {list ->
+                        _mutableState.update { it.copy(cardState = list.first() ,listSize = list.size )}
+                        ArrayDeque(list) } ?: ArrayDeque(emptyList())
                 }
             }
-
         }.stateIn(
-            initialValue = emptyList(),
+            initialValue = ArrayDeque(emptyList()),
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(8000)
-        )
+        ).apply {
+            this.value.removeLastOrNull()
+        }
+
+
+    init {
+        _mutableState.update { it.copy(cardState = cardReviews.value.removeFirstOrNull() , listSize = cardReviews.value.size) }
+
+    }
+
+
+
+    private fun nextCard() {
+        _mutableState.update { it.copy(cardState = cardReviews.value.removeFirstOrNull() , listSize = cardReviews.value.size) }
+
+    }
 
 
     override val state: StateFlow<ReviewCardsContract.State> = _mutableState
@@ -90,7 +100,13 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
     private val channelEffects = Channel<ReviewCardsContract.Effect>(Channel.UNLIMITED)
     override val effect: Flow<ReviewCardsContract.Effect> = channelEffects.receiveAsFlow()
     override fun event(event: ReviewCardsContract.Event) {
-        TODO("Not yet implemented")
+        when (event) {
+            ReviewCardsContract.Event.OnKnowClick -> {
+                nextCard()
+            }
+
+            ReviewCardsContract.Event.OnLearnClick -> TODO()
+        }
     }
 
 

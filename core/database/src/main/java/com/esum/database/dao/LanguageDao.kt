@@ -18,6 +18,8 @@ interface LanguageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = Language::class)
     suspend fun insertLanguage(languageEntity: Language): Long
 
+
+
     @Query("select count(*)  From  languages where CAC = -1")
     fun getNeedToLearn(): Flow<Int>
 

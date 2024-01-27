@@ -54,7 +54,7 @@ fun ReviewCardFront(
         modifier = modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.background)
-            .padding(vertical = 24.dp, horizontal = 8.dp),
+            .padding(vertical = 24.dp, horizontal = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {

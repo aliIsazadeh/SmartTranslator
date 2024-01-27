@@ -1,6 +1,7 @@
 package com.esum.feature.card.data.local.mapper
 
 import com.esum.common.lagnuage.Languages
+import com.esum.common.lagnuage.getLanguagesByKey
 import com.esum.database.entity.CardEntity
 import com.esum.database.entity.relations.CardWithLanguages
 import com.esum.feature.card.domain.local.model.CardDetails
@@ -19,7 +20,7 @@ fun CardWithLanguages.mapToCardWithLanguage(): CardWithLanguage {
         active = this.cardEntity.active,
         updateDate = this.cardEntity.updateDate ?: "",
         original = this.cardEntity.defineText,
-        originalLanguage = Languages.valueOf(this.cardEntity.defineLanguage),
+        originalLanguage = getLanguagesByKey(this.cardEntity.defineLanguage),
         descriptionModel = this.language?.let {
 
             Pair(
@@ -49,7 +50,7 @@ fun CardWithLanguages.mapToCardWithLanguage(): CardWithLanguage {
                     ),
                     translated = it.language.value,
                     correctAnswerCount = it.language.correctAnswerCount
-                ), Languages.valueOf(it.language.region)
+                ), getLanguagesByKey(it.language.region)
             )
         }
 

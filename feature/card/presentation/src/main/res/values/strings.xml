@@ -30,4 +30,5 @@
     <string name="translate_image">Translate Image</string>
     <string name="duckLearn">Duck Learn</string>
     <string name="original_text">Original Text</string>
+    <string name="translate_text">Translate Text</string>
 </resources>

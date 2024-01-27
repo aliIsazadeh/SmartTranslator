@@ -286,7 +286,9 @@ fun CardHomeScreen(
                     modifier = Modifier
                         .height(100.dp)
                         .fillMaxWidth(),
-                    onClick = {},
+                    onClick = {
+                        navController.navigate(CardFeature.reviewCardsScreenRoute)
+                    },
                     elevation = CardDefaults.elevatedCardElevation(8.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
 

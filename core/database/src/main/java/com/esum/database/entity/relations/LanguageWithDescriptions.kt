@@ -9,7 +9,7 @@ data class LanguageWithDescriptions(
     @Embedded val language : Language ,
     @Relation(
         entity = Description::class,
-        parentColumn = "region",
+        parentColumn = "id",
         entityColumn = "language_id"
     )
     val description: DescriptionWithMeanings?

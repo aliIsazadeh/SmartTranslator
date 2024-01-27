@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.resolve.sam.SamConstructorDescriptorKindExclude.excludes
-
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -18,10 +16,13 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
     packagingOptions {
-        exclude("META-INF/gradle/incremental.annotation.processors")
-        exclude("META-INF/LICENSE.md")
-        exclude("META-INF/LICENSE-notice.md")
-
+        resources {
+            excludes += setOf(
+                "META-INF/gradle/incremental.annotation.processors",
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        }
     }
 
     buildTypes {

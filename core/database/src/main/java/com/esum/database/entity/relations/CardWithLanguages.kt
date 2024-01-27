@@ -13,5 +13,4 @@ data class CardWithLanguages(
         entityColumn = "card_id"
     )
     val language: LanguageWithDescriptions?
-
 )
