@@ -58,9 +58,9 @@ fun ReviewCardBack(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 24.dp , horizontal = 4.dp),
+            .padding(vertical = 24.dp, horizontal = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
 
         Column(
@@ -102,9 +102,9 @@ fun ReviewCardBack(
                 audio = state.descriptionModel?.first?.description?.audio,
                 licence = state.descriptionModel?.first?.description?.licence ?: "",
                 phonetic = state.descriptionModel?.first?.description?.phonetic ?: "",
-                meanings = state.descriptionModel?.first?.description?.meanings
+                meanings = state.descriptionModel?.first?.description?.meanings,
             ),
-            onPlaySoundClick = { onAudioClick(it) }, onSearchClick = {})
+            onPlaySoundClick = { onAudioClick(it) }, onSearchClick = {}, searchAvailable = false)
     }
 }
 

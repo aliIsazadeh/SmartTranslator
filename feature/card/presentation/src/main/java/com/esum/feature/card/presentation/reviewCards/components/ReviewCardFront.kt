@@ -53,10 +53,9 @@ fun ReviewCardFront(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background)
             .padding(vertical = 24.dp, horizontal = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.Top)
     ) {
 
         Column(
@@ -91,42 +90,45 @@ fun ReviewCardFront(
                 )
             }
         }
-        Column(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.phonetic),
-                style = MaterialTheme.typography.labelSmall.copy(
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.outline
-                ),
-            )
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = state.pronunciation ?: "",
-                    style = MaterialTheme.typography.bodyMedium
-                        .copy(
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.primary
-                        ),
-                )
-                IconButton(onClick = { onAudioClick(state.audio ?: "") }) {
-                    Icon(
-                        imageVector = Icons.Filled.VolumeUp,
-                        contentDescription = "flag",
-                        modifier = Modifier.size(20.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
+
+        CorrectAnswerCounter(count = state.correctAnswerCount)
+
+//        Column(
+//            modifier = modifier
+//                .fillMaxWidth(),
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.spacedBy(16.dp)
+//        ) {
+//            Text(
+//                text = stringResource(id = R.string.phonetic),
+//                style = MaterialTheme.typography.labelSmall.copy(
+//                    textAlign = TextAlign.Center,
+//                    color = MaterialTheme.colorScheme.outline
+//                ),
+//            )
+//            Row(
+//                horizontalArrangement = Arrangement.SpaceEvenly,
+//                modifier = Modifier.fillMaxWidth(),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Text(
+//                    text = state.pronunciation ?: "",
+//                    style = MaterialTheme.typography.bodyMedium
+//                        .copy(
+//                            textAlign = TextAlign.Center,
+//                            color = MaterialTheme.colorScheme.primary
+//                        ),
+//                )
+//                IconButton(onClick = { onAudioClick(state.audio ?: "") }) {
+//                    Icon(
+//                        imageVector = Icons.Filled.VolumeUp,
+//                        contentDescription = "flag",
+//                        modifier = Modifier.size(20.dp),
+//                        tint = MaterialTheme.colorScheme.primary
+//                    )
+//                }
+//            }
+//        }
 
         state.example?.let {
             Column(
@@ -173,7 +175,6 @@ fun ReviewCardFrontPreview() {
                         example = "hello to you sir!",
                         audio = "",
                         pronunciation = "hello",
-                        click = {}
                     ), onAudioClick = {}
                 )
 

@@ -31,9 +31,12 @@ import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.addingCard.viewmodel.CardAddingContract
 
 @Composable
-fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> Unit , onSearchClick : () -> Unit) {
-
-
+fun WordDescriptionItem(
+    value: DescriptionModel,
+    onPlaySoundClick: (String) -> Unit,
+    onSearchClick: () -> Unit,
+    searchAvailable: Boolean = true
+) {
 
 
     Column(
@@ -42,7 +45,11 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
             .fillMaxWidth()
             .padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween , verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Row(modifier = Modifier.weight(0.8f), horizontalArrangement = Arrangement.Start) {
                 Text(
                     modifier = Modifier,
@@ -55,7 +62,10 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
                     style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onBackground)
                 )
             }
-            IconButton(onClick = { onPlaySoundClick(value.audio?:"") } ,modifier = Modifier.weight(0.1f)) {
+            IconButton(
+                onClick = { onPlaySoundClick(value.audio ?: "") },
+                modifier = Modifier.weight(0.1f)
+            ) {
                 Icon(
                     imageVector = Icons.Filled.VolumeUp,
                     contentDescription = "play_voice",
@@ -63,12 +73,14 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
-            IconButton(onClick = { onSearchClick() },modifier = Modifier.weight(0.1f)) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "generate sentence",
-                    tint = MaterialTheme.colorScheme.primary
-                )
+            if (searchAvailable) {
+                IconButton(onClick = { onSearchClick() }, modifier = Modifier.weight(0.1f)) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "generate sentence",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
         value.meanings?.forEachIndexed { index, meaning ->
@@ -164,15 +176,15 @@ fun WordDescriptionItem(value: DescriptionModel, onPlaySoundClick: (String) -> U
 
             }
 
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(2.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.secondary,
-                            shape = MaterialTheme.shapes.small
-                        )
-                )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = MaterialTheme.shapes.small
+                    )
+            )
 
         }
         Text(

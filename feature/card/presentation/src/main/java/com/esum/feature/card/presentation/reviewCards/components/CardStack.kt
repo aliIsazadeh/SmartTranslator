@@ -30,28 +30,40 @@ import com.esum.feature.card.domain.remote.description.model.DescriptionDefiniti
 import com.esum.feature.card.domain.remote.description.model.DescriptionMeanings
 import com.esum.feature.card.domain.remote.description.model.DescriptionModel
 import com.esum.feature.card.presentation.component.FlipCard
+import com.esum.feature.card.presentation.component.FullScreenCards
 import com.esum.feature.card.presentation.reviewCards.state.CardFrontState
 import com.esum.feature.card.presentation.reviewCards.state.ReviewCardState
+import com.esum.feature.card.presentation.reviewCards.viewmodel.ReviewCardsContract
 import java.util.UUID
 
 @Composable
-fun CardStack(modifier: Modifier = Modifier, state: ReviewCardState, cardListSize: Int) {
+fun CardStack(
+    modifier: Modifier = Modifier,
+    state: ReviewCardState,
+    cardListSize: Int,
+    onClick: () -> Unit,
+    rotated: Boolean,
+    audioClick: (String) -> Unit,
+    fullScreenOrFlip: Boolean,
+) {
     val cardStackLimit = 6
     var currentTopCard by remember { mutableStateOf(0) }
 //    val cardStack = cards.take(if (cards.size > cardStackLimit) cardStackLimit else cards.size)
-    val remainedCards = if (cardListSize > cardStackLimit) cardStackLimit +1 else cardListSize +1
+    val remainedCards = if (cardListSize > cardStackLimit) cardStackLimit + 1 else cardListSize + 1
     Box(
         modifier = modifier, contentAlignment = Alignment.Center,
     ) {
 
 
-        repeat(remainedCards ) { it ->
-           val  index = remainedCards - it
+        repeat(remainedCards) { it ->
+            val index = remainedCards - it
+
 
             Box(
                 modifier = Modifier
                     .graphicsLayer {
                         // Apply scaling and offset here for the illusion of a stack
+
                         translationX =
                             if (it <= currentTopCard) 0f else (it + currentTopCard) * 10f - 100f
                         scaleX = 1f - ((it - currentTopCard) * 0.02f).coerceAtLeast(0f)
@@ -59,39 +71,66 @@ fun CardStack(modifier: Modifier = Modifier, state: ReviewCardState, cardListSiz
                     },
                 // More card modifiers
             ) {
-                    Card(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .fillMaxHeight(0.7f - (index * 0.05f))
-                            .fillMaxWidth(0.7f),
-                        colors =  CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.background),
-                        elevation = CardDefaults.elevatedCardElevation(8.dp)
-                    ) {
-                    }
+
+                Card(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .fillMaxHeight(0.7f - (index * 0.05f))
+                        .fillMaxWidth(0.7f),
+                    colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.elevatedCardElevation(8.dp)
+                ) {
                 }
+
+            }
 
 
         }
-        Card(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxHeight(0.7f)
-                .fillMaxWidth(0.7f),
-            elevation = CardDefaults.cardElevation(8.dp)
-        ) {
-
-
-            FlipCard(
-                frontContent = { ReviewCardFront(state = state.cardFrontState, onAudioClick = {}) },
+//        Card(
+//            modifier = Modifier
+//                .align(Alignment.Center)
+//                .fillMaxHeight(0.7f)
+//                .fillMaxWidth(0.7f),
+//            elevation = CardDefaults.cardElevation(8.dp),
+//            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+//        ) {
+        if (fullScreenOrFlip) {
+            FullScreenCards(
+                modifier = Modifier.fillMaxSize(0.7f),
+                frontContent = {
+                    ReviewCardFront(
+                        state = state.cardFrontState,
+                        onAudioClick = { audioClick(it) })
+                },
                 backContent = {
                     ReviewCardBack(
                         state = state.cardBackState,
-                        onAudioClick = {}
+                        onAudioClick = { audioClick(it) },
                     )
-                }
+                },
+                rotated = rotated,
+                onClick = { onClick() })
+        } else {
+
+
+            FlipCard(modifier = Modifier.fillMaxSize(0.7f),
+                frontContent = {
+                    ReviewCardFront(
+                        state = state.cardFrontState,
+                        onAudioClick = { audioClick(it) })
+                },
+                backContent = {
+                    ReviewCardBack(
+                        state = state.cardBackState,
+                        onAudioClick = { audioClick(it) },
+                    )
+                },
+                rotated = rotated,
+                onClick = { onClick() }
             )
         }
     }
+    //}
 
 }
 
@@ -101,6 +140,8 @@ fun CardStack(modifier: Modifier = Modifier, state: ReviewCardState, cardListSiz
 fun CardStackPreview() {
     SmartTranslatorTheme {
 
+        val routated by remember { mutableStateOf(true) }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -109,8 +150,12 @@ fun CardStackPreview() {
         ) {
 
             CardStack(
+                rotated = false,
+                onClick = {},
                 modifier = Modifier,
                 cardListSize = 5,
+                audioClick = {},
+                fullScreenOrFlip = false,
                 state = ReviewCardState(
                     cardBackState = CardWithLanguage(
                         id = UUID.randomUUID(),
@@ -149,14 +194,15 @@ fun CardStackPreview() {
                                 translated = "me"
                             ), Languages.English
                         )
-                    ), cardFrontState = CardFrontState(
+                    ),
+                    cardFrontState = CardFrontState(
                         originalLanguages = Languages.English,
                         original = "hello",
                         example = "hello to you sir!",
                         audio = "",
                         pronunciation = "hello",
-                        click = {}
-                    )
+
+                        ),
                 )
 
 

@@ -1,12 +1,8 @@
 package com.esum.feature.card.presentation.component
 
-import android.annotation.SuppressLint
-import android.health.connect.datatypes.ExerciseRoute
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,24 +21,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun FlipCard(
+fun FullScreenCards(
     frontContent: @Composable () -> Unit,
     backContent: @Composable () -> Unit,
     onClick: () -> Unit,
     rotated: Boolean = true,
     modifier: Modifier = Modifier
+
 ) {
 
 //    var rotated by remember { mutableStateOf(true) }
@@ -66,10 +58,10 @@ fun FlipCard(
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         modifier = modifier
-            .graphicsLayer {
-                rotationY = rotation
-                cameraDistance = 8 * density
-            }
+//            .graphicsLayer {
+//                rotationY = rotation
+//                cameraDistance = 8 * density
+//            }
             .clickable {
                 onClick()
             },
@@ -81,35 +73,38 @@ fun FlipCard(
         Row(
             modifier = Modifier
                 .padding(2.dp)
-                .fillMaxWidth()
-                .graphicsLayer {
-                    alpha = if (rotated) animateBack else animateFront
-                    rotationY = rotation
-                },
+                .fillMaxWidth(),
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            if (rotated) {
+            AnimatedVisibility(visible = rotated) {
                 CardContent(frontContent)
-            } else {
+            }
+            AnimatedVisibility(visible = !rotated) {
+                Dialog(
+                    properties = DialogProperties(usePlatformDefaultWidth = false),
+                    onDismissRequest = { onClick() }) {
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            IconButton(
+                                onClick = { onClick() },
+                                modifier = Modifier
+                                    .align(Alignment.TopStart)
+                                    .padding(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "arrow back"
+                                )
+                            }
+                            CardContent(backContent)
 
-                CardContent(backContent)
-
+                        }
+                    }
+                }
             }
         }
     }
-
 }
 
-@Composable
-fun CardContent(content: @Composable () -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-
-        ) {
-        content()
-    }
-}

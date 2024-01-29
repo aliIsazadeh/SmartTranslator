@@ -18,6 +18,7 @@ import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
 import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
 import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.R
+import com.esum.feature.card.presentation.addingCard.state.AddCardScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -152,11 +153,7 @@ class AddingCardViewModel @Inject constructor(
             )
             effectChannel.trySend(CardAddingContract.Effect.SetFocusOnOriginalTextFiled)
         } else if (_mutableState.value.card.originalLanguages == _mutableState.value.card.translateLanguages) {
-            effectChannel.trySend(
-                CardAddingContract.Effect.ShowSnackBar(
-                    message = R.string.original_and_target_same_error, success = false
-                )
-            )
+            _mutableState.update { it.copy(card = it.card.copy(translateText = it.card.originalText)) }
         } else {
 
             viewModelScope.launch {

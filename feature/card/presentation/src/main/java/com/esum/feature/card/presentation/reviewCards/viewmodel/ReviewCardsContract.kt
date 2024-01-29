@@ -18,7 +18,7 @@ interface ReviewCardsContract :
         val listSize : Int = 0,
         val numberOfReviews: String = "",
         val errors: GenericDialogInfo? = null,
-        val loading: Boolean = false
+        val loading: Boolean = false,
     )
 
     sealed interface Event {
@@ -26,10 +26,13 @@ interface ReviewCardsContract :
         data object OnKnowClick : Event
         data object OnLearnClick : Event
 
+        data class OnRotate(val bol: Boolean?) : Event
+
     }
 
     sealed interface Effect {
         data class ShowSnackBar(val message: String) : Effect
+        data class RotateCard(val boolean: Boolean?) : Effect
     }
 
 

@@ -40,7 +40,7 @@ fun CardWithLanguages.mapToCardWithLanguage(): CardWithLanguage {
                                     DescriptionDefinition(
                                         id = descDif.id,
                                         example = descDif.example,
-                                        definition = descDif.example,
+                                        definition = descDif.definition,
                                         synonyms = descDif.synonyms.synonym.map { it },
                                         antonyms = descDif.antonym.value.map { it }
                                     )

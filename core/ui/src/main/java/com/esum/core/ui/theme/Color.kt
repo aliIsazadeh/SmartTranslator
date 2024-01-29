@@ -11,7 +11,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 
-/* dark Theme */
 val Dark_Primary = Color(0xFFFFB300)
 val Dark_OnPrimary = Color(0xFF141204)
 val Dark_PrimaryContainer = Color(0xFFC87200)
@@ -44,7 +43,7 @@ val Dark_OutlineVariant = Color(0xFF2E2C2C)
 val Dark_Scrim = Color(0xFF000000)
 
 
-/* Dark Theme */
+/* Light theme */
 val Primary = Color(0xFF1A2C42)
 val OnPrimary = Color(0xFFFFFFFF)
 val PrimaryContainer = Color(0xFFB1C0DD)
@@ -61,9 +60,9 @@ val Error = Color(0xFFB00020)
 val ErrorContainer = Color(0xFFFCD8DF)
 val OnError = Color(0xFFFFFFFF)
 val OnErrorContainer = Color(0xFF141213)
-val Background = Color(0xFFF8F9F9)
+val Background = Color(0xFFDBDBDB)
 val OnBackground = Color(0xFF090909)
-val Surface = Color(0xFFDBDBDB)
+val Surface = Color(0xFFFEFFFF)
 val OnSurface = Color(0xFF090909)
 val SurfaceVariant = Color(0xFFE2E3E4)
 val OnSurfaceVariant = Color(0xFF111111)

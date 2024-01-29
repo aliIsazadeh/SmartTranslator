@@ -93,7 +93,7 @@ fun CardHomeScreen(
 
     Scaffold(
         modifier = Modifier,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
 
             DefaultTopBar(
@@ -137,7 +137,7 @@ fun CardHomeScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(
                     modifier = Modifier
@@ -157,7 +157,7 @@ fun CardHomeScreen(
                                 modifier = Modifier
                                     .background(
                                         shape = CircleShape,
-                                        color = MaterialTheme.colorScheme.surface
+                                        color = MaterialTheme.colorScheme.background
                                     )
                                     .size(40.dp)
                                     .align(Alignment.Center)
@@ -226,7 +226,7 @@ fun CardHomeScreen(
                             navController.navigate(CardFeature.addCardScreenRoute)
                         },
                         elevation = CardDefaults.elevatedCardElevation(8.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Row(
                             modifier = Modifier
@@ -242,7 +242,7 @@ fun CardHomeScreen(
                             )
                             Text(
                                 text = stringResource(id = R.string.add_card),
-                                style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.onBackground)
+                                style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.onSurface)
                             )
                         }
 
@@ -253,7 +253,7 @@ fun CardHomeScreen(
                             .weight(0.5f),
                         onClick = {},
                         elevation = CardDefaults.elevatedCardElevation(8.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
 
                     ) {
                         Row(
@@ -272,7 +272,7 @@ fun CardHomeScreen(
                             Text(
                                 text = stringResource(id = R.string.translate_image),
                                 style = MaterialTheme.typography.titleSmall.copy(
-                                    color = MaterialTheme.colorScheme.onBackground,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     textAlign = TextAlign.Center
                                 )
                             )
@@ -290,7 +290,7 @@ fun CardHomeScreen(
                         navController.navigate(CardFeature.reviewCardsScreenRoute)
                     },
                     elevation = CardDefaults.elevatedCardElevation(8.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
 
                 ) {
                     Row(
@@ -307,7 +307,7 @@ fun CardHomeScreen(
                         )
                         Text(
                             text = stringResource(id = R.string.reviewCards),
-                            style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.onBackground)
+                            style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.onSurface)
                         )
                     }
 

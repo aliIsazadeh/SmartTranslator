@@ -1,5 +1,6 @@
 package com.esum.feature.card.presentation.reviewCards.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esum.common.constraints.ResultConstraints
@@ -25,6 +26,8 @@ import javax.inject.Provider
 @HiltViewModel
 class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Provider<GetCardReviewsUsecase>) :
     ViewModel(), ReviewCardsContract {
+
+    private val TAG = "ReviewCardsViewModel"
 
     private val _mutableState: MutableStateFlow<ReviewCardsContract.State> =
         MutableStateFlow(ReviewCardsContract.State())
@@ -59,39 +62,44 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
                                 CardFrontState(
                                     pronunciation = cardWithLanguage.descriptionModel?.first?.description?.phonetic,
                                     audio = cardWithLanguage.descriptionModel?.first?.description?.audio,
-                                    example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.map
-                                    { meanings -> meanings.definitions.firstOrNull { it.example?.isNotBlank() == true }?.example }
-                                        ?.firstOrNull() ?: "",
+                                    correctAnswerCount = cardWithLanguage.descriptionModel?.first?.correctAnswerCount
+                                        ?: 0,
+                                    example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.find
+                                    { descriptionMeanings -> descriptionMeanings.definitions.any { descriptionDefinition -> descriptionDefinition.definition != null } }
+                                        ?.definitions?.firstOrNull { it.definition?.isNotBlank() == true }?.definition,
                                     original = cardWithLanguage.original,
                                     originalLanguages = cardWithLanguage.originalLanguage,
-                                    click = {}
-                                ), cardWithLanguage
+                                ),
+                                cardWithLanguage,
                             )
                         }
-                    }?.toList()?.let {list ->
-                        _mutableState.update { it.copy(cardState = list.first() ,listSize = list.size )}
-                        ArrayDeque(list) } ?: ArrayDeque(emptyList())
+                    }?.toList()?.let { list ->
+                        _mutableState.update {
+                            it.copy(
+                                cardState = list.first(),
+                                listSize = list.size
+                            )
+                        }
+                        ArrayDeque(list).apply {
+                            this.removeFirstOrNull()
+                        }
+                    } ?: ArrayDeque(emptyList())
                 }
             }
         }.stateIn(
             initialValue = ArrayDeque(emptyList()),
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(8000)
-        ).apply {
-            this.value.removeLastOrNull()
-        }
-
-
-    init {
-        _mutableState.update { it.copy(cardState = cardReviews.value.removeFirstOrNull() , listSize = cardReviews.value.size) }
-
-    }
-
+        )
 
 
     private fun nextCard() {
-        _mutableState.update { it.copy(cardState = cardReviews.value.removeFirstOrNull() , listSize = cardReviews.value.size) }
-
+        _mutableState.update {
+            it.copy(
+                cardState = cardReviews.value.removeFirstOrNull(),
+                listSize = cardReviews.value.size
+            )
+        }
     }
 
 
@@ -101,12 +109,23 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
     override val effect: Flow<ReviewCardsContract.Effect> = channelEffects.receiveAsFlow()
     override fun event(event: ReviewCardsContract.Event) {
         when (event) {
-            ReviewCardsContract.Event.OnKnowClick -> {
+            is ReviewCardsContract.Event.OnKnowClick -> {
                 nextCard()
+                rotate(true)
+
             }
 
-            ReviewCardsContract.Event.OnLearnClick -> TODO()
+            is ReviewCardsContract.Event.OnLearnClick -> TODO()
+
+            is ReviewCardsContract.Event.OnRotate -> {
+                rotate(event.bol)
+            }
         }
+    }
+
+    private fun rotate(bol: Boolean?) {
+        Log.d(TAG, "rotate:")
+        channelEffects.trySend(ReviewCardsContract.Effect.RotateCard(bol))
     }
 
 
@@ -126,5 +145,4 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
             )
         }
     }
-
 }
