@@ -77,7 +77,8 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
                         _mutableState.update {
                             it.copy(
                                 cardState = list.first(),
-                                listSize = list.size
+                                listSize = list.size,
+                                currentCards = list.size
                             )
                         }
                         ArrayDeque(list).apply {
@@ -93,11 +94,14 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
         )
 
 
+
     private fun nextCard() {
         _mutableState.update {
             it.copy(
                 cardState = cardReviews.value.removeFirstOrNull(),
-                listSize = cardReviews.value.size
+                currentCards = if (it.currentCards > 0) {
+                    it.currentCards - 1
+                } else 0
             )
         }
     }

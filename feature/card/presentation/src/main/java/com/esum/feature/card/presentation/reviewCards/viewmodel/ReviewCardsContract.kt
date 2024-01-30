@@ -16,6 +16,7 @@ interface ReviewCardsContract :
         val reviewCards : ArrayDeque<ReviewCardState> = ArrayDeque(emptyList()),
         val cardState: ReviewCardState ? = null,
         val listSize : Int = 0,
+        val currentCards : Int = 0,
         val numberOfReviews: String = "",
         val errors: GenericDialogInfo? = null,
         val loading: Boolean = false,

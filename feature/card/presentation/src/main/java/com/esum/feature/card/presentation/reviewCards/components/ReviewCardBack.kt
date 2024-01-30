@@ -10,10 +10,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,6 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.theme.SmartTranslatorTheme
 import com.esum.feature.card.domain.local.model.CardDetails
@@ -29,6 +41,7 @@ import com.esum.feature.card.domain.remote.description.model.DescriptionDefiniti
 import com.esum.feature.card.domain.remote.description.model.DescriptionMeanings
 import com.esum.feature.card.domain.remote.description.model.DescriptionModel
 import com.esum.feature.card.presentation.R
+import com.esum.feature.card.presentation.component.CardContent
 import com.esum.feature.card.presentation.component.WordDescriptionItem
 import java.util.UUID
 
@@ -36,7 +49,9 @@ import java.util.UUID
 fun ReviewCardBack(
     modifier: Modifier = Modifier,
     state: CardWithLanguage,
-    onAudioClick: (String) -> Unit
+    onAudioClick: (String) -> Unit,
+    clickFullScreen : () -> Unit,
+    fullScreen : Boolean = false
 ) {
 
 
@@ -55,57 +70,75 @@ fun ReviewCardBack(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 24.dp, horizontal = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
 
-        Column(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.translate_text),
-                style = MaterialTheme.typography.labelSmall.copy(
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.outline
-                ),
-            )
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp),
+            onClick = { clickFullScreen()}) {
+            Icon(imageVector = if (fullScreen){ Icons.Filled.FullscreenExit} else { Icons.Filled.Fullscreen }, contentDescription = "fullscreen")
+        }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 24.dp, horizontal = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(
-                    text = state.descriptionModel?.first?.translated ?: "",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onBackground
+
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.translate_text),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.outline
+                        ),
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = state.descriptionModel?.first?.translated ?: "",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.onBackground
+                            ),
+                        )
+                        Image(
+                            painter = painterResource(id = image),
+                            contentDescription = "flag",
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+                CorrectAnswerCounter(count = state.descriptionModel?.first?.correctAnswerCount ?: 0)
+                WordDescriptionItem(
+                    value = DescriptionModel(
+                        id = state.id,
+                        audio = state.descriptionModel?.first?.description?.audio,
+                        licence = state.descriptionModel?.first?.description?.licence ?: "",
+                        phonetic = state.descriptionModel?.first?.description?.phonetic ?: "",
+                        meanings = state.descriptionModel?.first?.description?.meanings,
                     ),
-                )
-                Image(
-                    painter = painterResource(id = image),
-                    contentDescription = "flag",
-                    modifier = Modifier.size(20.dp)
+                    onPlaySoundClick = { onAudioClick(it) },
+                    onSearchClick = {},
+                    searchAvailable = false
                 )
             }
         }
-        CorrectAnswerCounter(count = state.descriptionModel?.first?.correctAnswerCount ?: 0)
-        WordDescriptionItem(
-            value = DescriptionModel(
-                id = state.id,
-                audio = state.descriptionModel?.first?.description?.audio,
-                licence = state.descriptionModel?.first?.description?.licence ?: "",
-                phonetic = state.descriptionModel?.first?.description?.phonetic ?: "",
-                meanings = state.descriptionModel?.first?.description?.meanings,
-            ),
-            onPlaySoundClick = { onAudioClick(it) }, onSearchClick = {}, searchAvailable = false)
-    }
+
 }
 
 @Preview
@@ -159,9 +192,9 @@ fun ReviewCardBackPreview() {
                                 translated = "me"
                             ), Languages.English
                         )
-                    ), onAudioClick = {}
+                    ), onAudioClick = {},
+                    clickFullScreen = {},
                 )
-
             }
         }
     }

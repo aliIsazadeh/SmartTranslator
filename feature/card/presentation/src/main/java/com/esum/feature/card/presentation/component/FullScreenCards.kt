@@ -29,41 +29,16 @@ import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun FullScreenCards(
-    frontContent: @Composable () -> Unit,
     backContent: @Composable () -> Unit,
-    onClick: () -> Unit,
-    rotated: Boolean = true,
-    modifier: Modifier = Modifier
+    onClick : () -> Unit
 
 ) {
 
-//    var rotated by remember { mutableStateOf(true) }
-
-    val rotation by animateFloatAsState(
-        targetValue = if (rotated) 180f else 0f,
-        animationSpec = tween(500), label = ""
-    )
-
-    val animateFront by animateFloatAsState(
-        targetValue = if (!rotated) 1f else 0f,
-        animationSpec = tween(500), label = ""
-    )
-
-    val animateBack by animateFloatAsState(
-        targetValue = if (rotated) 1f else 0f,
-        animationSpec = tween(500), label = ""
-    )
-
-
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-        modifier = modifier
-//            .graphicsLayer {
-//                rotationY = rotation
-//                cameraDistance = 8 * density
-//            }
+        modifier = Modifier
             .clickable {
-                onClick()
+           //     onClick()
             },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -78,10 +53,10 @@ fun FullScreenCards(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            AnimatedVisibility(visible = rotated) {
-                CardContent(frontContent)
-            }
-            AnimatedVisibility(visible = !rotated) {
+//            AnimatedVisibility(visible = rotated) {
+//                CardContent(frontContent)
+//            }
+//            AnimatedVisibility(visible = !rotated) {
                 Dialog(
                     properties = DialogProperties(usePlatformDefaultWidth = false),
                     onDismissRequest = { onClick() }) {
@@ -103,7 +78,7 @@ fun FullScreenCards(
                         }
                     }
                 }
-            }
+         //   }
         }
     }
 }

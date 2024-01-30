@@ -34,7 +34,7 @@ interface CardDao {
                 " where  ct.active and (ct.update_date <= strftime( '%Y%m%d' ,DATE('now'))" +
                 " or ct.update_date is null or ct.update_date ='' ) "
     )
-    fun getReviewCards(): Flow<List<CardWithLanguages>>
+    suspend fun getReviewCards(): List<CardWithLanguages>
 
     @Insert(entity = CardEntity::class)
     suspend fun insertCard(cardEntity: CardEntity): Long

@@ -62,6 +62,9 @@ fun FlipCard(
         animationSpec = tween(500), label = ""
     )
 
+    val fullScreen by remember { mutableStateOf(false) }
+
+
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),

@@ -32,4 +32,6 @@
     <string name="original_text">Original Text</string>
     <string name="translate_text">Translate Text</string>
     <string name="review_cards">Review Cards</string>
+    <string name="congratulations_you_have_done_it">Congratulations! You have done it!</string>
+    <string name="no_card_for_today">There is no card for Today!</string>
 </resources>

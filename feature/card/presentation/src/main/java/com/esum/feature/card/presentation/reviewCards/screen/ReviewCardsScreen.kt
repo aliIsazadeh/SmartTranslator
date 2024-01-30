@@ -4,24 +4,30 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SwitchLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -37,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
@@ -45,6 +52,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.request.repeatCount
 import com.esum.core.ui.CollectInLaunchedEffect
+import com.esum.core.ui.component.AnimatedCircularProgressIndicator
 import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
 import com.esum.feature.card.presentation.R
@@ -64,7 +72,7 @@ fun ReviewCardsScreen(
 
     val (state, effect, event) = use(viewModel)
     ReviewCardsScreen(state, effect, event)
-    val cards = viewModel.cardReviews.collectAsState()
+    val cards = viewModel.cardReviews.collectAsStateWithLifecycle()
 }
 
 @OptIn(InternalCoroutinesApi::class)
@@ -86,65 +94,73 @@ fun ReviewCardsScreen(
             }
         }
         .build()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            DefaultTopBar(modifier = Modifier.fillMaxWidth(), leftComposable = {
-                IconButton(onClick = { fullScreenOrFlip = !fullScreenOrFlip }) {
-                    Icon(imageVector = Icons.Filled.SwitchLeft, contentDescription = "")
-                }
-            },
-                rightComposable = {    Image(
-                    modifier = Modifier.size(
-                        40.dp
-                    ),
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current)
-                            .data(data = R.drawable.review)
-                            .apply(block = fun ImageRequest.Builder.() {
-                                repeatCount(2)
-                                size(70)
-                            }).build(),
-                        imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
-                )
-
+            DefaultTopBar(
+                modifier = Modifier.fillMaxWidth(), leftComposable = {
+                    Text(
+                        text = if (state.currentCards == 0) "Done" else if (state.listSize == 0) {
+                            "No Card"
+                        } else {
+                            "${state.currentCards} / ${state.listSize}"
+                        },
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                        modifier = Modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = CircleShape
+                            )
+                            .padding(8.dp)
+                    )
+                },
+                rightComposable = {
+                    Image(
+                        modifier = Modifier.size(
+                            40.dp
+                        ),
+                        painter = rememberAsyncImagePainter(
+                            ImageRequest.Builder(LocalContext.current)
+                                .data(data = R.drawable.review)
+                                .apply(block = fun ImageRequest.Builder.() {
+                                    repeatCount(2)
+                                    size(70)
+                                }).build(),
+                            imageLoader = imageLoader
+                        ),
+                        contentDescription = null,
+                    )
                 },
                 title = stringResource(R.string.review_cards)
             )
-//            {
-//                IconButton(onClick = { fullScreenOrFlip = !fullScreenOrFlip }) {
-//                    Icon(imageVector = Icons.Filled.SwitchLeft, contentDescription = "")
-//                }
-//            }
         },
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .padding(vertical = 16.dp, horizontal = 16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    8.dp,
-                    alignment = Alignment.CenterHorizontally
-                )
-            ) {
-                Button(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = { event.invoke(ReviewCardsContract.Event.OnKnowClick) },
-                    shape = MaterialTheme.shapes.medium,
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+            AnimatedVisibility (state.currentCards != 0 && state.listSize != 0) {
+                Row(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        8.dp,
+                        alignment = Alignment.CenterHorizontally
+                    )
                 ) {
-                    Text(text = "I Know This one")
-                }
-                OutlinedButton(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = { event.invoke(ReviewCardsContract.Event.OnKnowClick) },
-                    border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.primary),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text(text = "Need to Learn")
+                    Button(
+                        modifier = Modifier.padding(8.dp),
+                        onClick = { event.invoke(ReviewCardsContract.Event.OnKnowClick) },
+                        shape = MaterialTheme.shapes.medium,
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+                    ) {
+                        Text(text = "I Know This one")
+                    }
+                    OutlinedButton(
+                        modifier = Modifier.padding(8.dp),
+                        onClick = { event.invoke(ReviewCardsContract.Event.OnKnowClick) },
+                        border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.primary),
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        Text(text = "Need to Learn")
+                    }
                 }
             }
         }
@@ -172,10 +188,12 @@ fun ReviewCardsScreen(
                 .padding(bottom = paddingValues.calculateBottomPadding()),
             contentAlignment = Alignment.Center
         ) {
+
+
             state.cardState?.let {
                 CardStack(
-                    state = state.cardState,
-                    cardListSize = state.listSize,
+                    state = it,
+                    cardListSize = state.currentCards,
                     onClick = { event.invoke(ReviewCardsContract.Event.OnRotate(null)) },
                     rotated = rotated,
                     audioClick = { audio ->
@@ -200,8 +218,62 @@ fun ReviewCardsScreen(
                 )
             }
                 ?: Box(
-                    modifier = Modifier
-                )
+                    modifier = Modifier,
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (state.currentCards == 0 && state.listSize != 0) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                modifier = Modifier.size(
+                                    120.dp
+                                ),
+                                painter = rememberAsyncImagePainter(
+                                    ImageRequest.Builder(LocalContext.current)
+                                        .data(data = R.drawable.duck_done)
+                                        .apply(block = fun ImageRequest.Builder.() {
+                                            repeatCount(2)
+                                            size(120)
+                                        }).build(),
+                                    imageLoader = imageLoader
+                                ),
+                                contentDescription = null,
+                            )
+                            Text(
+                                text = stringResource(R.string.congratulations_you_have_done_it),
+                                style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary)
+                            )
+
+                        }
+                    } else if (state.listSize == 0) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                modifier = Modifier.size(
+                                    120.dp
+                                ),
+                                painter = rememberAsyncImagePainter(
+                                    ImageRequest.Builder(LocalContext.current)
+                                        .data(data = R.drawable.dont_know)
+                                        .apply(block = fun ImageRequest.Builder.() {
+                                            repeatCount(2)
+                                            size(120)
+                                        }).build(),
+                                    imageLoader = imageLoader
+                                ),
+                                contentDescription = null,
+                            )
+                            Text(
+                                text = stringResource(R.string.no_card_for_today),
+                                style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary)
+                            )
+                        }
+                    }
+                }
         }
     }
 }

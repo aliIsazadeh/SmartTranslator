@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
@@ -19,12 +20,13 @@ class CardReviewsRepositoryImpl @Inject constructor(
     private val dataProvider: CardGetReviewsDataProvider,
     private val dispatcher: CoroutineDispatcher
 ) : CardGetReviewsRepository {
-    override fun getCardReviews(): Flow<ResultConstraints<List<CardWithLanguage>>> =
-        dataProvider.getReviewCards().onStart {
-            ResultConstraints.Loading<List<CardWithLanguage>>()
-        }.map { list ->
-            ResultConstraints.Success(list.map { it.mapToCardWithLanguage() })
-        }.catch {
-            ResultConstraints.Error<List<CardWithLanguage>>(message = "error in CardReviewsRepositoryImpl is : ${it.message}")
-        }.distinctUntilChanged().flowOn(dispatcher)
+    override fun getCardReviews(): Flow<ResultConstraints<List<CardWithLanguage>>> = flow {
+        emit(ResultConstraints.Loading<List<CardWithLanguage>>())
+
+        val list = dataProvider.getReviewCards()
+
+        emit(ResultConstraints.Success(list.map { it.mapToCardWithLanguage() }))
+    }.catch {
+        ResultConstraints.Error<List<CardWithLanguage>>(message = "error in CardReviewsRepositoryImpl is : ${it.message}")
+    }.distinctUntilChanged().flowOn(dispatcher)
 }

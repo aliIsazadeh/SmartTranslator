@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -105,16 +107,19 @@ fun WordDescriptionItem(
                     )
                 }
                 if (definition.synonyms.isNotEmpty()) {
-                    Row(
+
+                    LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
                     ) {
-                        Text(
-                            modifier = Modifier,
-                            text = stringResource(id = R.string.synonyms),
-                            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
-                        )
-                        definition.synonyms.forEach {
+                        item{
+                            Text(
+                                modifier = Modifier,
+                                text = stringResource(id = R.string.synonyms),
+                                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
+                            )
+                        }
+                       items( definition.synonyms) {
                             Text(
                                 modifier = Modifier.padding(horizontal = 8.dp),
                                 text = it ?: "",
@@ -125,16 +130,18 @@ fun WordDescriptionItem(
                     }
                 }
                 if (definition.antonyms.isNotEmpty()) {
-                    Row(
+                    LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
                     ) {
-                        Text(
-                            modifier = Modifier,
-                            text = stringResource(id = R.string.antonyms),
-                            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
-                        )
-                        definition.antonyms.forEach {
+                        item{
+                            Text(
+                                modifier = Modifier,
+                                text = stringResource(id = R.string.antonyms),
+                                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.outline)
+                            )
+                        }
+                        items(definition.antonyms) {
                             Text(
                                 modifier = Modifier.padding(horizontal = 8.dp),
                                 text = it ?: "",

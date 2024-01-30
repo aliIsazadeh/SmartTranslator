@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.gif)
     implementation(libs.material.icons)
+    implementation(libs.lifecycle.runtime.compose)
 
     implementation(libs.androidx.compose.materialWindow)
 
