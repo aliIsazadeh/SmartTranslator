@@ -7,6 +7,7 @@ import com.esum.common.constraints.ResultConstraints
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
 import com.esum.feature.card.domain.local.usecase.GetCardReviewsUsecase
+import com.esum.feature.card.domain.local.usecase.UpdateCardUsecase
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.reviewCards.state.CardFrontState
 import com.esum.feature.card.presentation.reviewCards.state.ReviewCardState
@@ -20,11 +21,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
 @HiltViewModel
-class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Provider<GetCardReviewsUsecase>) :
+class ReviewCardsViewModel @Inject constructor(
+    private val getReviewUsecase: Provider<GetCardReviewsUsecase>,
+    private val updateCardUsecase: Provider<UpdateCardUsecase>
+) :
     ViewModel(), ReviewCardsContract {
 
     private val TAG = "ReviewCardsViewModel"
@@ -42,7 +47,7 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
                     addError(
                         title = R.string.an_error_accoured,
                         description = R.string.something_went_wrong,
-                        sticker = R.drawable.lagging
+                        sticker = R.raw.lagging
                     )
                     ArrayDeque(emptyList<ReviewCardState>())
                 }
@@ -78,7 +83,8 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
                             it.copy(
                                 cardState = list.first(),
                                 listSize = list.size,
-                                currentCards = list.size
+                                currentCards = list.size,
+                                loading = false
                             )
                         }
                         ArrayDeque(list).apply {
@@ -92,7 +98,6 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(8000)
         )
-
 
 
     private fun nextCard() {
@@ -115,6 +120,7 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
         when (event) {
             is ReviewCardsContract.Event.OnKnowClick -> {
                 nextCard()
+                knowThisCard(event.count)
                 rotate(true)
 
             }
@@ -130,6 +136,19 @@ class ReviewCardsViewModel @Inject constructor(private val getReviewUsecase: Pro
     private fun rotate(bol: Boolean?) {
         Log.d(TAG, "rotate:")
         channelEffects.trySend(ReviewCardsContract.Effect.RotateCard(bol))
+    }
+
+    private fun knowThisCard(correctAnswerCount: Int) {
+        viewModelScope.launch {
+            state.value.cardState?.cardBackState?.apply {
+                descriptionModel?.first?.copy(correctAnswerCount = correctAnswerCount)
+            }?.let {
+                updateCardUsecase.get().invoke(
+                    it
+                )
+            }
+
+        }
     }
 
 

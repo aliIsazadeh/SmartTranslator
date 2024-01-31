@@ -54,7 +54,7 @@ object DomainModule {
 
     @Provides
     @Singleton
-    fun provideUpdateCardUsecase(repository: CardRepository): UpdateCardUsecase {
+    fun provideUpdateCardUsecase(repository: CardGetReviewsRepository): UpdateCardUsecase {
         return UpdateCardUsecase(repository)
     }
 

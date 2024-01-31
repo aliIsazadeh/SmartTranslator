@@ -20,3 +20,17 @@ import java.util.TimeZone
         }
     }
 
+
+    fun addDays(day : Int):String{
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")).plus(day)
+        }else {
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_MONTH, day)
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH) + 1
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            "$year$month$day"
+        }
+    }
+

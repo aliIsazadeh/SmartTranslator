@@ -64,8 +64,21 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideCardReviewsRepository(getReviewsDataProvider: CardGetReviewsDataProvider): CardGetReviewsRepository {
-        return CardReviewsRepositoryImpl(getReviewsDataProvider, Dispatchers.IO)
+    fun provideCardReviewsRepository(
+        cardDataProvider: CardDataProvider,
+        languageProvider: LanguageProvider,
+        descriptionProvider: DescriptionProvider,
+        descriptionMeaningsProvider: DescriptionMeaningsProvider,
+        descriptionDefinitionProvider: DescriptionDefinitionProvider
+    ): CardGetReviewsRepository {
+        return CardReviewsRepositoryImpl(
+            cardDataProvider,
+            languageProvider,
+            descriptionDefinitionProvider,
+            descriptionProvider,
+            descriptionMeaningsProvider,
+            Dispatchers.IO
+        )
     }
 
 }

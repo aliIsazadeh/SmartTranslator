@@ -54,6 +54,9 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.request.repeatCount
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.CollectInLaunchedEffect
 import com.esum.core.ui.component.CircularIndeterminateProgressBar
@@ -119,16 +122,16 @@ fun CardAddingScreen(
     val translateFocusRequester = remember { FocusRequester() }
     val originalFocusRequester = remember { FocusRequester() }
 
-
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
-            if (Build.VERSION.SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
-        }
-        .build()
+//
+//    val imageLoader = ImageLoader.Builder(LocalContext.current)
+//        .components {
+//            if (Build.VERSION.SDK_INT >= 28) {
+//                add(ImageDecoderDecoder.Factory())
+//            } else {
+//                add(GifDecoder.Factory())
+//            }
+//        }
+//        .build()
 
     val translateTextFiledFocus by remember {
         mutableStateOf(false)
@@ -169,18 +172,24 @@ fun CardAddingScreen(
                     }
                 },
                 rightComposable = {
-                    Image(
-                        painter = rememberAsyncImagePainter(
-                            ImageRequest.Builder(LocalContext.current)
-                                .data(data = R.drawable.send_message)
-                                .apply(block = fun ImageRequest.Builder.() {
-                                    repeatCount(2)
-                                    size(60)
-                                }).build(),
-                            imageLoader = imageLoader
-                        ),
-                        contentDescription = null,
-                    )
+//                    Image(
+//                        painter = rememberAsyncImagePainter(
+//                            ImageRequest.Builder(LocalContext.current)
+//                                .data(data = R.drawable.send_message)
+//                                .apply(block = fun ImageRequest.Builder.() {
+//                                    repeatCount(2)
+//                                    size(60)
+//                                }).build(),
+//                            imageLoader = imageLoader
+//                        ),
+//                        contentDescription = null,
+//                    )
+                    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.send_message))
+                    LottieAnimation(
+                        composition = composition,
+                        modifier = Modifier.size(36.dp),
+                        iterations = 3,
+                        restartOnPlay = false,)
                 },
                 title = stringResource(id = R.string.add_card)
             )

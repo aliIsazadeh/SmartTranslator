@@ -24,7 +24,7 @@ interface ReviewCardsContract :
 
     sealed interface Event {
 
-        data object OnKnowClick : Event
+        data class OnKnowClick(val count : Int) : Event
         data object OnLearnClick : Event
 
         data class OnRotate(val bol: Boolean?) : Event

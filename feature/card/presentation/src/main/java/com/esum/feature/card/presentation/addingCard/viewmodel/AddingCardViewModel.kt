@@ -88,7 +88,7 @@ class AddingCardViewModel @Inject constructor(
                 addError(
                     title = R.string.an_error_accoured,
                     description = R.string.something_went_wrong,
-                    sticker = R.drawable.mind_blow
+                    sticker = R.raw.mind_blow
                 )
             }
         }
@@ -125,7 +125,7 @@ class AddingCardViewModel @Inject constructor(
                         addError(
                             title = R.string.an_error_accoured,
                             description = R.string.something_went_wrong,
-                            sticker = R.drawable.lagging
+                            sticker = R.raw.lagging
                         )
                     }
 
@@ -175,7 +175,7 @@ class AddingCardViewModel @Inject constructor(
                                         addError(
                                             title = R.string.unable_toTranslate,
                                             description = R.string.no_translation_find,
-                                            sticker = R.drawable.dont_know
+                                            sticker = R.raw.dont_know
                                         )
                                     }
 
@@ -184,14 +184,14 @@ class AddingCardViewModel @Inject constructor(
                                         addError(
                                             title = R.string.unable_toTranslate,
                                             description = R.string.something_went_wrong,
-                                            sticker = R.drawable.lagging
+                                            sticker = R.raw.lagging
                                         )
                                     }
 
                                     TranslateErrors.VpnProblem -> addError(
                                         title = R.string.vpn_problem,
                                         description = R.string.vpn_needed,
-                                        sticker = R.drawable.vpn
+                                        sticker = R.raw.vpn
                                     )
                                 }
                             }
@@ -241,7 +241,7 @@ class AddingCardViewModel @Inject constructor(
                             addError(
                                 title = R.string.unable_to_find_sentence,
                                 description = R.string.something_went_wrong,
-                                sticker = R.drawable.dont_know
+                                sticker = R.raw.dont_know
                             )
                         }
 

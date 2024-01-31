@@ -3,12 +3,14 @@ package com.esum.core.ui.component
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -19,6 +21,10 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.request.repeatCount
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.esum.core.ui.R
 
 @Composable
 fun GenericDialog(
@@ -32,33 +38,45 @@ fun GenericDialog(
 ) {
 
 
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
-            if (Build.VERSION.SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
-        }
-        .build()
+//    val imageLoader = ImageLoader.Builder(LocalContext.current)
+//        .components {
+//            if (Build.VERSION.SDK_INT >= 28) {
+//                add(ImageDecoderDecoder.Factory())
+//            } else {
+//                add(GifDecoder.Factory())
+//            }
+//        }
+//        .build()
 
     AlertDialog(
         modifier = modifier,
         onDismissRequest = onDismiss,
         icon = {
-            Image(
-                painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current)
-                        .data(data = sticker)
-                        .apply(block = fun ImageRequest.Builder.() {
-                            repeatCount(2)
-                            size(200)
-                        }).build(),
-                    imageLoader = imageLoader
-                ),
-                contentDescription = null,
-            )
-        },
+//            Image(
+//                painter = rememberAsyncImagePainter(
+//                    ImageRequest.Builder(LocalContext.current)
+//                        .data(data = sticker)
+//                        .apply(block = fun ImageRequest.Builder.() {
+//                            repeatCount(2)
+//                            size(200)
+//                        }).build(),
+//                    imageLoader = imageLoader
+//                ),
+//                contentDescription = null,
+//            )
+           sticker?.let {
+               val composition by rememberLottieComposition(
+                   spec = LottieCompositionSpec.RawRes(
+                       it
+                   )
+               )
+               LottieAnimation(
+                   composition = composition,
+                   modifier = Modifier.size(200.dp),
+                   iterations = 3,
+                   restartOnPlay = false,
+               )
+           }},
         title = { Text(stringResource(title), style = MaterialTheme.typography.bodyMedium) },
         text = {
             if (description != null) {

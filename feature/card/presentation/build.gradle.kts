@@ -89,6 +89,9 @@ dependencies {
     debugImplementation(libs.manifest.test)
     debugImplementation(libs.leakcanary)
 
+    //lottie
+    implementation(libs.lottie.compose)
+    implementation(libs.lottie)
 
     //mockk
     testImplementation(libs.mockk)

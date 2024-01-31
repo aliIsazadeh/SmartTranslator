@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -44,6 +45,9 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.request.repeatCount
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.esum.common.constraints.CardFeature
 import com.esum.core.ui.component.LineBar
 import com.esum.core.ui.theme.SmartTranslatorTheme
@@ -81,15 +85,15 @@ fun CardHomeScreen(
 
     ) {
 
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
-            if (Build.VERSION.SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
-        }
-        .build()
+//    val imageLoader = ImageLoader.Builder(LocalContext.current)
+//        .components {
+//            if (Build.VERSION.SDK_INT >= 28) {
+//                add(ImageDecoderDecoder.Factory())
+//            } else {
+//                add(GifDecoder.Factory())
+//            }
+//        }
+//        .build()
 
     Scaffold(
         modifier = Modifier,
@@ -102,21 +106,27 @@ fun CardHomeScreen(
                     .wrapContentHeight(),
                 leftComposable = { /*TODO*/ },
                 rightComposable = {
-                    Image(
-                        modifier = Modifier.size(
-                            30.dp
-                        ),
-                        painter = rememberAsyncImagePainter(
-                            ImageRequest.Builder(LocalContext.current)
-                                .data(data = R.drawable.say_hello)
-                                .apply(block = fun ImageRequest.Builder.() {
-                                    repeatCount(2)
-                                    size(70)
-                                }).build(),
-                            imageLoader = imageLoader
-                        ),
-                        contentDescription = null,
-                    )
+//                    Image(
+//                        modifier = Modifier.size(
+//                            30.dp
+//                        ),
+//                        painter = rememberAsyncImagePainter(
+//                            ImageRequest.Builder(LocalContext.current)
+//                                .data(data = R.drawable.say_hello)
+//                                .apply(block = fun ImageRequest.Builder.() {
+//                                    repeatCount(2)
+//                                    size(70)
+//                                }).build(),
+//                            imageLoader = imageLoader
+//                        ),
+//                        contentDescription = null,
+//                    )
+                    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.hello))
+                    LottieAnimation(
+                        composition = composition,
+                        modifier = Modifier.size(36.dp),
+                        iterations = 3,
+                        restartOnPlay = false,)
                 },
                 title = stringResource(id = R.string.duckLearn)
             )

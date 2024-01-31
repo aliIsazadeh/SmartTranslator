@@ -56,6 +56,12 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.constraintlayout)
 
+
+
+    //lottie
+    implementation(libs.lottie.compose)
+    implementation(libs.lottie)
+
     implementation(libs.coil)
     implementation(libs.coil.gif)
 
