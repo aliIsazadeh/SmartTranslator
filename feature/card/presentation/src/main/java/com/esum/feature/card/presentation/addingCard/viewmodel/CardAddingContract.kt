@@ -36,7 +36,8 @@ interface CardAddingContract :
         val availableLanguage : List<Pair<Languages, Int>> = listOf(),
         val sentence: String? = null,
         val errors: GenericDialogInfo? = null,
-        val loading: Boolean = false
+        val loadingTranslate : Boolean = false ,
+        val loadingDescription : Boolean = false
 
     )
 

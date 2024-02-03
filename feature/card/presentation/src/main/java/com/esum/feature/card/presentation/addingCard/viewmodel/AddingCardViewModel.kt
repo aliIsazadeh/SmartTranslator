@@ -166,7 +166,7 @@ class AddingCardViewModel @Inject constructor(
                         when (result) {
                             is ResultConstraints.Error -> {
                                 _mutableState.update {
-                                    it.copy(loading = false)
+                                    it.copy(loadingTranslate = false)
                                 }
                                 when (getTranslateErrorByMessage(
                                     result.message ?: ""
@@ -197,12 +197,12 @@ class AddingCardViewModel @Inject constructor(
                             }
 
                             is ResultConstraints.Loading -> _mutableState.update {
-                                it.copy(loading = true)
+                                it.copy(loadingTranslate = true)
                             }
 
                             is ResultConstraints.Success -> _mutableState.update {
                                 it.copy(
-                                    loading = false,
+                                    loadingTranslate = false,
                                     card = it.card.copy(translateText = result.data!!.translated)
                                 )
                             }
@@ -235,7 +235,7 @@ class AddingCardViewModel @Inject constructor(
                 ).collect() { result ->
                     when (result) {
                         is ResultConstraints.Error -> {
-                            _mutableState.update { it.copy(loading = false) }
+                            _mutableState.update { it.copy(loadingDescription = false) }
                             Log.e(TAG, "onlineGenerateSentence: ${result.message}")
 
                             addError(
@@ -246,14 +246,14 @@ class AddingCardViewModel @Inject constructor(
                         }
 
                         is ResultConstraints.Loading -> {
-                            _mutableState.update { it.copy(loading = true) }
+                            _mutableState.update { it.copy(loadingDescription = true) }
                         }
 
                         is ResultConstraints.Success -> {
                             _mutableState.update {
                                 it.copy(
                                     card = it.card.copy(description = result.data),
-                                    loading = false
+                                    loadingDescription = false
                                 )
                             }
                         }

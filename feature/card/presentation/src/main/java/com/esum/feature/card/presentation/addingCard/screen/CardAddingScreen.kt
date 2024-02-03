@@ -62,6 +62,7 @@ import com.esum.core.ui.CollectInLaunchedEffect
 import com.esum.core.ui.component.CircularIndeterminateProgressBar
 import com.esum.core.ui.component.DefaultSnackbar
 import com.esum.core.ui.component.GenericDialog
+import com.esum.core.ui.component.shimmerLoadingAnimation
 import com.esum.core.ui.theme.SmartTranslatorTheme
 import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
@@ -172,24 +173,17 @@ fun CardAddingScreen(
                     }
                 },
                 rightComposable = {
-//                    Image(
-//                        painter = rememberAsyncImagePainter(
-//                            ImageRequest.Builder(LocalContext.current)
-//                                .data(data = R.drawable.send_message)
-//                                .apply(block = fun ImageRequest.Builder.() {
-//                                    repeatCount(2)
-//                                    size(60)
-//                                }).build(),
-//                            imageLoader = imageLoader
-//                        ),
-//                        contentDescription = null,
-//                    )
-                    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.send_message))
+                    val composition by rememberLottieComposition(
+                        spec = LottieCompositionSpec.RawRes(
+                            R.raw.send_message
+                        )
+                    )
                     LottieAnimation(
                         composition = composition,
                         modifier = Modifier.size(36.dp),
                         iterations = 3,
-                        restartOnPlay = false,)
+                        restartOnPlay = false,
+                    )
                 },
                 title = stringResource(id = R.string.add_card)
             )
@@ -206,7 +200,7 @@ fun CardAddingScreen(
                     .testTag("save_card_btn")
                     .fillMaxWidth()
                     .padding(16.dp), shape = MaterialTheme.shapes.extraSmall,
-                enabled = (state.card.originalText.isNotBlank() &&state.card.translateText.isNotBlank() &&  state.card.originalLanguages.key.isNotBlank()),
+                enabled = (state.card.originalText.isNotBlank() && state.card.translateText.isNotBlank() && state.card.originalLanguages.key.isNotBlank()),
                 onClick = { event.invoke(CardAddingContract.Event.SaveCardEvent) }) {
                 Text(
                     text = stringResource(R.string.save_card),
@@ -278,26 +272,38 @@ fun CardAddingScreen(
                 }
 
             }
+
             Row(
                 modifier = Modifier
+                    .padding(top = 16.dp, bottom = 16.dp)
                     .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                InfoTextFiled(
-                    modifier = Modifier
-                        .weight(0.8f)
-                        .padding(top = 16.dp, bottom = 16.dp)
-                        .testTag("translate_text_field")
-                        .focusRequester(translateFocusRequester),
-                    value = state.card.translateText,
-                    onValueChange = onTranslationTextChange,
-                    hint = stringResource(
-                        id = R.string.add_translate_text_here
-                    ),
-                    maxLine = 4,
-                    nullable = false
-                )
-
+                if (state.loadingTranslate) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = stringResource(R.string.translating) , modifier = Modifier.padding(4.dp))
+                    }
+                } else {
+                    InfoTextFiled(
+                        modifier = Modifier
+                            .weight(0.8f)
+                            .padding(top = 16.dp, bottom = 16.dp)
+                            .testTag("translate_text_field")
+                            .focusRequester(translateFocusRequester),
+                        value = state.card.translateText,
+                        onValueChange = onTranslationTextChange,
+                        hint = stringResource(
+                            id = R.string.add_translate_text_here
+                        ),
+                        maxLine = 4,
+                        nullable = false
+                    )
+                }
                 Picker(
                     modifier = Modifier
                         .weight(0.2f)
@@ -306,6 +312,7 @@ fun CardAddingScreen(
                     textStyle = MaterialTheme.typography.labelSmall,
                     selectLanguage = onTranslateLanguageSelect,
                 )
+
             }
 
 
@@ -361,11 +368,11 @@ fun CardAddingScreen(
 
                             Log.e("mediaPlayer", "CardAddingScreen: ${e.message}")
                         }
-                    } ,
-                    onSearchClick = {event.invoke(CardAddingContract.Event.GenerateSentenceEvent)})
+                    },
+                    onSearchClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent) })
             }
         }
-        CircularIndeterminateProgressBar(isVisible = state.loading)
+//        CircularIndeterminateProgressBar(isVisible = state.loading)
 
         if (state.errors != null) {
             state.errors.apply {

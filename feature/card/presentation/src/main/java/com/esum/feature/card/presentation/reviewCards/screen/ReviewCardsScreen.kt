@@ -101,71 +101,71 @@ fun ReviewCardsScreen(
 //        }
 //        .build()
 
-//    if (state.loading) {
-//
-//        Scaffold(topBar = {
-//            DefaultTopBar(
-//                leftComposable = {
-//                    Box(
-//                        modifier = Modifier
-//                            .size(40.dp)
-//                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
-//                    )
-//                },
-//                rightComposable = {
-//                    Box(
-//                        modifier = Modifier
-//                            .size(40.dp)
-//                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
-//                    )
-//                },
-//                title = stringResource(R.string.review_cards),
-//            )
-//        },
-//            bottomBar = {
-//                Row(
-//                    modifier = Modifier
-//                        .padding(vertical = 16.dp, horizontal = 16.dp)
-//                        .fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.spacedBy(
-//                        8.dp,
-//                        alignment = Alignment.CenterHorizontally
-//                    )
-//                ) {
-//                    Box(
-//                        modifier = Modifier
-//                            .weight(1f)
-//                            .height(40.dp)
-//                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
-//                    ) {
-//
-//                    }
-//                    Box(
-//                        modifier = Modifier
-//                            .weight(1f)
-//                            .fillMaxWidth()
-//                            .height(40.dp)
-//                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
-//                    ) {
-//
-//                    }
-//                }
-//            }
-//        ) { paddingValues ->
-//            paddingValues
-//
-//            Box(modifier = Modifier
-//                .fillMaxSize()
-//                , contentAlignment = Alignment.Center){
-//                Box(modifier = Modifier
-//                    .fillMaxSize(0.7f)
-//                    .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium))
-//            }
-//
-//
-//        }
-//    }
-//    else{
+    if (state.loading) {
+
+        Scaffold(topBar = {
+            DefaultTopBar(
+                leftComposable = {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
+                    )
+                },
+                rightComposable = {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
+                    )
+                },
+                title = stringResource(R.string.review_cards),
+            )
+        },
+            bottomBar = {
+                Row(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        8.dp,
+                        alignment = Alignment.CenterHorizontally
+                    )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(40.dp)
+                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
+                    ) {
+
+                    }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .height(40.dp)
+                            .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
+                    ) {
+
+                    }
+                }
+            }
+        ) { paddingValues ->
+            paddingValues
+
+            Box(modifier = Modifier
+                .fillMaxSize()
+                , contentAlignment = Alignment.Center){
+                Box(modifier = Modifier
+                    .fillMaxSize(0.7f)
+                    .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium))
+            }
+
+
+        }
+    }
+    else{
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -399,7 +399,7 @@ fun ReviewCardsScreen(
                     }
                 }
         }
-        //      }
+              }
     }
 }
 
