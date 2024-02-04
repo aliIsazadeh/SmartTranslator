@@ -21,18 +21,18 @@ fun CardWithLanguages.mapToCardWithLanguage(): CardWithLanguage {
         updateDate = this.cardEntity.updateDate ?: "",
         original = this.cardEntity.defineText,
         originalLanguage = getLanguagesByKey(this.cardEntity.defineLanguage),
-        descriptionModel = this.language?.let {
+        descriptionModel = this.language?.let { languageWithDescriptions ->
 
             Pair(
                 CardDetails(
-                    id = null,
-                    sentence = it.language.sentence,
+                    id = languageWithDescriptions.language.id,
+                    sentence = languageWithDescriptions.language.sentence,
                     description = DescriptionModel(
-                        id = it.description?.description?.id,
-                        audio = it.description?.description?.audio,
-                        phonetic = it.description?.description?.phonetic ?: "",
-                        licence = it.description?.description?.licence ?: "",
-                        meanings = it.description?.meanings?.map { meanings ->
+                        id = languageWithDescriptions.description?.description?.id,
+                        audio = languageWithDescriptions.description?.description?.audio,
+                        phonetic = languageWithDescriptions.description?.description?.phonetic ?: "",
+                        licence = languageWithDescriptions.description?.description?.licence ?: "",
+                        meanings = languageWithDescriptions.description?.meanings?.map { meanings ->
                             DescriptionMeanings(
                                 id = meanings.meanings.id,
                                 partOfSpeech = meanings.meanings.partOfSpeech,
@@ -48,9 +48,9 @@ fun CardWithLanguages.mapToCardWithLanguage(): CardWithLanguage {
                             )
                         }
                     ),
-                    translated = it.language.value,
-                    correctAnswerCount = it.language.correctAnswerCount
-                ), getLanguagesByKey(it.language.region)
+                    translated = languageWithDescriptions.language.value,
+                    correctAnswerCount = languageWithDescriptions.language.correctAnswerCount
+                ), getLanguagesByKey(languageWithDescriptions.language.region)
             )
         }
 

@@ -27,38 +27,38 @@ fun CorrectAnswerCounter(modifier: Modifier = Modifier, count: Int) {
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
     ) {
         Icon(
-            modifier = modifier.size(15.dp),
-            painter = painterResource(id = R.drawable.duck_face),
+            modifier = modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.face_duck),
             contentDescription = "duckFace",
             tint = if (count > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
         )
         Icon(
-            modifier = modifier.size(15.dp),
-            painter = painterResource(id = R.drawable.duck_face),
+            modifier = modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.face_duck),
             contentDescription = "duckFace",
             tint = if (count > 1) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
         )
         Icon(
-            modifier = modifier.size(15.dp),
-            painter = painterResource(id = R.drawable.duck_face),
+            modifier = modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.face_duck),
             contentDescription = "duckFace",
             tint = if (count > 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
         )
         Icon(
-            modifier = modifier.size(15.dp),
-            painter = painterResource(id = R.drawable.duck_face),
+            modifier = modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.face_duck),
             contentDescription = "duckFace",
             tint = if (count > 3) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
         )
         Icon(
-            modifier = modifier.size(15.dp),
-            painter = painterResource(id = R.drawable.duck_face),
+            modifier = modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.face_duck),
             contentDescription = "duckFace",
             tint = if (count > 4) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
         )
         Icon(
-            modifier = modifier.size(15.dp),
-            painter = painterResource(id = R.drawable.duck_face),
+            modifier = modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.face_duck),
             contentDescription = "duckFace",
             tint = if (count > 5) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
         )

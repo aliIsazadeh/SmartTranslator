@@ -232,7 +232,7 @@ class AddingCardViewModel @Inject constructor(
                 getDescriptionUsecase.get().invoke(
                     _mutableState.value.card.translateText,
                     languages = _mutableState.value.card.translateLanguages
-                ).collect() { result ->
+                ).onEach  { result ->
                     when (result) {
                         is ResultConstraints.Error -> {
                             _mutableState.update { it.copy(loadingDescription = false) }
@@ -258,7 +258,7 @@ class AddingCardViewModel @Inject constructor(
                             }
                         }
                     }
-                }
+                }.launchIn(viewModelScope)
             }
         }
     }

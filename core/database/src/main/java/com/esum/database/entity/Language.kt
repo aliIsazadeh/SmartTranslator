@@ -15,7 +15,7 @@ data class Language(
     @ColumnInfo(name = "value") val value: String,
     @ColumnInfo(name = "card_id") val cardId: UUID,
     @ColumnInfo("CAC")
-    val correctAnswerCount: Int = 0,
+    val correctAnswerCount: Int ,
     @ColumnInfo("sentence")
     val sentence: String? = null,
 )

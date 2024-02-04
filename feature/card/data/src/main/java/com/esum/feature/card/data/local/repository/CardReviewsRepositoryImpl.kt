@@ -1,5 +1,6 @@
 package com.esum.feature.card.data.local.repository
 
+import android.util.Log
 import com.esum.common.constraints.ResultConstraints
 import com.esum.common.date.addDays
 import com.esum.common.date.getCurrentDate
@@ -46,35 +47,35 @@ class CardReviewsRepositoryImpl @Inject constructor(
         dataProvider.updateCard(
             cardEntity = dataObject.copy(
                 cardEntity = dataObject.cardEntity.copy(
-                    updateDate = addDays(
+                    updateDate =
+                    addDays(
                         when (dataObject.language?.language?.correctAnswerCount) {
                             0 -> {
-                                1
+                                0
                             }
                             1 -> {
-                                3
+                                1
                             }
                             2 -> {
-                                7
+                                3
                             }
                             3 -> {
-                                30
+                                7
                             }
                             4 -> {
-                                90
+                                30
                             }
                             5 -> {
-                                180
+                                90
                             }
                             6 -> {
-                                365
+                                180
                             }
                             else -> {
                                 365
                             }
                         },
                     ),
-
                 ),
             ).cardEntity,
         )
@@ -98,6 +99,7 @@ class CardReviewsRepositoryImpl @Inject constructor(
             )
         )
     }.catch {
+        Log.e("updateCard", "updateCard: ${it.message} ", )
         emit(ResultConstraints.Error(message = it.message.toString()))
     }.flowOn(dispatcher)
 }

@@ -17,7 +17,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -61,7 +66,20 @@ class ReviewCardsViewModel @Inject constructor(
 
                 is ResultConstraints.Success -> {
 
+
                     result.data?.let { list ->
+                        if (list.isEmpty()){
+                            _mutableState.update {
+                                it.copy(
+                                    cardState = null,
+                                    listSize = list.size,
+                                    currentCards = list.size,
+                                    loading = false
+                                )
+                            }
+                            return@map ArrayDeque( emptyList() )
+
+                        }
                         list.map { cardWithLanguage ->
                             ReviewCardState(
                                 CardFrontState(
@@ -119,8 +137,8 @@ class ReviewCardsViewModel @Inject constructor(
     override fun event(event: ReviewCardsContract.Event) {
         when (event) {
             is ReviewCardsContract.Event.OnKnowClick -> {
-                nextCard()
                 knowThisCard(event.count)
+
                 rotate(true)
 
             }
@@ -140,20 +158,38 @@ class ReviewCardsViewModel @Inject constructor(
 
     private fun knowThisCard(correctAnswerCount: Int) {
         viewModelScope.launch {
-            state.value.cardState?.cardBackState?.apply {
-                descriptionModel?.first?.copy(correctAnswerCount = correctAnswerCount)
-            }?.let {
+            state.value.cardState?.cardBackState?.let { cardWithLanguage ->
+                val card = cardWithLanguage.apply {
+                    descriptionModel?.first?.correctAnswerCount = correctAnswerCount
+                }
                 updateCardUsecase.get().invoke(
-                    it
-                )
-            }
+                    card
+                ).onEach  { result ->
 
+                    when (result) {
+                        is ResultConstraints.Error -> {
+                            _mutableState.update { it.copy(loading = false) }
+                            addError(
+                                R.string.an_error_accoured,
+                                description = R.string.something_went_wrong,
+                                sticker = R.raw.dont_know
+                            )
+                        }
+                        is ResultConstraints.Loading ->  _mutableState.update { it.copy(loading = true) }
+                        is ResultConstraints.Success -> {
+                            _mutableState.update { it.copy(loading = false) }
+                            nextCard()
+                        }
+                    }
+
+                }.launchIn(viewModelScope)
+            }
         }
     }
 
 
     private fun addError(title: Int, description: Int, sticker: Int) {
-        _mutableState.update {
+        _mutableState.update { it ->
             it.copy(
                 errors = GenericDialogInfo.Builder().title(title)
                     .sticker(sticker = sticker)

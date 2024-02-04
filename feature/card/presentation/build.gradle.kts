@@ -97,6 +97,9 @@ dependencies {
     testImplementation(libs.mockk)
     androidTestImplementation(libs.mockk)
 
+    //glide
+    implementation(libs.glide)
+
 
     //hilt
     implementation(libs.hilt.compose)

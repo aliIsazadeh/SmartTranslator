@@ -286,7 +286,10 @@ fun CardAddingScreen(
                             .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = stringResource(R.string.translating) , modifier = Modifier.padding(4.dp))
+                        Text(
+                            text = stringResource(R.string.translating),
+                            modifier = Modifier.padding(4.dp)
+                        )
                     }
                 } else {
                     InfoTextFiled(
@@ -348,28 +351,42 @@ fun CardAddingScreen(
                     }
                 )
             } else {
-                var isPlaying by remember { mutableStateOf(false) }
-                WordDescriptionItem(
-                    value = state.card.description,
-                    onPlaySoundClick = {
-                        try {
-                            val mediaPlayer = MediaPlayer().apply {
-                                setAudioAttributes(
-                                    AudioAttributes.Builder()
-                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                                        .build()
-                                )
-                                setDataSource(it)
-                                prepare() // might take long! (for buffering, etc)
-                                start()
-                            }
-                        } catch (e: Exception) {
+                if (state.loadingDescription) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(400.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                                .shimmerLoadingAnimation(shape = MaterialTheme.shapes.medium)
+                        )
+                    }
+                } else {
+                    WordDescriptionItem(
+                        value = state.card.description,
+                        onPlaySoundClick = {
+                            try {
+                                MediaPlayer().apply {
+                                    setAudioAttributes(
+                                        AudioAttributes.Builder()
+                                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                                            .build()
+                                    )
+                                    setDataSource(it)
+                                    prepare() // might take long! (for buffering, etc)
+                                    start()
+                                }
+                            } catch (e: Exception) {
 
-                            Log.e("mediaPlayer", "CardAddingScreen: ${e.message}")
-                        }
-                    },
-                    onSearchClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent) })
+                                Log.e("mediaPlayer", "CardAddingScreen: ${e.message}")
+                            }
+                        },
+                        onSearchClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent) })
+                }
             }
         }
 //        CircularIndeterminateProgressBar(isVisible = state.loading)

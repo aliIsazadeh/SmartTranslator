@@ -65,7 +65,7 @@ fun Picker(
 ) {
 
     val visibleItemsMiddle = visibleItemsCount / 2
-    val listScrollCount = Integer.MAX_VALUE
+    val listScrollCount = Integer.MAX_VALUE 
     val listScrollMiddle = listScrollCount / 2
     val listStartIndex =
         listScrollMiddle - listScrollMiddle % items.size - visibleItemsMiddle + startIndex

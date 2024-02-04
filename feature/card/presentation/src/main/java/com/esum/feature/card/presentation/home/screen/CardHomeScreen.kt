@@ -48,6 +48,8 @@ import coil.request.repeatCount
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.esum.common.constraints.CardFeature
 import com.esum.core.ui.component.LineBar
 import com.esum.core.ui.theme.SmartTranslatorTheme
@@ -75,7 +77,7 @@ fun CardHomeScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun CardHomeScreen(
     state: CardHomeContract.State,
@@ -121,12 +123,15 @@ fun CardHomeScreen(
 //                        ),
 //                        contentDescription = null,
 //                    )
+
                     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.hello))
                     LottieAnimation(
                         composition = composition,
                         modifier = Modifier.size(36.dp),
                         iterations = 3,
                         restartOnPlay = false,)
+
+
                 },
                 title = stringResource(id = R.string.duckLearn)
             )

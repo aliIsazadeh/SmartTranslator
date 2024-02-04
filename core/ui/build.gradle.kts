@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.constraintlayout)
 
+    implementation(libs.glide)
+
 
 
     //lottie

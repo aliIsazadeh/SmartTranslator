@@ -16,7 +16,7 @@ data class Card(
 
 data class CardDetails(
     val id: UUID? = null,
-    val correctAnswerCount: Int,
+    var correctAnswerCount: Int,
     val translated: String,
     val description: DescriptionModel?,
     val sentence : String?
