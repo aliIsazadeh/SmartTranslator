@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -123,16 +124,8 @@ fun CardAddingScreen(
     val translateFocusRequester = remember { FocusRequester() }
     val originalFocusRequester = remember { FocusRequester() }
 
-//
-//    val imageLoader = ImageLoader.Builder(LocalContext.current)
-//        .components {
-//            if (Build.VERSION.SDK_INT >= 28) {
-//                add(ImageDecoderDecoder.Factory())
-//            } else {
-//                add(GifDecoder.Factory())
-//            }
-//        }
-//        .build()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     val translateTextFiledFocus by remember {
         mutableStateOf(false)
@@ -257,7 +250,8 @@ fun CardAddingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("online_translate_tag"),
-                onClick = { event.invoke(CardAddingContract.Event.OnlineTranslateEvent) }) {
+                onClick = { event.invoke(CardAddingContract.Event.OnlineTranslateEvent)
+                    keyboardController?.hide()}) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.height(IntrinsicSize.Min)
@@ -385,7 +379,8 @@ fun CardAddingScreen(
                                 Log.e("mediaPlayer", "CardAddingScreen: ${e.message}")
                             }
                         },
-                        onSearchClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent) })
+                        onSearchClick = { event.invoke(CardAddingContract.Event.GenerateSentenceEvent)
+                            keyboardController?.hide()})
                 }
             }
         }

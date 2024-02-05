@@ -17,9 +17,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -42,8 +39,8 @@ class ReviewCardsViewModel @Inject constructor(
     private val _mutableState: MutableStateFlow<ReviewCardsContract.State> =
         MutableStateFlow(ReviewCardsContract.State())
 
-    val cardReviews: StateFlow<ArrayDeque<ReviewCardState>> =
-        getReviewUsecase.get().invoke().map { result ->
+    init {
+        getReviewUsecase.get().invoke().onEach { result ->
             when (result) {
                 is ResultConstraints.Error -> {
                     _mutableState.update {
@@ -54,21 +51,16 @@ class ReviewCardsViewModel @Inject constructor(
                         description = R.string.something_went_wrong,
                         sticker = R.raw.lagging
                     )
-                    ArrayDeque(emptyList<ReviewCardState>())
                 }
 
                 is ResultConstraints.Loading -> {
                     _mutableState.update {
                         it.copy(loading = true)
                     }
-                    ArrayDeque(emptyList<ReviewCardState>())
                 }
-
                 is ResultConstraints.Success -> {
-
-
                     result.data?.let { list ->
-                        if (list.isEmpty()){
+                        if (list.isEmpty()) {
                             _mutableState.update {
                                 it.copy(
                                     cardState = null,
@@ -77,8 +69,7 @@ class ReviewCardsViewModel @Inject constructor(
                                     loading = false
                                 )
                             }
-                            return@map ArrayDeque( emptyList() )
-
+                            return@onEach
                         }
                         list.map { cardWithLanguage ->
                             ReviewCardState(
@@ -88,7 +79,12 @@ class ReviewCardsViewModel @Inject constructor(
                                     correctAnswerCount = cardWithLanguage.descriptionModel?.first?.correctAnswerCount
                                         ?: 0,
                                     example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.find
-                                    { descriptionMeanings -> descriptionMeanings.definitions.any { descriptionDefinition -> descriptionDefinition.definition != null } }
+                                    { descriptionMeanings ->
+                                        descriptionMeanings.definitions.any { descriptionDefinition
+                                            ->
+                                            descriptionDefinition.definition != null
+                                        }
+                                    }
                                         ?.definitions?.firstOrNull { it.definition?.isNotBlank() == true }?.definition,
                                     original = cardWithLanguage.original,
                                     originalLanguages = cardWithLanguage.originalLanguage,
@@ -97,34 +93,35 @@ class ReviewCardsViewModel @Inject constructor(
                             )
                         }
                     }?.toList()?.let { list ->
+
                         _mutableState.update {
                             it.copy(
                                 cardState = list.first(),
                                 listSize = list.size,
                                 currentCards = list.size,
-                                loading = false
+                                loading = false,
+                                nexReviewDays = getNextDaysOnReview(list.first().cardBackState.descriptionModel?.first?.correctAnswerCount),
+                                reviewCards = ArrayDeque(list)
                             )
                         }
                         ArrayDeque(list).apply {
                             this.removeFirstOrNull()
                         }
-                    } ?: ArrayDeque(emptyList())
+                    }
                 }
             }
-        }.stateIn(
-            initialValue = ArrayDeque(emptyList()),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(8000)
-        )
+        }.launchIn(viewModelScope)
 
-
+    }
     private fun nextCard() {
         _mutableState.update {
+            val card = _mutableState.value.reviewCards.removeFirstOrNull()
             it.copy(
-                cardState = cardReviews.value.removeFirstOrNull(),
+                cardState = card,
                 currentCards = if (it.currentCards > 0) {
                     it.currentCards - 1
-                } else 0
+                } else 0,
+                nexReviewDays = getNextDaysOnReview(card?.cardBackState?.descriptionModel?.first?.correctAnswerCount)
             )
         }
     }
@@ -137,17 +134,33 @@ class ReviewCardsViewModel @Inject constructor(
     override fun event(event: ReviewCardsContract.Event) {
         when (event) {
             is ReviewCardsContract.Event.OnKnowClick -> {
+
                 knowThisCard(event.count)
 
                 rotate(true)
 
             }
+            is ReviewCardsContract.Event.OnLearnClick -> {
+                needToLearn()
+                knowThisCard(1)
+                rotate(true)
 
-            is ReviewCardsContract.Event.OnLearnClick -> TODO()
+            }
 
             is ReviewCardsContract.Event.OnRotate -> {
                 rotate(event.bol)
             }
+            is ReviewCardsContract.Event.NeedToLearn -> {
+                needToLearn()
+            }
+        }
+    }
+
+
+    private fun needToLearn(){
+        rotate(false)
+        _mutableState.update {
+            it.copy(needToLearn = !it.needToLearn)
         }
     }
 
@@ -164,7 +177,7 @@ class ReviewCardsViewModel @Inject constructor(
                 }
                 updateCardUsecase.get().invoke(
                     card
-                ).onEach  { result ->
+                ).onEach { result ->
 
                     when (result) {
                         is ResultConstraints.Error -> {
@@ -175,7 +188,8 @@ class ReviewCardsViewModel @Inject constructor(
                                 sticker = R.raw.dont_know
                             )
                         }
-                        is ResultConstraints.Loading ->  _mutableState.update { it.copy(loading = true) }
+
+                        is ResultConstraints.Loading -> _mutableState.update { it.copy(loading = true) }
                         is ResultConstraints.Success -> {
                             _mutableState.update { it.copy(loading = false) }
                             nextCard()
@@ -202,6 +216,39 @@ class ReviewCardsViewModel @Inject constructor(
                         _mutableState.update { it.copy(errors = null) }
                     }.build()
             )
+        }
+    }
+}
+
+fun getNextDaysOnReview(value: Int?): Int {
+    return when (value
+        ?: 0) {
+        0 -> {
+            1
+        }
+
+        1 -> {
+            3
+        }
+
+        2 -> {
+            7
+        }
+
+        3 -> {
+            30
+        }
+
+        4 -> {
+            90
+        }
+
+        5 -> {
+            180
+        }
+
+        else -> {
+            360
         }
     }
 }

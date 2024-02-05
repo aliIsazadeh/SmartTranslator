@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
@@ -61,7 +60,6 @@ dependencies {
     implementation(project(":core:feature-api"))
     implementation(libs.androidx.runner)
     androidTestImplementation(project(":core:database"))
-//    implementation(project(":feature:card:data"))
 
 
     implementation(libs.androidx.core.ktx)
@@ -99,6 +97,7 @@ dependencies {
 
     //glide
     implementation(libs.glide)
+
 
 
     //hilt

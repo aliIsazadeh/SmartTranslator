@@ -1,6 +1,7 @@
 package com.esum.smarttranslator.di
 
 import com.esum.feature.card.presentation.navigation.CardApi
+import com.esum.feature.translator.presentation.navigation.TranslateApi
 import com.esum.smarttranslator.navigation.NavigationProvider
 import com.esum.smarttranslator.navigationTesting.TestApi
 import dagger.Module
@@ -15,8 +16,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNavigationProvider(cardApi: CardApi , testApi: TestApi ) : NavigationProvider {
-        return NavigationProvider(cardApi , testApi)
+    fun provideNavigationProvider(cardApi: CardApi , testApi: TestApi , translateApi : TranslateApi) : NavigationProvider {
+        return NavigationProvider(cardApi , testApi , translateApi)
     }
 
 }

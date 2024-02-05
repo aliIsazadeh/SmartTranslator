@@ -60,7 +60,7 @@ fun ReviewCardsScreen(
 
     val (state, effect, event) = use(viewModel)
     ReviewCardsScreen(state, effect, event)
-    val cards = viewModel.cardReviews.collectAsStateWithLifecycle()
+//    val cards = viewModel..collectAsStateWithLifecycle()
 }
 
 @OptIn(InternalCoroutinesApi::class)
@@ -106,21 +106,6 @@ fun ReviewCardsScreen(
                 },
                 rightComposable = {
 
-//                        Image(
-//                            modifier = Modifier.size(
-//                                40.dp
-//                            ),
-//                            painter = rememberAsyncImagePainter(
-//                                ImageRequest.Builder(LocalContext.current)
-//                                    .data(data = R.drawable.review)
-//                                    .apply(block = fun ImageRequest.Builder.() {
-//                                        repeatCount(2)
-//                                        size(70)
-//                                    }).build(),
-//                                imageLoader = imageLoader
-//                            ),
-//                            contentDescription = null,
-//                        )
                     val composition by rememberLottieComposition(
                         spec = LottieCompositionSpec.RawRes(
                             R.raw.review_tgs
@@ -144,40 +129,58 @@ fun ReviewCardsScreen(
                 enter = slideInVertically(),
                 exit = slideOutVertically()
             ) {
-                Row(
-                    modifier = Modifier
-                        .padding(vertical = 16.dp, horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        8.dp,
-                        alignment = Alignment.CenterHorizontally
-                    )
-                ) {
-                    Button(
+                if (state.needToLearn) {
+
+                    Box(modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 16.dp), contentAlignment = Alignment.Center){
+                        Button(
+                            modifier = Modifier.fillMaxWidth(0.5f),
+                            onClick = { event.invoke(ReviewCardsContract.Event.OnLearnClick) }) {
+                            Text(text = stringResource(id = R.string.review_tomorrow))
+                        }
+                    }
+
+                } else {
+                    Row(
                         modifier = Modifier
-                            .padding(8.dp)
-                            .weight(1f),
-                        onClick = {
-                            event.invoke(
-                                ReviewCardsContract.Event.OnKnowClick(
-                                    (state.cardState?.cardBackState?.descriptionModel?.first?.correctAnswerCount ?:-1) +1
+                            .padding(vertical = 16.dp, horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            8.dp,
+                            alignment = Alignment.CenterHorizontally
+                        )
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .weight(1f),
+                            onClick = {
+                                event.invoke(
+                                    ReviewCardsContract.Event.OnKnowClick(
+                                        (state.cardState?.cardBackState?.descriptionModel?.first?.correctAnswerCount
+                                            ?: -1) + 1
+                                    )
+                                )
+                            },
+                            shape = MaterialTheme.shapes.medium,
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+                        ) {
+                            Text(
+                                text = if (state.nexReviewDays == 1) stringResource(id = R.string.review_tomorrow) else stringResource(
+                                    id = R.string.reviewat,
+                                    state.nexReviewDays.toString()
                                 )
                             )
-                        },
-                        shape = MaterialTheme.shapes.medium,
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
-                    ) {
-                        Text(text = "I Know This one")
-                    }
-                    OutlinedButton(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .weight(1f),
-                        onClick = { event.invoke(ReviewCardsContract.Event.OnKnowClick(state.cardState?.cardBackState?.descriptionModel?.first?.correctAnswerCount ?:-1) )},
-                        border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.primary),
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        Text(text = "Need to Learn")
+                        }
+                        OutlinedButton(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .weight(1f),
+                            onClick = { event.invoke(ReviewCardsContract.Event.NeedToLearn) },
+                            border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.primary),
+                            shape = MaterialTheme.shapes.medium
+                        ) {
+                            Text(text = "Need to Learn")
+                        }
                     }
                 }
             }
@@ -199,7 +202,7 @@ fun ReviewCardsScreen(
             }
         }
         if (state.loading) {
-            Box(modifier = Modifier.fillMaxSize() , contentAlignment = Alignment.Center){
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize(0.7f)
@@ -253,21 +256,7 @@ fun ReviewCardsScreen(
                                 verticalArrangement = Arrangement.spacedBy(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-//                                Image(
-//                                    modifier = Modifier.size(
-//                                        120.dp
-//                                    ),
-//                                    painter = rememberAsyncImagePainter(
-//                                        ImageRequest.Builder(LocalContext.current)
-//                                            .data(data = R.drawable.duck_done)
-//                                            .apply(block = fun ImageRequest.Builder.() {
-//                                                repeatCount(2)
-//                                                size(120)
-//                                            }).build(),
-//                                        imageLoader = imageLoader
-//                                    ),
-//                                    contentDescription = null,
-//                                )
+
                                 val composition by rememberLottieComposition(
                                     spec = LottieCompositionSpec.RawRes(
                                         R.raw.duck_done_tgs
@@ -290,21 +279,7 @@ fun ReviewCardsScreen(
                                 verticalArrangement = Arrangement.spacedBy(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-//                                Image(
-//                                    modifier = Modifier.size(
-//                                        120.dp
-//                                    ),
-//                                    painter = rememberAsyncImagePainter(
-//                                        ImageRequest.Builder(LocalContext.current)
-//                                            .data(data = R.drawable.dont_know)
-//                                            .apply(block = fun ImageRequest.Builder.() {
-//                                                repeatCount(2)
-//                                                size(120)
-//                                            }).build(),
-//                                        imageLoader = imageLoader
-//                                    ),
-//                                    contentDescription = null,
-//                                )
+
                                 val composition by rememberLottieComposition(
                                     spec = LottieCompositionSpec.RawRes(
                                         R.raw.bad_boy

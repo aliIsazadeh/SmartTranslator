@@ -9,17 +9,24 @@ import androidx.navigation.compose.NavHost
 import com.esum.common.constraints.CardFeature
 
 @Composable
-fun AppNavigation(modifier: Modifier,navController: NavHostController, navigationProvider: NavigationProvider , windowSizeClass: WindowSizeClass) {
-
-    NavHost(modifier = modifier,navController = navController, startDestination = CardFeature.nestedRoute){
+fun AppNavigation(
+    modifier: Modifier,
+    navController: NavHostController,
+    navigationProvider: NavigationProvider,
+    windowSizeClass: WindowSizeClass
+) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = CardFeature.nestedRoute
+    ) {
         navigationProvider.cardApi.registerGraph(
-           navController =  navController, this , windowSizeClass = windowSizeClass
+            navController = navController, this, windowSizeClass = windowSizeClass
         )
         navigationProvider.testApi.registerGraph(
-            navController,this,windowSizeClass
+            navController, this, windowSizeClass
         )
-
-
+        navigationProvider.translateApi.registerGraph(navController, this, windowSizeClass)
     }
 
 }

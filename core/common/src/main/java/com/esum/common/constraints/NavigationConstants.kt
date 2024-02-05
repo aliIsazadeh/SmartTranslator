@@ -13,3 +13,7 @@ object TestFuture {
     const val testScreenRoute = "test_screen_route"
 
 }
+object TranslateFeature {
+    const val nestedRoute = "translate_nested_route"
+    const val translatePageRoute = "translate_screen_route"
+}

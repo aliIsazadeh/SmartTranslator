@@ -51,6 +51,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.esum.common.constraints.CardFeature
+import com.esum.common.constraints.TranslateFeature
 import com.esum.core.ui.component.LineBar
 import com.esum.core.ui.theme.SmartTranslatorTheme
 import com.esum.core.ui.topbar.DefaultTopBar
@@ -87,16 +88,6 @@ fun CardHomeScreen(
 
     ) {
 
-//    val imageLoader = ImageLoader.Builder(LocalContext.current)
-//        .components {
-//            if (Build.VERSION.SDK_INT >= 28) {
-//                add(ImageDecoderDecoder.Factory())
-//            } else {
-//                add(GifDecoder.Factory())
-//            }
-//        }
-//        .build()
-
     Scaffold(
         modifier = Modifier,
         containerColor = MaterialTheme.colorScheme.background,
@@ -108,21 +99,7 @@ fun CardHomeScreen(
                     .wrapContentHeight(),
                 leftComposable = { /*TODO*/ },
                 rightComposable = {
-//                    Image(
-//                        modifier = Modifier.size(
-//                            30.dp
-//                        ),
-//                        painter = rememberAsyncImagePainter(
-//                            ImageRequest.Builder(LocalContext.current)
-//                                .data(data = R.drawable.say_hello)
-//                                .apply(block = fun ImageRequest.Builder.() {
-//                                    repeatCount(2)
-//                                    size(70)
-//                                }).build(),
-//                            imageLoader = imageLoader
-//                        ),
-//                        contentDescription = null,
-//                    )
+
 
                     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.hello))
                     LottieAnimation(
@@ -266,7 +243,9 @@ fun CardHomeScreen(
                         modifier = Modifier
                             .height(100.dp)
                             .weight(0.5f),
-                        onClick = {},
+                        onClick = {
+                                  navController.navigate(TranslateFeature.nestedRoute)
+                        },
                         elevation = CardDefaults.elevatedCardElevation(8.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
 

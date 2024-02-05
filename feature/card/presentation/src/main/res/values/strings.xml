@@ -35,4 +35,6 @@
     <string name="congratulations_you_have_done_it">Congratulations! You have done it!</string>
     <string name="no_card_for_today">There is no card for Today!</string>
     <string name="translating">Translating!...</string>
+    <string name="reviewat">Review in %1$s days!</string>
+    <string name="review_tomorrow">Review Tomorrow</string>
 </resources>

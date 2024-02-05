@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.androidx.compose.materialWindow)
     implementation(libs.androidx.compose.materialWindow)
+    implementation(project(":feature:translator:presentation"))
 
     debugImplementation(libs.leakcanary)
 
