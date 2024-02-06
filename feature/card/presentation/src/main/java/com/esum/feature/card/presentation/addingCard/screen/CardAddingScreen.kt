@@ -63,6 +63,7 @@ import com.esum.core.ui.CollectInLaunchedEffect
 import com.esum.core.ui.component.CircularIndeterminateProgressBar
 import com.esum.core.ui.component.DefaultSnackbar
 import com.esum.core.ui.component.GenericDialog
+import com.esum.core.ui.component.ResizableTextView
 import com.esum.core.ui.component.shimmerLoadingAnimation
 import com.esum.core.ui.theme.SmartTranslatorTheme
 import com.esum.core.ui.topbar.DefaultTopBar
@@ -195,7 +196,7 @@ fun CardAddingScreen(
                     .padding(16.dp), shape = MaterialTheme.shapes.extraSmall,
                 enabled = (state.card.originalText.isNotBlank() && state.card.translateText.isNotBlank() && state.card.originalLanguages.key.isNotBlank()),
                 onClick = { event.invoke(CardAddingContract.Event.SaveCardEvent) }) {
-                Text(
+                ResizableTextView(
                     text = stringResource(R.string.save_card),
                     style = MaterialTheme.typography.titleSmall
                 )
@@ -256,7 +257,7 @@ fun CardAddingScreen(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.height(IntrinsicSize.Min)
                 ) {
-                    Text(text = "translate online", style = MaterialTheme.typography.bodySmall)
+                    ResizableTextView(text = stringResource(R.string.translate_online), style = MaterialTheme.typography.bodySmall)
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "online translate",

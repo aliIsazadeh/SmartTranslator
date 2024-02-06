@@ -1,6 +1,5 @@
 package com.esum.feature.card.presentation.home.screen
 
-import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,9 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,17 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.ImageLoader
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.request.ImageRequest
-import coil.request.repeatCount
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.esum.common.constraints.CardFeature
 import com.esum.common.constraints.TranslateFeature
 import com.esum.core.ui.component.LineBar
@@ -57,7 +46,6 @@ import com.esum.core.ui.theme.SmartTranslatorTheme
 import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
 import com.esum.feature.card.presentation.R
-import com.esum.feature.card.presentation.component.LineBarState
 import com.esum.feature.card.presentation.home.viewmodel.CardHomeContract
 import com.esum.feature.card.presentation.home.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.flow.Flow
@@ -78,7 +66,7 @@ fun CardHomeScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardHomeScreen(
     state: CardHomeContract.State,

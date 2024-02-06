@@ -41,6 +41,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.esum.core.ui.CollectInLaunchedEffect
+import com.esum.core.ui.component.ResizableTextView
 import com.esum.core.ui.component.shimmerLoadingAnimation
 import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
@@ -90,7 +91,7 @@ fun ReviewCardsScreen(
             DefaultTopBar(
                 modifier = Modifier.fillMaxWidth(), leftComposable = {
                     Text(
-                        text = if (state.currentCards == 0) "Done" else if (state.listSize == 0) {
+                        text = if (state.currentCards < 0) "Done" else if (state.listSize == 0) {
                             "No Card"
                         } else {
                             "${state.currentCards} / ${state.listSize}"
@@ -125,7 +126,7 @@ fun ReviewCardsScreen(
         },
         bottomBar = {
             AnimatedVisibility(
-                state.currentCards != 0 && state.listSize != 0,
+                state.currentCards >= 0 && state.listSize != 0,
                 enter = slideInVertically(),
                 exit = slideOutVertically()
             ) {
@@ -135,7 +136,7 @@ fun ReviewCardsScreen(
                         Button(
                             modifier = Modifier.fillMaxWidth(0.5f),
                             onClick = { event.invoke(ReviewCardsContract.Event.OnLearnClick) }) {
-                            Text(text = stringResource(id = R.string.review_tomorrow))
+                            ResizableTextView(text = stringResource(id = R.string.review_tomorrow))
                         }
                     }
 
@@ -151,7 +152,6 @@ fun ReviewCardsScreen(
                     ) {
                         Button(
                             modifier = Modifier
-                                .padding(8.dp)
                                 .weight(1f),
                             onClick = {
                                 event.invoke(
@@ -164,16 +164,17 @@ fun ReviewCardsScreen(
                             shape = MaterialTheme.shapes.medium,
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                         ) {
-                            Text(
+                            ResizableTextView(
                                 text = if (state.nexReviewDays == 1) stringResource(id = R.string.review_tomorrow) else stringResource(
                                     id = R.string.reviewat,
-                                    state.nexReviewDays.toString()
-                                )
+                                    state.nexReviewDays.toString(),
+                                ),
+                                maxLines = 1,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                         OutlinedButton(
                             modifier = Modifier
-                                .padding(8.dp)
                                 .weight(1f),
                             onClick = { event.invoke(ReviewCardsContract.Event.NeedToLearn) },
                             border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.primary),
@@ -251,7 +252,7 @@ fun ReviewCardsScreen(
                         modifier = Modifier,
                         contentAlignment = Alignment.Center
                     ) {
-                        if (state.currentCards == 0 && state.listSize != 0) {
+                        if (state.currentCards < 0 && state.listSize != 0) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally

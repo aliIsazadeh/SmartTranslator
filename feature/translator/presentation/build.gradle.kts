@@ -94,11 +94,16 @@ dependencies {
     implementation(libs.text.recognition.common)
 
 
-
+    //lottie
+    implementation(libs.lottie.compose)
+    implementation(libs.lottie)
 
     //permission
     implementation(libs.systemuicontroller)
     implementation(libs.permissions)
+
+    //cropper
+    implementation(libs.cropper)
 
 
     //hilt

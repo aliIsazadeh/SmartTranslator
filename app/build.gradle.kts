@@ -90,6 +90,9 @@ dependencies {
     androidTestImplementation(libs.hilt.instrumented.test)
     kaptAndroidTest(libs.hilt.test)
     kaptTest(libs.hilt.test)
+
+    //cropper
+    implementation(libs.cropper)
 }
 kapt {
     correctErrorTypes = true

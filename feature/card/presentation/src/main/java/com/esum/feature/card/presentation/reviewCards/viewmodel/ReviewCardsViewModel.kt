@@ -118,9 +118,7 @@ class ReviewCardsViewModel @Inject constructor(
             val card = _mutableState.value.reviewCards.removeFirstOrNull()
             it.copy(
                 cardState = card,
-                currentCards = if (it.currentCards > 0) {
-                    it.currentCards - 1
-                } else 0,
+                currentCards =  it.currentCards - 1 ,
                 nexReviewDays = getNextDaysOnReview(card?.cardBackState?.descriptionModel?.first?.correctAnswerCount)
             )
         }

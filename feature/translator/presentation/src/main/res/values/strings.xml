@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_image_from">Select Image From :</string>
+    <string name="camera">Camera</string>
+    <string name="files">Files</string>
+    <string name="analyzing">Analyzing Image …</string>
+    <string name="comfirm">Confirm</string>
+    <string name="try_againg">Try again!</string>
+</resources>
