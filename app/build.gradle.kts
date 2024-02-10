@@ -56,6 +56,8 @@ dependencies {
     implementation(project(":feature:card:presentation"))
     implementation(project(":feature:card:domain"))
     implementation(project(":feature:card:data"))
+    implementation(project(":feature:translating:domain"))
+    implementation(project(":feature:translating:data"))
     implementation(project(":core:common"))
     implementation(project(":core:feature-api"))
 
@@ -70,6 +72,7 @@ dependencies {
     implementation(libs.androidx.compose.materialWindow)
     implementation(libs.androidx.compose.materialWindow)
     implementation(project(":feature:translator:presentation"))
+    implementation(project(":feature:image-convertor:presentation"))
 
     debugImplementation(libs.leakcanary)
 

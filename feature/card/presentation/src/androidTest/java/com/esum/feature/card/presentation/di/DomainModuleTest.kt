@@ -24,6 +24,7 @@ import javax.inject.Singleton
 object DomainModuleTest {
 
     private val repository = CardRepositoryFakeImpl()
+
     private val cardInsertRepository = CardInsertFakeRepository()
     private val cardGetRepository = CardReviewFakeRepository()
 
@@ -79,7 +80,7 @@ object DomainModuleTest {
     @Provides
     @Singleton
     fun provideUpdateCardUsecase(): UpdateCardUsecase {
-        return UpdateCardUsecase(repository)
+        return UpdateCardUsecase(cardGetRepository)
     }
 
 

@@ -35,8 +35,13 @@
             <option value="$PROJECT_DIR$/feature/card/presentation" />
             <option value="$PROJECT_DIR$/feature/image-convertor" />
             <option value="$PROJECT_DIR$/feature/image-convertor/data" />
+            <option value="$PROJECT_DIR$/feature/image-convertor/domain" />
+            <option value="$PROJECT_DIR$/feature/image-convertor/presentation" />
             <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/profile/data" />
+            <option value="$PROJECT_DIR$/feature/translating" />
+            <option value="$PROJECT_DIR$/feature/translating/data" />
+            <option value="$PROJECT_DIR$/feature/translating/domain" />
             <option value="$PROJECT_DIR$/feature/translator" />
             <option value="$PROJECT_DIR$/feature/translator/data" />
             <option value="$PROJECT_DIR$/feature/translator/domain" />

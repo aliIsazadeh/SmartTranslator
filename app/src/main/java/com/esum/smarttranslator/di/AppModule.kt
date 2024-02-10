@@ -1,7 +1,7 @@
 package com.esum.smarttranslator.di
 
 import com.esum.feature.card.presentation.navigation.CardApi
-import com.esum.feature.translator.presentation.navigation.TranslateApi
+import com.esum.feature.image_convertor.presentation.navigation.TranslateApi
 import com.esum.smarttranslator.navigation.NavigationProvider
 import com.esum.smarttranslator.navigationTesting.TestApi
 import dagger.Module

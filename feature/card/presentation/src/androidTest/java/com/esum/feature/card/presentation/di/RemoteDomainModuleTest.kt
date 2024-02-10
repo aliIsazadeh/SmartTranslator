@@ -1,12 +1,10 @@
 package com.esum.feature.card.presentation.di
 
-import com.esum.feature.card.domain.remote.description.di.DescriptionDomainModule
-import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
-import com.esum.feature.card.domain.remote.translate.di.RemoteDomainModule
-import com.esum.feature.card.domain.remote.translate.repository.RemoteRepository
-import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
-import com.esum.feature.card.presentation.repository.DescriptionRepositoryFakeImpl
+
 import com.esum.feature.card.presentation.repository.RemoteRepositoryFakeImpl
+import com.esum.feature.translating.domain.translating.di.RemoteDomainModule
+import com.esum.feature.translating.domain.translating.repository.RemoteRepository
+import com.esum.feature.translating.domain.translating.usecase.TranslateCardUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -18,6 +16,12 @@ import javax.inject.Singleton
 object RemoteDomainModuleTest {
 
     private val repository = RemoteRepositoryFakeImpl()
+
+    @Provides
+    @Singleton
+    fun RemoteRepositoryFake() : RemoteRepository {
+        return repository
+    }
 
 
     @Provides

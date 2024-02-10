@@ -2,7 +2,6 @@ package com.esum.feature.card.presentation.di
 
 import com.esum.feature.card.domain.remote.description.di.DescriptionDomainModule
 import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
-import com.esum.feature.card.domain.remote.translate.di.RemoteDomainModule
 import com.esum.feature.card.presentation.repository.DescriptionRepositoryFakeImpl
 import dagger.Module
 import dagger.Provides

@@ -56,12 +56,12 @@ android {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:card:domain"))
+    implementation(project(":feature:translating:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:feature-api"))
-    implementation(libs.androidx.runner)
     androidTestImplementation(project(":core:database"))
 
-
+    implementation(libs.androidx.runner)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

@@ -9,4 +9,8 @@ import kotlinx.coroutines.flow.flow
 class CardReviewFakeRepository : CardGetReviewsRepository {
     override fun getCardReviews(): Flow<ResultConstraints<List<CardWithLanguage>>> = flow {
     }
+
+    override suspend fun updateCard(card: CardWithLanguage): Flow<ResultConstraints<Long>> {
+        TODO("Not yet implemented")
+    }
 }

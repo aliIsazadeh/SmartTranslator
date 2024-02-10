@@ -16,9 +16,9 @@ import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.model.CardDetails
 import com.esum.feature.card.domain.local.usecase.InsertCardUsecase
 import com.esum.feature.card.domain.remote.description.usecase.GetDescriptionUsecase
-import com.esum.feature.card.domain.remote.translate.usecase.TranslateCardUseCase
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.addingCard.state.AddCardScreenState
+import com.esum.feature.translating.domain.translating.usecase.TranslateCardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
