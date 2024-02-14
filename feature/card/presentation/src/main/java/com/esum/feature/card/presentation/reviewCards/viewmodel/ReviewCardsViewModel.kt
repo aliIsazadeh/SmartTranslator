@@ -97,7 +97,7 @@ class ReviewCardsViewModel @Inject constructor(
                         _mutableState.update {
                             it.copy(
                                 cardState = list.first(),
-                                listSize = list.size,
+                                listSize = list.size ,
                                 currentCards = list.size,
                                 loading = false,
                                 nexReviewDays = getNextDaysOnReview(list.first().cardBackState.descriptionModel?.first?.correctAnswerCount),
@@ -140,7 +140,7 @@ class ReviewCardsViewModel @Inject constructor(
             }
             is ReviewCardsContract.Event.OnLearnClick -> {
                 needToLearn()
-                knowThisCard(1)
+                knowThisCard(-1)
                 rotate(true)
 
             }
@@ -221,6 +221,9 @@ class ReviewCardsViewModel @Inject constructor(
 fun getNextDaysOnReview(value: Int?): Int {
     return when (value
         ?: 0) {
+        -1 -> {
+            1
+        }
         0 -> {
             1
         }
@@ -246,7 +249,9 @@ fun getNextDaysOnReview(value: Int?): Int {
         }
 
         else -> {
-            360
+
+               360
+
         }
     }
 }

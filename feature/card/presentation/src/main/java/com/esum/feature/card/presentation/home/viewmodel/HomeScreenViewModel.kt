@@ -58,7 +58,8 @@ class HomeScreenViewModel @Inject constructor(private val getActiveCardsUsecase:
                                 count = result.data?.completeCardsCount ?: "0"
                             ),
                             needToLearnCards = LineBarState(
-                                percentage = result.data?.needToLearnCardsPercentage ?: 0.0,
+                                percentage = (result.data?.needToLearnCardsCount?.toDouble()
+                                    ?: 0.0).div(result.data?.allCardsCount?.toDouble() ?: 1.0),
                                 count = result.data?.needToLearnCardsCount ?: "0"
                             ),
                         )

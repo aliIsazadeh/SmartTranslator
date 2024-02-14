@@ -17,12 +17,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-//    @Provides
-//    @Singleton
-//    fun provideInterceptor(): Interceptor {
-//        return TranslateInterceptor()
-//    }
-
     @Provides
     @Singleton
     fun providesClient(): OkHttpClient {
@@ -35,8 +29,6 @@ object NetworkModule {
             it.proceed(request)
         }).build()
     }
-
-
 
     @Provides
     @Singleton

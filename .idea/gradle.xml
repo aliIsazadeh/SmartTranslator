@@ -42,6 +42,7 @@
             <option value="$PROJECT_DIR$/feature/translating" />
             <option value="$PROJECT_DIR$/feature/translating/data" />
             <option value="$PROJECT_DIR$/feature/translating/domain" />
+            <option value="$PROJECT_DIR$/feature/translating/presentation" />
             <option value="$PROJECT_DIR$/feature/translator" />
             <option value="$PROJECT_DIR$/feature/translator/data" />
             <option value="$PROJECT_DIR$/feature/translator/domain" />

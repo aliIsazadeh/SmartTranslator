@@ -102,7 +102,6 @@ fun CardAddingScreen(
 
 }
 
-@OptIn(InternalCoroutinesApi::class)
 @Composable
 fun CardAddingScreen(
     state: CardAddingContract.State,

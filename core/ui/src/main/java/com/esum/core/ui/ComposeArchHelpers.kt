@@ -15,6 +15,14 @@ data class StateEffectDispatch<STATE, EFFECT, EVENT>(
     val dispatch: (EVENT) -> Unit
 )
 
+interface UnidirectionalViewModel<STATE, EFFECT, EVENT> {
+    val state: StateFlow<STATE>
+    val effect: Flow<EFFECT>
+    fun event(event: EVENT)
+}
+
+
+
 @Composable
 inline fun <reified STATE, EFFECT, EVENT> use(
     viewModel: UnidirectionalViewModel<STATE, EFFECT, EVENT>
@@ -28,17 +36,8 @@ inline fun <reified STATE, EFFECT, EVENT> use(
         effectFlow =  viewModel.effect,
         dispatch = dispatch
     )
-
 }
 
-
-interface UnidirectionalViewModel<STATE, EFFECT, EVENT> {
-    val state: StateFlow<STATE>
-    val effect: Flow<EFFECT>
-    fun event(event: EVENT)
-}
-@InternalCoroutinesApi
-@Suppress("ComposableNaming")
 @Composable
 fun <T> Flow<T>.CollectInLaunchedEffect(function : suspend (value : T) -> Unit) {
     val flow = this
@@ -46,3 +45,4 @@ fun <T> Flow<T>.CollectInLaunchedEffect(function : suspend (value : T) -> Unit) 
         flow.collectLatest(function)
     }
 }
+

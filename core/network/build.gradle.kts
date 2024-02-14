@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okhttp)
     implementation(libs.converter.gson)
+    implementation(libs.okhttp.interceptor)
 
 
     //moshi
@@ -61,6 +62,8 @@ dependencies {
     implementation(libs.moshi.kotlin.convertor)
 
 
+    //dataStore
+    implementation(libs.dataStore)
 
 
     //hilt

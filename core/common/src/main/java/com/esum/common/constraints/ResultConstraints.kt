@@ -6,3 +6,11 @@ sealed class ResultConstraints<T>(val data : T? = null , val message : String? =
     class Success<T>(data: T) : ResultConstraints<T>(data = data)
     class Error<T>(message: String) : ResultConstraints<T>(message = message)
 }
+
+
+
+
+
+
+
+

@@ -252,7 +252,7 @@ fun ReviewCardsScreen(
                         modifier = Modifier,
                         contentAlignment = Alignment.Center
                     ) {
-                        if (state.currentCards < 0 && state.listSize != 0) {
+                        if (state.currentCards <= 0 && state.listSize != 0) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally

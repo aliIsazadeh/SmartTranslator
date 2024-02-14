@@ -8,7 +8,6 @@ import retrofit2.http.POST
 
 interface TranslateApiService {
 
-
     @FormUrlEncoded
     @POST("/translate")
     suspend fun translate(
