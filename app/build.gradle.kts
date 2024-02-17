@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.compose.materialWindow)
     implementation(project(":feature:translator:presentation"))
     implementation(project(":feature:image-convertor:presentation"))
+    implementation(project(":core:web-socket"))
 
     debugImplementation(libs.leakcanary)
 

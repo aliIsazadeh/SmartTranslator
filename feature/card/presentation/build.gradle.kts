@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":feature:translating:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:feature-api"))
+    implementation(project(":core:web-socket"))
     androidTestImplementation(project(":core:database"))
 
     implementation(libs.androidx.runner)
@@ -94,6 +95,7 @@ dependencies {
     //mockk
     testImplementation(libs.mockk)
     androidTestImplementation(libs.mockk)
+
 
 
 

@@ -1,13 +1,18 @@
 package com.esum.feature.card.presentation.home.viewmodel
 
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esum.common.constraints.ResultConstraints
+import com.esum.core.web_socket.MessageListener
+import com.esum.core.web_socket.WebSocketListener
 import com.esum.feature.card.domain.local.model.ActiveCardsCount
 import com.esum.feature.card.domain.local.model.CardStatusStates
 import com.esum.feature.card.domain.local.usecase.GetActiveCardsUseCase
 import com.esum.feature.card.presentation.component.LineBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,14 +26,47 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(private val getActiveCardsUsecase: Provider<GetActiveCardsUseCase>) :
+class HomeScreenViewModel @Inject constructor(
+    private val getActiveCardsUsecase: Provider<GetActiveCardsUseCase>,
+    private val messageListener: MessageListener
+) :
     ViewModel(), CardHomeContract {
     private val _mutableState = MutableStateFlow(
         CardHomeContract.State()
     )
-    override val state: StateFlow<CardHomeContract.State> = _mutableState
-    private val effectChannel = Channel<CardHomeContract.Effect>(Channel.UNLIMITED)
-    override val effect: Flow<CardHomeContract.Effect> = effectChannel.receiveAsFlow()
+
+
+    val messageState: StateFlow<String> =
+        messageListener.invoke().map { result ->
+            when (result) {
+                is ResultConstraints.Error -> {
+                    ""
+                }
+
+                is ResultConstraints.Loading -> {
+                    ""
+                }
+
+                is ResultConstraints.Success -> {
+                    result.data ?: ""
+                }
+            }
+        }.stateIn(
+            initialValue = "",
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
+
+    override
+    val state: StateFlow<CardHomeContract.State> = _mutableState
+
+    private
+    val effectChannel = Channel<CardHomeContract.Effect>(Channel.UNLIMITED)
+
+    override
+    val effect: Flow<CardHomeContract.Effect> =
+        effectChannel.receiveAsFlow()
 
     val activeCardsState: StateFlow<List<CardStatusStates>> =
         getActiveCardsUsecase.get().invoke().map { result ->

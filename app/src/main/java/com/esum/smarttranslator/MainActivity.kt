@@ -1,8 +1,12 @@
 package com.esum.smarttranslator
 
+import android.Manifest
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -23,21 +27,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.esum.common.constraints.CardFeature
+import com.esum.common.constraints.ResultConstraints
 import com.esum.common.constraints.TestFuture
+import com.esum.core.web_socket.LogService
+import com.esum.core.web_socket.WebSocketListener
 import com.esum.smarttranslator.navigation.AppNavigation
 import com.esum.smarttranslator.navigation.BottomNavigationItem
 import com.esum.smarttranslator.navigation.NavigationProvider
 import com.esum.smarttranslator.ui.theme.SmartTranslatorTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,7 +66,16 @@ class MainActivity : ComponentActivity() {
 
 
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this , arrayOf(Manifest.permission.POST_NOTIFICATIONS) , 0)
+        }
+
+
+        val intent = Intent(this , LogService::class.java)
+
+
         setContent {
+
 
             val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
 
@@ -120,6 +144,8 @@ class MainActivity : ComponentActivity() {
                                                     )
                                                 },
                                                 onClick = {
+                                                    intent.action = LogService.Actions.START.toString()
+                                                    startService(intent)
                                                     navigationSelectedItem = index
                                                     navController.navigate(navigationItem.route) {
                                                         popUpTo(navController.graph.findStartDestination().id) {
