@@ -86,6 +86,11 @@ dependencies {
     debugImplementation(libs.tooling.ui)
     debugImplementation(libs.manifest.test)
 
+
+    //lottie
+    implementation(libs.lottie.compose)
+    implementation(libs.lottie)
+
     //hilt
     implementation(libs.hilt.compose)
     implementation(libs.hilt)

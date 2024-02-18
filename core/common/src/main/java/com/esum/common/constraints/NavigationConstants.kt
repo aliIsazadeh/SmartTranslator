@@ -17,3 +17,7 @@ object TranslateFeature {
     const val nestedRoute = "translate_nested_route"
     const val translatePageRoute = "translate_screen_route"
 }
+
+object HomeFeature {
+    const val splashScreen = "home_splash"
+}
