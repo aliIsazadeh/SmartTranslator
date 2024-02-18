@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.esum.common.constraints.CardFeature
 import com.esum.common.constraints.HomeFeature
+import com.esum.smarttranslator.splash.SliderScreen
 import com.esum.smarttranslator.splash.SplashScreen
 
 @Composable
@@ -25,6 +26,11 @@ fun AppNavigation(
     ) {
         composable(HomeFeature.splashScreen){
             SplashScreen(navController = navController)
+        }
+
+        composable(HomeFeature.sliderScreen){
+
+            SliderScreen(navController = navController)
         }
         navigationProvider.cardApi.registerGraph(
             navController = navController, this, windowSizeClass = windowSizeClass

@@ -1,5 +1,7 @@
 package com.esum.common.constraints
 
+import com.google.android.material.slider.Slider
+
 object CardFeature {
 
     const val nestedRoute = "card_nested_route"
@@ -20,4 +22,5 @@ object TranslateFeature {
 
 object HomeFeature {
     const val splashScreen = "home_splash"
+    const val sliderScreen = "home_slider"
 }

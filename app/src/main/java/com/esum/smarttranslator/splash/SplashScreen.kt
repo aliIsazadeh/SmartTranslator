@@ -54,6 +54,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.esum.common.constraints.CardFeature
+import com.esum.common.constraints.HomeFeature
 import com.esum.smarttranslator.R
 import kotlinx.coroutines.delay
 import java.time.Duration
@@ -86,7 +87,11 @@ fun SplashScreen(navController: NavController) {
             targetValue = if (animate) 0.05f else -1f,
             animationSpec = tween(3000, easing = LinearEasing), label = "",
             finishedListener = {
-                navController.navigate(CardFeature.nestedRoute)
+                navController.navigate(HomeFeature.sliderScreen){
+                    popUpTo(HomeFeature.splashScreen) {
+                        inclusive = true
+                    }
+                }
 
             }
         )
