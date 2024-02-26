@@ -28,20 +28,7 @@
         <State />
       </entry>
       <entry key="app">
-        <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\aisazadeh\.android\avd\Resizable_Experimental_API_34.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-18T10:48:47.408492100Z" />
-        </State>
+        <State />
       </entry>
       <entry key="reviewCardsTest()">
         <State />
