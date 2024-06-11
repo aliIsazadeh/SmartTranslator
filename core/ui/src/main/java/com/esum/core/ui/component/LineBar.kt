@@ -24,7 +24,7 @@ fun LineBar(
     title: String,
     mainColor: Color,
     subColor: Color,
-    percentage: Double,
+    percentage: Float,
     count: String
 ) {
     Column(
@@ -44,7 +44,7 @@ fun LineBar(
             Box(
                 modifier = Modifier
                     .height(4.dp)
-                    .fillMaxWidth(percentage.toFloat())
+                    .fillMaxWidth(if(percentage.isNaN()){0.0f}else percentage)
                     .background(color = mainColor, shape = MaterialTheme.shapes.small)
             )
         }
@@ -62,7 +62,7 @@ fun LineBarPreview() {
                 title = "main card",
                 mainColor = MaterialTheme.colorScheme.primary,
                 subColor = MaterialTheme.colorScheme.primaryContainer,
-                percentage = 0.6,
+                percentage = 0.6f,
                 count = "212"
             )
         }

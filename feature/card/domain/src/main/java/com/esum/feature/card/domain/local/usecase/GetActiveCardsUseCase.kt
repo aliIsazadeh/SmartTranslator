@@ -24,25 +24,25 @@ class GetActiveCardsUseCase @Inject constructor(private val repository: CardRepo
                 is ResultConstraints.Success -> {
                     ResultConstraints.Success(
                         CardStatusStates(
-                            needToLearnCardsPercentage = (result.data?.second ?: 0).div(
+                            needToLearnCardsPercentage = (result.data?.second?.toFloat() ?: 0f).div(
                                 if (result.data?.first.isNullOrEmpty().not()) result.data?.first?.size
                                     ?: 1 else 1
-                            ).toDouble(),
+                            ).toFloat(),
                             needToLearnCardsCount = (result.data?.second ?: 0).toString(),
                             activeCardsCount = result.data?.first?.firstOrNull() { it.active }?.count?.toString()
                                 ?: "0",
-                            activeCardsPercentage = (result.data?.first?.filter { it.active }?.size?.toDouble()
-                                ?: 0.0).div(
+                            activeCardsPercentage = (result.data?.first?.filter { it.active }?.size?.toFloat()
+                                ?: 0.0f).div(
                                 if (result.data?.first.isNullOrEmpty().not()) result.data?.first?.size
                                     ?: 1 else 1
                             ),
                             allCardsCount = ((result.data?.first?.firstOrNull() { activeCardsCount -> activeCardsCount.active }?.count
                                 ?: 0) + (result.data?.first?.firstOrNull() { activeCardsCount -> !activeCardsCount.active }?.count
                                 ?: 0)).toString(),
-                            allCardsPercentage = 100.0,
+                            allCardsPercentage = 100.0f,
                             completeCardsCount = result.data?.first?.filter { !it.active }?.size.toString(),
-                            completeCardsPercentage = (result.data?.first?.filter { !it.active }?.size?.toDouble()
-                                ?: 0.0).div(
+                            completeCardsPercentage = (result.data?.first?.filter { !it.active }?.size?.toFloat()
+                                ?: 0.0f).div(
                                 if (result.data?.first.isNullOrEmpty().not()) result.data?.first?.size!!
                                      else 1
                             )

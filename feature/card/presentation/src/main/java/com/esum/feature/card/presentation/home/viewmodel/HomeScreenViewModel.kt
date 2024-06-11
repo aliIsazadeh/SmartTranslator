@@ -46,20 +46,20 @@ class HomeScreenViewModel @Inject constructor(private val getActiveCardsUsecase:
                     _mutableState.update { state ->
                         state.copy(
                             allCards = LineBarState(
-                                percentage = 100.0,
+                                percentage = 100.0f,
                                 count = result.data?.allCardsCount ?: "0"
                             ),
                             activeCards = LineBarState(
-                                percentage = result.data?.activeCardsPercentage ?: 0.0,
+                                percentage = result.data?.activeCardsPercentage ?: 0.0f,
                                 count = result.data?.activeCardsCount ?: "0"
                             ),
                             completedCards = LineBarState(
-                                percentage = result.data?.completeCardsPercentage ?: 0.0,
+                                percentage = result.data?.completeCardsPercentage ?: 0.0f,
                                 count = result.data?.completeCardsCount ?: "0"
                             ),
                             needToLearnCards = LineBarState(
-                                percentage = (result.data?.needToLearnCardsCount?.toDouble()
-                                    ?: 0.0).div(result.data?.allCardsCount?.toDouble() ?: 1.0),
+                                percentage = (result.data?.needToLearnCardsCount?.toFloat()
+                                    ?: 0.0f).div(result.data?.allCardsCount?.toFloat() ?: 1.0f),
                                 count = result.data?.needToLearnCardsCount ?: "0"
                             ),
                         )

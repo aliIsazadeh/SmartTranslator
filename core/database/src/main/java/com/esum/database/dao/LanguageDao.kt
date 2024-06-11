@@ -21,7 +21,7 @@ interface LanguageDao {
 
 
     @Query("select count(*)  From  languages where CAC = -1")
-    fun getNeedToLearn(): Flow<Int>
+    fun getNeedToLearn(): Flow<Int?>
 
     @Update(entity = Language::class)
     suspend fun updateLanguage(entity: Language)

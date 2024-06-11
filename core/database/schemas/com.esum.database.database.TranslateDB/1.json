@@ -1,0 +1,302 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "432b1603c5299177dd5a149469a7d529",
+    "entities": [
+      {
+        "tableName": "card_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `define_language` TEXT NOT NULL, `define_text` TEXT NOT NULL, `image` TEXT, `create_date` TEXT NOT NULL, `update_date` TEXT, `active` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "defineLanguage",
+            "columnName": "define_language",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "defineText",
+            "columnName": "define_text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createDate",
+            "columnName": "create_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateDate",
+            "columnName": "update_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "profile_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `name` TEXT NOT NULL, `password` TEXT, `username` TEXT NOT NULL, `email` TEXT NOT NULL, `phone_number` TEXT NOT NULL, `avatar` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "password",
+            "columnName": "password",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phoneNumber",
+            "columnName": "phone_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatar",
+            "columnName": "avatar",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "descriptions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `phonetic` TEXT NOT NULL, `audio` TEXT NOT NULL, `licence` TEXT NOT NULL, `language_id` BLOB NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phonetic",
+            "columnName": "phonetic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "audio",
+            "columnName": "audio",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "licence",
+            "columnName": "licence",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "languageId",
+            "columnName": "language_id",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "description_definition",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `definition` TEXT, `example` TEXT, `synonyms` TEXT NOT NULL, `antonyms` TEXT NOT NULL, `dm_id` BLOB NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "definition",
+            "columnName": "definition",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "example",
+            "columnName": "example",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "synonyms",
+            "columnName": "synonyms",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antonym",
+            "columnName": "antonyms",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descriptionMeaningId",
+            "columnName": "dm_id",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "description_meanings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `part_of_speech` TEXT NOT NULL, `description_id` BLOB NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partOfSpeech",
+            "columnName": "part_of_speech",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descriptionId",
+            "columnName": "description_id",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "languages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `region` TEXT NOT NULL, `value` TEXT NOT NULL, `card_id` BLOB NOT NULL, `CAC` INTEGER NOT NULL, `sentence` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "region",
+            "columnName": "region",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cardId",
+            "columnName": "card_id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "correctAnswerCount",
+            "columnName": "CAC",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sentence",
+            "columnName": "sentence",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '432b1603c5299177dd5a149469a7d529')"
+    ]
+  }
+}

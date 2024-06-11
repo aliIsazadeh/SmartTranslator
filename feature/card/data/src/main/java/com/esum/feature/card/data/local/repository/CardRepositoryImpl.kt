@@ -86,7 +86,7 @@ class CardRepositoryImpl @Inject constructor(
         return cardsStatusFlow.onStart {
             ResultConstraints.Loading<List<ActiveCardsCount>>()
         }.map { pair ->
-            ResultConstraints.Success(Pair(pair.first.map { ActiveCardsCount(active = it.active, count = it.count) } , pair.second))
+            ResultConstraints.Success(Pair(pair.first.map { ActiveCardsCount(active = it.active ?: false, count = it.count ?: 0) } , pair.second ?: 0))
         }.catch {
             ResultConstraints.Error<List<ActiveCardsCount>>(message = "error while getActiveCardsCount ")
         }.distinctUntilChanged().flowOn(dispatcher)
