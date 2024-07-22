@@ -14,8 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.esum.core.ui.R
 import com.esum.core.ui.theme.SmartTranslatorTheme
 
 @Composable
@@ -32,7 +34,9 @@ fun LineBar(
             .fillMaxWidth()
             .padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = title, style = MaterialTheme.typography.labelSmall.copy(color = mainColor))
             Text(text = count, style = MaterialTheme.typography.labelSmall.copy(color = mainColor))
         }
@@ -44,7 +48,11 @@ fun LineBar(
             Box(
                 modifier = Modifier
                     .height(4.dp)
-                    .fillMaxWidth(if(percentage.isNaN()){0.0f}else percentage)
+                    .fillMaxWidth(
+                        if (percentage.isNaN()) {
+                            0.0f
+                        } else percentage
+                    )
                     .background(color = mainColor, shape = MaterialTheme.shapes.small)
             )
         }
@@ -59,7 +67,7 @@ fun LineBarPreview() {
     SmartTranslatorTheme {
         Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
             LineBar(
-                title = "main card",
+                title = stringResource(R.string.main_card),
                 mainColor = MaterialTheme.colorScheme.primary,
                 subColor = MaterialTheme.colorScheme.primaryContainer,
                 percentage = 0.6f,

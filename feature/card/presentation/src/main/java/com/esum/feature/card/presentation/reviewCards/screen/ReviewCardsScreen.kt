@@ -47,6 +47,8 @@ import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.reviewCards.components.CardStack
+import com.esum.feature.card.presentation.reviewCards.state.CardFrontState
+import com.esum.feature.card.presentation.reviewCards.state.ReviewCardState
 import com.esum.feature.card.presentation.reviewCards.viewmodel.ReviewCardsContract
 import com.esum.feature.card.presentation.reviewCards.viewmodel.ReviewCardsViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -64,25 +66,15 @@ fun ReviewCardsScreen(
 //    val cards = viewModel..collectAsStateWithLifecycle()
 }
 
-@OptIn(InternalCoroutinesApi::class)
 @Composable
 fun ReviewCardsScreen(
     state: ReviewCardsContract.State,
     effect: Flow<ReviewCardsContract.Effect>,
     event: (ReviewCardsContract.Event) -> Unit
 ) {
-    var fullScreenOrFlip by remember {
+    val fullScreenOrFlip by remember {
         mutableStateOf(true)
     }
-//    val imageLoader = ImageLoader.Builder(LocalContext.current)
-//        .components {
-//            if (Build.VERSION.SDK_INT >= 28) {
-//                add(ImageDecoderDecoder.Factory())
-//            } else {
-//                add(GifDecoder.Factory())
-//            }
-//        }
-//        .build()
 
 
     Scaffold(
@@ -132,10 +124,15 @@ fun ReviewCardsScreen(
             ) {
                 if (state.needToLearn) {
 
-                    Box(modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 16.dp), contentAlignment = Alignment.Center){
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp, horizontal = 16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Button(
                             modifier = Modifier.fillMaxWidth(0.5f),
-                            onClick = { event.invoke(ReviewCardsContract.Event.OnLearnClick) }) {
+                            onClick = { event.invoke(ReviewCardsContract.Event.OnLearnClick(state.cardState!!)) }) {
                             ResizableTextView(text = stringResource(id = R.string.review_tomorrow))
                         }
                     }
@@ -156,8 +153,8 @@ fun ReviewCardsScreen(
                             onClick = {
                                 event.invoke(
                                     ReviewCardsContract.Event.OnKnowClick(
-                                        (state.cardState?.cardBackState?.descriptionModel?.first?.correctAnswerCount
-                                            ?: -1) + 1
+                                        (state.cardState?.descriptionModel?.first?.correctAnswerCount
+                                            ?: -1) + 1, state.cardState!!
                                     )
                                 )
                             },
@@ -223,7 +220,27 @@ fun ReviewCardsScreen(
 
                 state.cardState?.let {
                     CardStack(
-                        state = it,
+                        state = it.let {cardWithLanguage ->
+                            ReviewCardState(
+                                CardFrontState(
+                                    pronunciation = cardWithLanguage.descriptionModel?.first?.description?.phonetic,
+                                    audio = cardWithLanguage.descriptionModel?.first?.description?.audio,
+                                    correctAnswerCount = cardWithLanguage.descriptionModel?.first?.correctAnswerCount
+                                        ?: 0,
+                                    example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.find
+                                    { descriptionMeanings ->
+                                        descriptionMeanings.definitions.any { descriptionDefinition
+                                            ->
+                                            descriptionDefinition.definition != null
+                                        }
+                                    }
+                                        ?.definitions?.firstOrNull { it.definition?.isNotBlank() == true }?.definition,
+                                    original = cardWithLanguage.original,
+                                    originalLanguages = cardWithLanguage.originalLanguage,
+                                ),
+                                cardWithLanguage,
+                            )
+                        },
                         cardListSize = state.currentCards,
                         onClick = { event.invoke(ReviewCardsContract.Event.OnRotate(null)) },
                         rotated = rotated,

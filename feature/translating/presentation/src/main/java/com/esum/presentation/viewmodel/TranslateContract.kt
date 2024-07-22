@@ -6,7 +6,8 @@ import com.esum.core.ui.UnidirectionalViewModel
 interface TranslateContract : UnidirectionalViewModel<TranslateContract.STATE , TranslateContract.EFFECT , TranslateContract.EVENT>{
     @Stable
     data class STATE(
-        val loading : Boolean = false
+        val loading : Boolean = false ,
+        val text : String = ""
     )
 
     sealed interface EFFECT {

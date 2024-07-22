@@ -16,6 +16,8 @@ class TranslateViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() , TranslateContract {
 
+    
+
     private val _mutableState : MutableStateFlow<TranslateContract.STATE> = MutableStateFlow(
         TranslateContract.STATE())
 
@@ -30,5 +32,7 @@ class TranslateViewModel @Inject constructor(
             TranslateContract.EVENT.Translate -> TODO()
         }
     }
+
+
 
 }

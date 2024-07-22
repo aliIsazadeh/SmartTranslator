@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.res.stringResource
 import com.esum.core.ui.UnidirectionalViewModel
 import com.esum.core.ui.component.GenericDialogInfo
+import com.esum.feature.card.domain.local.model.Card
 import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.presentation.R
 import com.esum.feature.card.presentation.reviewCards.state.ReviewCardState
@@ -15,8 +16,8 @@ interface ReviewCardsContract :
 
     @Stable
     data class State(
-        val reviewCards: ArrayDeque<ReviewCardState> = ArrayDeque(emptyList()),
-        val cardState: ReviewCardState? = null,
+        val reviewCards: ArrayDeque<CardWithLanguage> = ArrayDeque(emptyList()),
+        val cardState: CardWithLanguage? = null,
         val listSize: Int = 0,
         val currentCards: Int = 0,
         val nexReviewDays: Int = 0,
@@ -28,8 +29,8 @@ interface ReviewCardsContract :
 
     sealed interface Event {
 
-        data class OnKnowClick(val count: Int) : Event
-        data object OnLearnClick : Event
+        data class OnKnowClick(val count: Int , val card : CardWithLanguage)  : Event
+        data class OnLearnClick(val card : CardWithLanguage) : Event
         data object NeedToLearn : Event
         data class OnRotate(val bol: Boolean?) : Event
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.esum.common.constraints.ResultConstraints
 import com.esum.core.ui.component.GenericDialogInfo
 import com.esum.core.ui.component.PositiveAction
+import com.esum.feature.card.domain.local.model.CardWithLanguage
 import com.esum.feature.card.domain.local.usecase.GetCardReviewsUsecase
 import com.esum.feature.card.domain.local.usecase.UpdateCardUsecase
 import com.esum.feature.card.presentation.R
@@ -58,68 +59,75 @@ class ReviewCardsViewModel @Inject constructor(
                         it.copy(loading = true)
                     }
                 }
+
                 is ResultConstraints.Success -> {
                     result.data?.let { list ->
-                        if (list.isEmpty()) {
-                            _mutableState.update {
-                                it.copy(
-                                    cardState = null,
-                                    listSize = list.size,
-                                    currentCards = list.size,
-                                    loading = false
-                                )
-                            }
-                            return@onEach
-                        }
-                        list.map { cardWithLanguage ->
-                            ReviewCardState(
-                                CardFrontState(
-                                    pronunciation = cardWithLanguage.descriptionModel?.first?.description?.phonetic,
-                                    audio = cardWithLanguage.descriptionModel?.first?.description?.audio,
-                                    correctAnswerCount = cardWithLanguage.descriptionModel?.first?.correctAnswerCount
-                                        ?: 0,
-                                    example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.find
-                                    { descriptionMeanings ->
-                                        descriptionMeanings.definitions.any { descriptionDefinition
-                                            ->
-                                            descriptionDefinition.definition != null
-                                        }
-                                    }
-                                        ?.definitions?.firstOrNull { it.definition?.isNotBlank() == true }?.definition,
-                                    original = cardWithLanguage.original,
-                                    originalLanguages = cardWithLanguage.originalLanguage,
-                                ),
-                                cardWithLanguage,
-                            )
-                        }
-                    }?.toList()?.let { list ->
 
                         _mutableState.update {
                             it.copy(
-                                cardState = list.first(),
-                                listSize = list.size ,
+                                cardState = list.firstOrNull(),
+                                listSize = list.size,
                                 currentCards = list.size,
                                 loading = false,
-                                nexReviewDays = getNextDaysOnReview(list.first().cardBackState.descriptionModel?.first?.correctAnswerCount),
-                                reviewCards = ArrayDeque(list)
+                                reviewCards = ArrayDeque(list),
+                                nexReviewDays = getNextDaysOnReview(list.first().descriptionModel?.first?.correctAnswerCount),
                             )
                         }
-                        ArrayDeque(list).apply {
-                            this.removeFirstOrNull()
-                        }
+                        _mutableState.value.reviewCards.removeFirst()
                     }
+//                        list.map { cardWithLanguage ->
+//                            ReviewCardState(
+//                                CardFrontState(
+//                                    pronunciation = cardWithLanguage.descriptionModel?.first?.description?.phonetic,
+//                                    audio = cardWithLanguage.descriptionModel?.first?.description?.audio,
+//                                    correctAnswerCount = cardWithLanguage.descriptionModel?.first?.correctAnswerCount
+//                                        ?: 0,
+//                                    example = cardWithLanguage.descriptionModel?.first?.description?.meanings?.find
+//                                    { descriptionMeanings ->
+//                                        descriptionMeanings.definitions.any { descriptionDefinition
+//                                            ->
+//                                            descriptionDefinition.definition != null
+//                                        }
+//                                    }
+//                                        ?.definitions?.firstOrNull { it.definition?.isNotBlank() == true }?.definition,
+//                                    original = cardWithLanguage.original,
+//                                    originalLanguages = cardWithLanguage.originalLanguage,
+//                                ),
+//                                cardWithLanguage,
+//                            )
+//                        }
+//                    }?.toList()?.let { list ->
+
+//                        _mutableState.update {
+//                            it.copy(
+//                                cardState = list.first(),
+//                                listSize = list.size,
+//                                currentCards = list.size,
+//                                loading = false,
+//                                nexReviewDays = getNextDaysOnReview(list.first().cardBackState.descriptionModel?.first?.correctAnswerCount),
+//                                reviewCards = list
+//                            )
+//                        }
                 }
+
             }
         }.launchIn(viewModelScope)
 
     }
+
+
     private fun nextCard() {
+        val card = _mutableState.value.reviewCards.firstOrNull()
         _mutableState.update {
-            val card = _mutableState.value.reviewCards.removeFirstOrNull()
             it.copy(
                 cardState = card,
-                currentCards =  it.currentCards - 1 ,
-                nexReviewDays = getNextDaysOnReview(card?.cardBackState?.descriptionModel?.first?.correctAnswerCount)
+                currentCards = it.currentCards - 1,
+                nexReviewDays = getNextDaysOnReview(card?.descriptionModel?.first?.correctAnswerCount),
+                reviewCards = _mutableState.value.reviewCards.apply {
+                    if (_mutableState.value.reviewCards.isNotEmpty()) {
+                        _mutableState.value.reviewCards.removeFirst()
+                    }
+                }
             )
         }
     }
@@ -133,14 +141,15 @@ class ReviewCardsViewModel @Inject constructor(
         when (event) {
             is ReviewCardsContract.Event.OnKnowClick -> {
 
-                knowThisCard(event.count)
+                knowThisCard(event.count , currentCard = event.card)
 
                 rotate(true)
 
             }
+
             is ReviewCardsContract.Event.OnLearnClick -> {
                 needToLearn()
-                knowThisCard(-1)
+                knowThisCard(-1 , event.card )
                 rotate(true)
 
             }
@@ -148,6 +157,7 @@ class ReviewCardsViewModel @Inject constructor(
             is ReviewCardsContract.Event.OnRotate -> {
                 rotate(event.bol)
             }
+
             is ReviewCardsContract.Event.NeedToLearn -> {
                 needToLearn()
             }
@@ -155,7 +165,7 @@ class ReviewCardsViewModel @Inject constructor(
     }
 
 
-    private fun needToLearn(){
+    private fun needToLearn() {
         rotate(false)
         _mutableState.update {
             it.copy(needToLearn = !it.needToLearn)
@@ -167,14 +177,12 @@ class ReviewCardsViewModel @Inject constructor(
         channelEffects.trySend(ReviewCardsContract.Effect.RotateCard(bol))
     }
 
-    private fun knowThisCard(correctAnswerCount: Int) {
+    private fun knowThisCard(correctAnswerCount: Int , currentCard : CardWithLanguage) {
         viewModelScope.launch {
-            state.value.cardState?.cardBackState?.let { cardWithLanguage ->
-                val card = cardWithLanguage.apply {
-                    descriptionModel?.first?.correctAnswerCount = correctAnswerCount
-                }
+
                 updateCardUsecase.get().invoke(
-                    card
+                    currentCard.copy(descriptionModel = currentCard.descriptionModel?.first?.copy()
+                        ?.let { currentCard.descriptionModel?.copy(first = it.copy(correctAnswerCount = correctAnswerCount)) })
                 ).onEach { result ->
 
                     when (result) {
@@ -189,14 +197,19 @@ class ReviewCardsViewModel @Inject constructor(
 
                         is ResultConstraints.Loading -> _mutableState.update { it.copy(loading = true) }
                         is ResultConstraints.Success -> {
-                            _mutableState.update { it.copy(loading = false) }
-                            nextCard()
+                            val nextCard = _mutableState.value.reviewCards.firstOrNull()
+                            _mutableState.update {
+                                it.copy(loading = false, cardState = nextCard,
+                                    currentCards = it.currentCards - 1,
+                                    nexReviewDays = getNextDaysOnReview(nextCard?.descriptionModel?.first?.correctAnswerCount),
+                                    reviewCards = it.reviewCards.apply { this.removeFirstOrNull() })
+                            }
+//                            nextCard()
                         }
                     }
 
                 }.launchIn(viewModelScope)
             }
-        }
     }
 
 
@@ -224,6 +237,7 @@ fun getNextDaysOnReview(value: Int?): Int {
         -1 -> {
             1
         }
+
         0 -> {
             1
         }
@@ -250,7 +264,7 @@ fun getNextDaysOnReview(value: Int?): Int {
 
         else -> {
 
-               360
+            360
 
         }
     }

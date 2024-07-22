@@ -68,6 +68,8 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.flow.Flow
+import com.esum.core.ui.R as UiR
+
 
 @androidx.annotation.OptIn(ExperimentalGetImage::class)
 @Composable
@@ -301,7 +303,7 @@ fun CameraScreen(
 
                     val composition by rememberLottieComposition(
                         spec = LottieCompositionSpec.RawRes(
-                            R.raw.translating
+                            UiR.raw.translating
                         )
                     )
                     LottieAnimation(
@@ -316,7 +318,7 @@ fun CameraScreen(
             }
 
         }
-        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.translating))
+        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(UiR.raw.translating))
         LottieAnimation(
             composition = composition,
             modifier = Modifier.size(36.dp),
