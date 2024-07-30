@@ -57,7 +57,6 @@ class ImageTranslateViewModel @Inject constructor() : ViewModel(), CameraScreenC
 
         try {
 
-
             _mutableState.update { it.copy(loading = true) }
 
             val imageTextAnalyzer = ImageTextAnalyzer(onTextDetected = { text ->

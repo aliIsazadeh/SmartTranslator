@@ -58,6 +58,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
+import com.esum.common.constraints.TranslateFeature
 import com.esum.core.ui.use
 import com.esum.feature.image_convertor.presentation.R
 import com.esum.feature.image_convertor.presentation.viewModel.CameraScreenContract
@@ -158,13 +159,6 @@ fun CameraScreen(
             val exception = result.error
         }
     }
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        val cropOptions = CropImageContractOptions(uri, CropImageOptions())
-        imageCropLauncher.launch(cropOptions)
-    }
-
 
     val requestForImage =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -290,7 +284,7 @@ fun CameraScreen(
         }
     }
     if (state.loading) {
-        Dialog(onDismissRequest = { /*TODO*/ }) {
+        Dialog(onDismissRequest = { }) {
             Card(shape = MaterialTheme.shapes.medium) {
                 Column(
                     modifier = Modifier
@@ -330,53 +324,7 @@ fun CameraScreen(
     if (permissionsCameraState.allPermissionsGranted) {
         Box(modifier = Modifier.fillMaxSize()) {
             AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
-//
-//
-//            IconButton(
-//                modifier = Modifier
-//                    .align(Alignment.BottomCenter)
-//                    .padding(16.dp),
-//                onClick = {
-////                    event.invoke(CameraScreenContract.Event.ImageCapture)
-//
-//                    val cropOptions = CropImageContractOptions(uri = null , cropImageOptions = CropImageOptions(imageSourceIncludeCamera = true , imageSourceIncludeGallery = false))
-//                    imageCropLauncher.launch( cropOptions)
-//
-//
-////                    cameraController.setImageAnalysisAnalyzer(executor) { imageProxy ->
-////                        imageProxy.image?.let { image ->
-////                            val img = InputImage.fromMediaImage(
-////                                image,
-////                                imageProxy.imageInfo.rotationDegrees
-////                            )
-//////                            textRecognizer.process(img).addOnCompleteListener { task ->
-//////                                val text =
-//////                                    if (!task.isSuccessful) task.exception!!.localizedMessage?.toString()
-//////                                        .toString()
-//////                                    else task.result.text
-//////                                event.invoke(CameraScreenContract.Event.TextDetected(text))
-//////                                cameraController.clearImageAnalysisAnalyzer()
-//////                                imageProxy.close()
-//////                            }
-////                            val cropOptions = CropImageContractOptions(
-////                                uri = null,
-////                                cropImageOptions = CropImageOptions(
-////                                    cropShape = CropImageView.CropShape.RECTANGLE,
-////                                    initialCropWindowRectangle = imageProxy.cropRect
-////                                )
-////                            )
-////                            imageCropLauncher.launch(cropOptions)
-////                        }
-////                    }
-//                }
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Filled.Camera,
-//                    contentDescription = "",
-//                    tint = MaterialTheme.colorScheme.primary,
-//                    modifier = Modifier.size(80.dp)
-//                )
-//            }
+
         }
     }
     if (state.text.isNotBlank()) {
@@ -400,7 +348,7 @@ fun CameraScreen(
                         modifier = Modifier
                     )
                     Button(
-                        onClick = { onTextChange("") },
+                        onClick = { navController.navigate(TranslateFeature.translatePageRoute +"/${state.text}") },
                         shape = MaterialTheme.shapes.small,
                         modifier = Modifier
                             .fillMaxWidth()

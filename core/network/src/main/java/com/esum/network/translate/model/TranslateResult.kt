@@ -6,8 +6,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class TranslateResult(
-    @Json(name ="data")
-    val data: TranslateData,
-    @Json(name ="status")
-    val status: String
+    @Json(name = "translatedText")
+    val translatedText: String
+//    @Json(name ="data")
+//    val data: TranslateData,
+//    @Json(name ="status")
+//    val status: String
 )

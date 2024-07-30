@@ -7,7 +7,8 @@ interface TranslateContract : UnidirectionalViewModel<TranslateContract.STATE , 
     @Stable
     data class STATE(
         val loading : Boolean = false ,
-        val text : String = ""
+        val text : String = "",
+        val translatedText : String = "",
     )
 
     sealed interface EFFECT {
@@ -20,8 +21,7 @@ interface TranslateContract : UnidirectionalViewModel<TranslateContract.STATE , 
     }
 
     sealed interface EVENT {
-        data object Translate : EVENT
-
+        data class Translate (val text : String): EVENT
     }
 
 }

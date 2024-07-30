@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.androidx.compose.materialWindow)
     implementation(project(":feature:translator:presentation"))
     implementation(project(":feature:image-convertor:presentation"))
+    implementation(project(":feature:translating:presentation"))
 
     debugImplementation(libs.leakcanary)
 

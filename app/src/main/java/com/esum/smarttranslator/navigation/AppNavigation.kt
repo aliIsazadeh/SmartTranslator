@@ -38,7 +38,7 @@ fun AppNavigation(
         navigationProvider.testApi.registerGraph(
             navController, this, windowSizeClass
         )
-        navigationProvider.translateApi.registerGraph(navController, this, windowSizeClass)
+        navigationProvider.imageConvertorApi.registerGraph(navController, this, windowSizeClass)
     }
 
 }

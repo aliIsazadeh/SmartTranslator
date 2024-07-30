@@ -82,7 +82,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun SmartTranslatorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -103,7 +102,6 @@ fun SmartTranslatorTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = typography,

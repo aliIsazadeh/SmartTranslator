@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.esum.common.constraints.ImageConvertingFeature
 import com.esum.common.constraints.TranslateFeature
 import com.esum.feature.image_convertor.presentation.screen.CameraScreen
 import com.esum.feature_api.FeatureApi
@@ -16,11 +17,11 @@ internal object InternalTranslateFeatureApi : FeatureApi {
         windowSizeClass: WindowSizeClass
     ) {
         navGraphBuilder.navigation(
-            startDestination = TranslateFeature.translatePageRoute,
-            route = TranslateFeature.nestedRoute
+            startDestination = ImageConvertingFeature.imageConverterPageRoute,
+            route = ImageConvertingFeature.nestedRoute
         ) {
 
-            composable(TranslateFeature.translatePageRoute) {
+            composable(ImageConvertingFeature.imageConverterPageRoute) {
                 CameraScreen(navController = navController, windowSizeClass = windowSizeClass)
             }
 

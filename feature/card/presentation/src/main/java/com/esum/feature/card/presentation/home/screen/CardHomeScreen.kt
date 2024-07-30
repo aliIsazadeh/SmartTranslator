@@ -40,6 +40,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.esum.common.constraints.CardFeature
+import com.esum.common.constraints.ImageConvertingFeature
 import com.esum.common.constraints.TranslateFeature
 import com.esum.core.ui.component.LineBar
 import com.esum.core.ui.theme.SmartTranslatorTheme
@@ -232,7 +233,7 @@ fun CardHomeScreen(
                             .height(100.dp)
                             .weight(0.5f),
                         onClick = {
-                                  navController.navigate(TranslateFeature.nestedRoute)
+                                  navController.navigate(ImageConvertingFeature.nestedRoute)
                         },
                         elevation = CardDefaults.elevatedCardElevation(8.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)

@@ -9,17 +9,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class TranslateViewModel @Inject constructor(
-    val savedStateHandle: SavedStateHandle
+    val savedStateHandle: SavedStateHandle ,
+
 ) : ViewModel() , TranslateContract {
 
+    private val text : String = savedStateHandle.get<String>("text") ?:""
     
 
     private val _mutableState : MutableStateFlow<TranslateContract.STATE> = MutableStateFlow(
-        TranslateContract.STATE())
+        TranslateContract.STATE(text = text))
 
     private val effectChannel : Channel<TranslateContract.EFFECT> = Channel<TranslateContract.EFFECT>(Channel.UNLIMITED)
 
@@ -29,7 +32,21 @@ class TranslateViewModel @Inject constructor(
 
     override fun event(event: TranslateContract.EVENT) {
         when (event) {
-            TranslateContract.EVENT.Translate -> TODO()
+            is TranslateContract.EVENT.Translate -> {
+
+            }
+        }
+    }
+
+    fun onChangeText(value : String){
+        _mutableState.update {
+            it.copy(text = value)
+        }
+    }
+
+    fun onTranslateChange(value: String){
+        _mutableState.update {
+            it.copy(translatedText = value)
         }
     }
 

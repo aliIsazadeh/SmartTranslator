@@ -1,7 +1,7 @@
 package com.esum.feature.image_convertor.presentation.di
 
-import com.esum.feature.image_convertor.presentation.navigation.TranslateApi
-import com.esum.feature.image_convertor.presentation.navigation.TranslateApiImpl
+import com.esum.feature.image_convertor.presentation.navigation.ImageConvertorApi
+import com.esum.feature.image_convertor.presentation.navigation.ImageConvertorApiImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @Module
 object UiModule {
     @Provides
-    fun provideTranslateApi() : TranslateApi {
-        return TranslateApiImpl()
+    fun provideTranslateApi() : ImageConvertorApi {
+        return ImageConvertorApiImpl()
     }
 }

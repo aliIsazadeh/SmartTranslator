@@ -49,6 +49,10 @@ android {
 dependencies {
 
     implementation(project(":core:ui"))
+    implementation(project(":feature:card:presentation"))
+    implementation(project(":core:feature-api"))
+    implementation(project(":core:common"))
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

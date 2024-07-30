@@ -70,10 +70,10 @@ class ReviewCardsViewModel @Inject constructor(
                                 currentCards = list.size,
                                 loading = false,
                                 reviewCards = ArrayDeque(list),
-                                nexReviewDays = getNextDaysOnReview(list.first().descriptionModel?.first?.correctAnswerCount),
+                                nexReviewDays = getNextDaysOnReview(list.firstOrNull()?.descriptionModel?.first?.correctAnswerCount),
                             )
                         }
-                        _mutableState.value.reviewCards.removeFirst()
+                        _mutableState.value.reviewCards.removeFirstOrNull()
                     }
 //                        list.map { cardWithLanguage ->
 //                            ReviewCardState(

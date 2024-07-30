@@ -22,9 +22,9 @@ object NetworkModule {
     fun providesClient(): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(Interceptor.invoke {
             val request =  it.request().newBuilder()
-                .addHeader("X-RapidAPI-Key", "a8c484a0b1mshd2eb9728993d4c4p13b074jsne7ae553be513")
-                .addHeader("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
-                .addHeader("content-type", "application/x-www-form-urlencoded")
+//                .addHeader("X-RapidAPI-Key", "a8c484a0b1mshd2eb9728993d4c4p13b074jsne7ae553be513")
+//                .addHeader("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
+//                .addHeader("content-type", "application/x-www-form-urlencoded")
                 .build()
             it.proceed(request)
         }).build()
@@ -37,7 +37,7 @@ object NetworkModule {
             .add(KotlinJsonAdapterFactory())
             .build()
         return Retrofit.Builder()
-            .baseUrl("https://text-translator2.p.rapidapi.com")
+            .baseUrl("http://10.0.2.2:5000")
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi)).build()
             .create(TranslateApiService::class.java)
