@@ -17,8 +17,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNavigationProvider(cardApi: CardApi , testApi: TestApi , imageConvertorApi: ImageConvertorApi , translateApi: TranslateApi) : NavigationProvider {
-        return NavigationProvider(cardApi , testApi , imageConvertorApi , translateApi)
+    fun provideNavigationProvider(
+        cardApi: CardApi,
+        testApi: TestApi,
+        imageConvertorApi: ImageConvertorApi,
+        translateApi: TranslateApi
+    ): NavigationProvider {
+        return NavigationProvider(cardApi, testApi, imageConvertorApi, translateApi)
     }
 
 }

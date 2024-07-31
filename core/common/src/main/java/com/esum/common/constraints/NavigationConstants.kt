@@ -14,8 +14,8 @@ object TestFuture {
 
 }
 object TranslateFeature {
-    const val nestedRoute = "translate_nested_route"
-    const val translatePageRoute = "translate_screen_route"
+    const val nestedRoute = "translating_nested_route"
+    const val translatePageRoute = "translating_screen_route"
 }
 
 object ImageConvertingFeature {

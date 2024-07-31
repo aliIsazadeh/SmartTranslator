@@ -62,7 +62,12 @@ dependencies {
     implementation(project(":feature:translating:data"))
     implementation(project(":core:common"))
     implementation(project(":core:feature-api"))
+    implementation(project(":feature:translator:presentation"))
+    implementation(project(":feature:image-convertor:presentation"))
+    implementation(project(":feature:translating:presentation"))
 
+
+    implementation(libs.androidx.compose.materialWindow)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -72,10 +77,7 @@ dependencies {
     implementation(libs.compose.preview)
     implementation(libs.compose.material)
     implementation(libs.androidx.compose.materialWindow)
-    implementation(libs.androidx.compose.materialWindow)
-    implementation(project(":feature:translator:presentation"))
-    implementation(project(":feature:image-convertor:presentation"))
-    implementation(project(":feature:translating:presentation"))
+
 
     debugImplementation(libs.leakcanary)
 

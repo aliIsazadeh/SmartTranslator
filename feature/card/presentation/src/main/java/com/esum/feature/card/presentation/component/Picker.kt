@@ -6,10 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -68,15 +70,15 @@ fun Picker(
     val listScrollCount = Integer.MAX_VALUE 
     val listScrollMiddle = listScrollCount / 2
     val listStartIndex =
-        listScrollMiddle - listScrollMiddle % items.size - visibleItemsMiddle + startIndex
+        listScrollMiddle - listScrollMiddle % items.size -  visibleItemsMiddle + startIndex
 
     fun getItem(index: Int) = items[index % items.size]
 
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = listStartIndex)
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = listStartIndex )
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
-    val itemHeightPixels = remember { mutableStateOf(0) }
-    val itemHeightDp = pixelsToDp(itemHeightPixels.value)
+    val itemHeightPixels = remember { mutableIntStateOf(0) }
+    val itemHeightDp = pixelsToDp(itemHeightPixels.intValue)
 
     val fadingEdgeGradient = remember {
         Brush.verticalGradient(
@@ -87,6 +89,7 @@ fun Picker(
     }
 
     LaunchedEffect(listState) {
+
         snapshotFlow { listState.firstVisibleItemIndex }
             .map { index -> getItem(index + visibleItemsMiddle) }
             .distinctUntilChanged()
@@ -112,7 +115,7 @@ fun Picker(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
-//                    modifier = Modifier.height(IntrinsicSize.Max)
+                    modifier = Modifier
                 ) {
                     Text(
                         text = getItem(index).first.key,
@@ -120,14 +123,14 @@ fun Picker(
                             .onSizeChanged { size -> itemHeightPixels.value = size.height }
                             .then(textModifier)
                             .weight(0.2f),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
                     )
                     Image(
                         painter = painterResource(id = getItem(index).second),
                         contentDescription = "flag image",
                         Modifier
-                            .height(20.dp)
+                            .height(30.dp)
                             .weight(0.5f)
                     )
                 }
@@ -190,7 +193,9 @@ fun PickerPreview() {
                     Pair<Languages, Int>(Languages.Italian, R.drawable.italy),
                     Pair<Languages, Int>(Languages.Arabic, R.drawable.saudi_arabia),
                     Pair<Languages, Int>(Languages.Japans, R.drawable.japan),
-                ),
+
+
+                    ),
                 textStyle = MaterialTheme.typography.labelSmall,
                 selectLanguage = {},
 

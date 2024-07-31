@@ -18,7 +18,7 @@ internal object InternalTranslationApi : FeatureApi {
     ) {
 
         navGraphBuilder.navigation(
-            startDestination = TranslateFeature.translatePageRoute + "/{text}",
+            startDestination = TranslateFeature.translatePageRoute ,
             route = TranslateFeature.nestedRoute
         ) {
             composable(route = TranslateFeature.translatePageRoute + "/{text}"){  navBackstack ->

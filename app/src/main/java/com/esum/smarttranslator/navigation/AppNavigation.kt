@@ -24,11 +24,11 @@ fun AppNavigation(
         navController = navController,
         startDestination = HomeFeature.splashScreen
     ) {
-        composable(HomeFeature.splashScreen){
+        composable(HomeFeature.splashScreen) {
             SplashScreen(navController = navController)
         }
 
-        composable(HomeFeature.sliderScreen){
+        composable(HomeFeature.sliderScreen) {
 
             SliderScreen(navController = navController)
         }
@@ -39,6 +39,7 @@ fun AppNavigation(
             navController, this, windowSizeClass
         )
         navigationProvider.imageConvertorApi.registerGraph(navController, this, windowSizeClass)
+        navigationProvider.translateApi.registerGraph(navController, this, windowSizeClass)
     }
 
 }
