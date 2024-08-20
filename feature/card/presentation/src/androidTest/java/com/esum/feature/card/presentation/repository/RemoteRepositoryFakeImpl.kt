@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class RemoteRepositoryFakeImpl() : RemoteRepository {
-    override suspend fun translateOnline(
+    override  fun translateOnline(
         fromLanguages: Languages,
         toLanguages: Languages,
         text: String

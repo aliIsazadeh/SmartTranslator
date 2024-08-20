@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":feature:card:presentation"))
     implementation(project(":core:feature-api"))
     implementation(project(":core:common"))
+    implementation(project(":feature:translating:domain"))
 
 
     implementation(libs.androidx.core.ktx)

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class TranslateCardUseCase @Inject constructor(private val remoteRepository: RemoteRepository) {
 
-    suspend operator fun invoke(
+     operator fun invoke(
         fromLanguages: Languages,
         toLanguages: Languages,
         text: String

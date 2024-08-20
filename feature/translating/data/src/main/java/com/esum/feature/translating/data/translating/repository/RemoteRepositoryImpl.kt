@@ -21,7 +21,7 @@ class RemoteRepositoryImpl @Inject constructor(
 ) :
     RemoteRepository {
 
-    override suspend fun translateOnline(
+    override  fun translateOnline(
         fromLanguages: Languages,
         toLanguages: Languages,
         text: String

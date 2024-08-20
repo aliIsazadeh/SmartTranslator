@@ -143,7 +143,7 @@ fun TranslateScreen(
                         ),
                         nullable = false
                     )
-                    Column(modifier = Modifier.weight(0.2f) , ) {
+                    Column(modifier = Modifier.weight(0.2f).padding(top = 16.dp) , ) {
                         Picker(
                             modifier = Modifier.padding(top = 8.dp)
                                 .testTag("original_picker"),

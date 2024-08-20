@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteRepository {
 
-    suspend fun translateOnline(
+     fun translateOnline(
         fromLanguages: Languages,
         toLanguages: Languages,
         text: String
