@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -246,26 +247,7 @@ fun CardAddingScreen(
                 )
 
             }
-            TextButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("online_translate_tag"),
-                onClick = { event.invoke(CardAddingContract.Event.OnlineTranslateEvent)
-                    keyboardController?.hide()}) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.height(IntrinsicSize.Min)
-                ) {
-                    ResizableTextView(text = stringResource(R.string.translate_online), style = MaterialTheme.typography.bodySmall)
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "online translate",
-                        modifier = Modifier.size(20.dp)
-                    )
 
-                }
-
-            }
 
             Row(
                 modifier = Modifier
@@ -312,6 +294,25 @@ fun CardAddingScreen(
 
             }
 
+
+            OutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("online_translate_tag"),
+                onClick = { event.invoke(CardAddingContract.Event.OnlineTranslateEvent)
+                    keyboardController?.hide()}) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.height(IntrinsicSize.Min)
+                ) {
+                    ResizableTextView(text = stringResource(R.string.translate_online), style = MaterialTheme.typography.bodySmall)
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "online translate",
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
 
             Spacer(
                 modifier = Modifier

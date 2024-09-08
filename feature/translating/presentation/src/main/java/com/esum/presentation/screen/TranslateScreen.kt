@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -38,7 +39,6 @@ import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.component.ResizableTextView
 import com.esum.core.ui.topbar.DefaultTopBar
 import com.esum.core.ui.use
-import com.esum.feature.card.presentation.addingCard.viewmodel.CardAddingContract
 import com.esum.feature.card.presentation.component.InfoTextFiled
 import com.esum.feature.card.presentation.component.Picker
 import com.esum.presentation.R
@@ -156,29 +156,7 @@ fun TranslateScreen(
 
                 }
 
-                TextButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("online_translate_tag"),
-                    onClick = {
-                        event.invoke(TranslateContract.EVENT.Translate(state.text))
-                        keyboardController?.hide()
-                    }) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier.height(IntrinsicSize.Min)
-                    ) {
-                        ResizableTextView(
-                            text = stringResource(com.esum.feature.card.presentation.R.string.translate_online),
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "online translate",
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
+
                 Row(
                     modifier = Modifier
                         .padding(top = 16.dp, bottom = 16.dp)
@@ -205,6 +183,30 @@ fun TranslateScreen(
                             items = state.availableLanguage,
                             textStyle = MaterialTheme.typography.labelSmall,
                             selectLanguage = onTranslateLanguageSelect,
+                        )
+                    }
+                }
+
+                OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("online_translate_tag"),
+                    onClick = {
+                        event.invoke(TranslateContract.EVENT.Translate(state.text))
+                        keyboardController?.hide()
+                    }) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.height(IntrinsicSize.Min)
+                    ) {
+                        ResizableTextView(
+                            text = stringResource(com.esum.feature.card.presentation.R.string.translate_online),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "online translate",
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }
