@@ -4,15 +4,16 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt.android)
     kotlin("kapt")
+
+
 }
 
 android {
     namespace = "com.esum.feature.card.domain"
-    compileSdk = 34
-
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 25
+        minSdk = libs.versions.minSdk.get().toInt()
 
 
 

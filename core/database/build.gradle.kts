@@ -6,6 +6,8 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.room)
 
+
+
 }
 room {
     schemaDirectory("$projectDir/schemas")
@@ -14,10 +16,10 @@ room {
 
 android {
     namespace = "com.esum.database"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 25
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "com.esum.database.DatabaseTestRunner"
         consumerProguardFiles("consumer-rules.pro")

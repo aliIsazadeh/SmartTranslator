@@ -1,18 +1,18 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.hilt.android)
     kotlin("kapt")
+    alias(libs.plugins.hilt.android)
+
 
 }
 
 android {
     namespace = "com.esum.network"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 25
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "com.esum.network.TestRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -28,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -71,10 +71,10 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 
-    androidTestImplementation(libs.hilt.instrumented.test)
-    kaptAndroidTest(libs.hilt.test)
+//    androidTestImplementation(libs.hilt.instrumented.test)
+//    kaptAndroidTest(libs.hilt.test)
 
-    testImplementation(libs.hilt.instrumented.test)
+//    testImplementation(libs.hilt.instrumented.test)
     kaptTest(libs.hilt.test)
 }
 kapt {

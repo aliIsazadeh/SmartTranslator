@@ -3,13 +3,15 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.compose.compiler)
+
 }
 android {
     namespace = "com.esum.feature.card.presentation"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 25
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "com.esum.feature.card.presentation.PresentTestRunner"
         consumerProguardFiles("consumer-rules.pro")
