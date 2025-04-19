@@ -2,7 +2,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
 
 }
@@ -50,14 +50,17 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.espresso)
 
+    implementation(libs.kotlinx.metadata.jvm)
+
+
     //hilt
     implementation(libs.hilt.compose)
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.instrumented.test)
-    kaptAndroidTest(libs.hilt.test)
-    kaptTest(libs.hilt.test)
+    kspAndroidTest(libs.hilt.test)
+    kspTest(libs.hilt.test)
 }
-kapt {
-    correctErrorTypes = true
-}
+//kapt {
+//    correctErrorTypes = true
+//}

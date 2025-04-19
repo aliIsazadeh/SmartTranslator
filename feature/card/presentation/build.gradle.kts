@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.compose.compiler)
 
@@ -89,6 +89,9 @@ dependencies {
     debugImplementation(libs.manifest.test)
     debugImplementation(libs.leakcanary)
 
+    implementation(libs.kotlinx.metadata.jvm)
+
+
     //lottie
     implementation(libs.lottie.compose)
     implementation(libs.lottie)
@@ -103,10 +106,10 @@ dependencies {
     //hilt
     implementation(libs.hilt.compose)
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.instrumented.test)
-    kaptAndroidTest(libs.hilt.test)
+    kspAndroidTest(libs.hilt.test)
 }
-kapt {
-    correctErrorTypes = true
-}
+//kapt {
+//    correctErrorTypes = true
+//}
