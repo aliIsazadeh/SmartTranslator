@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Photo
@@ -31,6 +33,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -48,6 +52,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -112,8 +117,6 @@ fun CameraScreen(
     previewView.controller = cameraController
 
 
-
-
     val textRecognizer =
         remember { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
 
@@ -126,6 +129,10 @@ fun CameraScreen(
 
     var selectSourceDialog by remember {
         mutableStateOf(true)
+    }
+
+    var textDialog by remember{
+        mutableStateOf(false)
     }
 
     val filePermissionRequest = rememberMultiplePermissionsState(
@@ -150,11 +157,13 @@ fun CameraScreen(
                         if (!task.isSuccessful) task.exception!!.localizedMessage?.toString()
                             .toString()
                         else task.result.text
+                    textDialog = true
+                    selectSourceDialog = false
                     event.invoke(CameraScreenContract.Event.TextDetected(text))
                 }
             }
         } else {
-            Log.e("CameraScreen", "CameraScreen: ${result.error?.message} ", )
+            Log.e("CameraScreen", "CameraScreen: ${result.error?.message} ")
             // Handle error
             val exception = result.error
         }
@@ -220,11 +229,16 @@ fun CameraScreen(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 if (permissionsCameraState.allPermissionsGranted) {
-                                    val cropOptions = CropImageContractOptions(uri = null , cropImageOptions = CropImageOptions(imageSourceIncludeCamera = true , imageSourceIncludeGallery = false))
-                                    imageCropLauncher.launch( cropOptions)
+                                    val cropOptions = CropImageContractOptions(
+                                        uri = null,
+                                        cropImageOptions = CropImageOptions(
+                                            imageSourceIncludeCamera = true,
+                                            imageSourceIncludeGallery = false
+                                        )
+                                    )
+                                    imageCropLauncher.launch(cropOptions)
 
-                                }
-                                else {
+                                } else {
                                     filePermissionRequest.launchMultiplePermissionRequest()
                                 }
                             }, shape = MaterialTheme.shapes.medium
@@ -327,17 +341,54 @@ fun CameraScreen(
 
         }
     }
-    if (state.text.isNotBlank()) {
-        Dialog(onDismissRequest = { onTextChange("") }) {
-            Card(
+    if (state.text.isNotBlank() && textDialog) {
+//        Box {
+//            Card(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(16.dp)
+//            ) {
+//        Dialog(
+//            properties = DialogProperties(
+//                usePlatformDefaultWidth = false
+//            ),
+//            onDismissRequest = { textDialog = false},
+//
+//            ) {
+            Scaffold (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                    .fillMaxSize() ,
+                bottomBar = {
+                    Column(Modifier.padding(horizontal = 16.dp , vertical = 16.dp)) {
+                        Button(
+                            onClick = { navController.navigate(TranslateFeature.translatePageRoute + "/${state.text}") },
+                            shape = MaterialTheme.shapes.small,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                            //.align(Alignment.End)
+                        ) {
+                            Text(text = stringResource(id = R.string.comfirm))
+                        }
+                        OutlinedButton(
+                            onClick = {
+                                onTextChange("")
+                                selectSourceDialog = true
+                            },
+                            shape = MaterialTheme.shapes.small,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                            //.align(Alignment.End)
+
+                        ) {
+                            Text(text = stringResource(id = R.string.try_againg))
+                        }
+                    }
+                }
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
 
@@ -347,27 +398,12 @@ fun CameraScreen(
                         onValueChange = { onTextChange(it) },
                         modifier = Modifier
                     )
-                    Button(
-                        onClick = { navController.navigate(TranslateFeature.translatePageRoute +"/${state.text}") },
-                        shape = MaterialTheme.shapes.small,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.End)
-                    ) {
-                        Text(text = stringResource(id = R.string.comfirm))
-                    }
-                    OutlinedButton(
-                        onClick = { onTextChange("") },
-                        shape = MaterialTheme.shapes.small,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.End)
-                    ) {
-                        Text(text = stringResource(id = R.string.try_againg))
-                    }
+
                 }
             }
-        }
+//        }
     }
+    //   }
+    //   }
 
 }
