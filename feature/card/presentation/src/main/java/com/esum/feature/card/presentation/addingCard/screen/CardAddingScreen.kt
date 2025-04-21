@@ -218,7 +218,7 @@ fun CardAddingScreen(
         ) {
 
             Row(
-                modifier = Modifier
+                modifier = Modifier.padding(top = 8.dp , end = 16.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -251,7 +251,7 @@ fun CardAddingScreen(
 
             Row(
                 modifier = Modifier
-                    .padding(top = 16.dp, bottom = 16.dp)
+                    .padding(top = 16.dp, bottom = 16.dp , end = 16.dp)
                     .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {

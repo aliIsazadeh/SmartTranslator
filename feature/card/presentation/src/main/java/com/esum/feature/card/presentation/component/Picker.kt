@@ -1,5 +1,8 @@
 package com.esum.feature.card.presentation.component
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,9 +10,12 @@ import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
@@ -19,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +48,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.esum.common.lagnuage.Languages
 import com.esum.core.ui.theme.SmartTranslatorTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -56,19 +65,80 @@ fun Picker(
     textModifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     dividerColor: Color = MaterialTheme.colorScheme.primary,
-    selectLanguage : (Languages) -> Unit
+    selectLanguage: (Languages) -> Unit ,
 ) {
 
-    val visibleItemsMiddle = visibleItemsCount /2
-    val listScrollCount = Integer.MAX_VALUE 
+    val visibleItemsMiddle  : Int = visibleItemsCount / 2
+    val listScrollCount = Integer.MAX_VALUE
     val listScrollMiddle = listScrollCount / 2
     val listStartIndex =
-         items.size -  visibleItemsMiddle + startIndex
+        items.size - visibleItemsMiddle + startIndex
 
     fun getItem(index: Int) = items[index % items.size]
 
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = listStartIndex  , initialFirstVisibleItemScrollOffset = 25  )
+
+    val listState = rememberLazyListState(
+        initialFirstVisibleItemIndex = listStartIndex,
+        initialFirstVisibleItemScrollOffset = 15
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (listState.isScrollInProgress) 1.5f else 1.0f,
+        animationSpec = tween(durationMillis = 200),
+        label = "scale"
+    )
+
+    val animatedFontSize by animateFloatAsState(
+        targetValue = if (listState.isScrollInProgress) MaterialTheme.typography.titleMedium.fontSize.value else MaterialTheme.typography.bodyMedium.fontSize.value,
+        animationSpec = tween(durationMillis = 200),
+        label = "fontSize"
+    )
+    val animatePadding by animateIntAsState(
+        targetValue = if (listState.isScrollInProgress) 16 else 0,
+        animationSpec = tween(durationMillis = 200),
+        label = "padding"
+    )
+
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
+
+
+
+//    val animatedScale by animateFloatAsState(targetValue = scale, label = "")
+
+//    LaunchedEffect(listState.isScrollInProgress) {
+//        var lastOffset = 0f
+//
+//        snapshotFlow {
+//            listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
+//        }.collect { (index, offset) ->
+//            val currentOffset = index * 1000 + offset // You can use item height or just fake multiplier
+//            val delta = currentOffset - lastOffset
+//            lastOffset = currentOffset.toFloat()
+//
+//            if (delta != 0f) {
+//                val now = System.currentTimeMillis()
+//                if (scrollStartTime == null) scrollStartTime = now
+//
+//                val duration = now - scrollStartTime!!
+//                totalScrollOffset += kotlin.math.abs(delta)
+//
+//                println("Scroll duration: ${duration}ms")
+//                println("Total scroll movement: $totalScrollOffset")
+//
+//                // Example: map to a number (could be scale or intensity)
+//                val mappedValue = (totalScrollOffset / 1000f).coerceAtMost(5f)
+//                println("Mapped value: $mappedValue")
+//            } else {
+//                // Scrolling stopped
+//                scrollStartTime = 1
+//            }
+//        }
+//    }
+//    LaunchedEffect(scrollStartTime) {
+//        scale = if(((scrollStartTime  )  * 1.1) < 3) {
+//            ( scrollStartTime  ) * 1.1f
+//        } else 1f
+//    }
 
     val itemHeightPixels = remember { mutableIntStateOf(0) }
     val itemHeightDp = pixelsToDp(itemHeightPixels.intValue)
@@ -93,13 +163,17 @@ fun Picker(
             }
     }
 
-    Box(modifier = modifier) {
+    Box(modifier = modifier.graphicsLayer {
+        scaleY = scale
+        scaleX = scale
+    }) {
 
         LazyColumn(
             state = listState,
             flingBehavior = flingBehavior,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.testTag("lazy_column")
+            modifier = Modifier
+                .testTag("lazy_column")
                 .fillMaxWidth()
                 .height(itemHeightDp * visibleItemsCount)
                 .fadingEdge(fadingEdgeGradient),
@@ -116,7 +190,7 @@ fun Picker(
                             .onSizeChanged { size -> itemHeightPixels.value = size.height }
                             .then(textModifier)
                             .weight(0.2f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = animatedFontSize.sp),
                         textAlign = TextAlign.Center
                     )
                     Image(
@@ -125,6 +199,10 @@ fun Picker(
                         Modifier
                             .height(30.dp)
                             .weight(0.5f)
+                            .graphicsLayer {
+                                scaleY = scale
+                                scaleX = scale
+                            }
                     )
                 }
             }
@@ -132,12 +210,13 @@ fun Picker(
 
         Divider(
             color = dividerColor,
-            modifier = Modifier.offset(y = itemHeightDp * visibleItemsMiddle )
+            modifier = Modifier.offset(y = (itemHeightDp.value * visibleItemsMiddle).dp )
         )
+
 
         Divider(
             color = dividerColor,
-            modifier = Modifier.offset(y = itemHeightDp * (visibleItemsMiddle + 1))
+            modifier = Modifier.offset(y = (itemHeightDp.value * (visibleItemsMiddle + 1.4)).dp)
         )
 
     }
@@ -169,16 +248,18 @@ fun PickerPreview() {
 
     SmartTranslatorTheme {
 
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.background)
-        ) {
-            Box(modifier = Modifier.weight(0.8f))
+//        Row(
+//            Modifier
+//                .fillMaxWidth()
+//                .fillMaxHeight()
+//                .background(color = MaterialTheme.colorScheme.background)
+//        ) {
+//            Box(modifier = Modifier.weight(0.8f))
 
 
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Picker(
-                modifier = Modifier.weight(0.2f),
+                modifier = Modifier,
                 items = listOf(
                     Pair<Languages, Int>(Languages.Farsi, R.drawable.iran),
                     Pair<Languages, Int>(Languages.English, R.drawable.united_kingdom),
@@ -192,8 +273,9 @@ fun PickerPreview() {
                 textStyle = MaterialTheme.typography.labelSmall,
                 selectLanguage = {},
 
-            )
+                )
         }
+        //   }
 
     }
 

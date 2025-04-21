@@ -384,10 +384,10 @@ fun CameraScreen(
                         }
                     }
                 }
-            ) {
+            ) { padding ->
                 Column(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(bottom = padding.calculateBottomPadding() , start = 16.dp , end = 16.dp , top = 16.dp)
                         .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
