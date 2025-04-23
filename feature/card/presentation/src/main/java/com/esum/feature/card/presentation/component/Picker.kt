@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +67,7 @@ fun Picker(
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     dividerColor: Color = MaterialTheme.colorScheme.primary,
     selectLanguage: (Languages) -> Unit ,
+    onClick : () -> Unit
 ) {
 
     val visibleItemsMiddle  : Int = visibleItemsCount / 2
@@ -166,6 +168,8 @@ fun Picker(
     Box(modifier = modifier.graphicsLayer {
         scaleY = scale
         scaleX = scale
+    }.clickable {
+
     }) {
 
         LazyColumn(
@@ -272,6 +276,7 @@ fun PickerPreview() {
                     ),
                 textStyle = MaterialTheme.typography.labelSmall,
                 selectLanguage = {},
+               onClick =  {}
 
                 )
         }
